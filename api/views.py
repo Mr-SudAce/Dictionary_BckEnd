@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from django.contrib import messages
 import requests
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -83,6 +84,7 @@ def apiadmin(request):
 def delapiadmin(request, id):
     word = Word.objects.get(id=id)
     word.delete()
+    messages.warning(request, "Deleted Successfully")
     return redirect("apiword")
 
 
@@ -92,9 +94,10 @@ def updateadmin(request, id):
         form = WordForm(request.POST, instance=word)
         if form.is_valid():
             form.save()
-            return HttpResponse("Updated")
+            messages.success(request, "Word updated successfully!")
+            return redirect('apiword')
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return redirect('apiword')
     else:
         form = WordForm(instance=word)
 
