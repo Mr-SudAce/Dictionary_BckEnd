@@ -5,7 +5,7 @@
   {% if messages %}
   <div class="mt-4 position-absolute" style="top: -17px; right: 12px;">
     {% for message in messages %}
-    <div class=" alert alert-{{ message.tags }} alert-dismissible fade show m-0" role="alert">
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show m-0" role="alert">
       {{ message }}
     </div>
     {% endfor %}
@@ -20,7 +20,7 @@
       <thead class="table-dark">
         <tr>
           <th>#</th>
-          <th>Words</th>
+          <th>Word</th>
           <th>Description</th>
           <th>Antonyms</th>
           <th>Synonyms</th>
@@ -58,7 +58,7 @@
   <!-- Word Form -->
   <div class="card mt-5">
     <div class="card-header bg-primary text-white">
-      <h5 class="mb-0 text-center">{{ "Update"|default:"Add New Word" }}</h5>
+      <h5 class="mb-0 text-center">{{ "UPDATE"|default:"Add New Word" }}</h5>
     </div>
     <div class="card-body">
       <form
@@ -66,27 +66,11 @@
         method="POST"
       >
         {% csrf_token %}
-        <div class="mb-3">
-          <label for="word" class="form-label">Word</label>
-          {{ form.word }}
-        </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          {{ form.description }}
-        </div>
-        <div class="mb-3">
-          <label for="antonyms" class="form-label">Antonyms</label>
-          {{ form.antonyms }}
-        </div>
-        <div class="mb-3">
-          <label for="synonyms" class="form-label">Synonyms</label>
-          {{ form.synonyms }}
-        </div>
-        <div class="mb-3">
-          <label for="example" class="form-label">Example</label>
-          {{ form.example }}
-        </div>
-        <button type="submit" class="btn btn-success w-100"> Submit
+        <table class="table table-borderless">
+          {{ wordform.as_table }}
+        </table>
+        <button type="submit" name="word_submit" class="btn btn-success w-100">
+          Submit
           <i class="bi bi-check-circle"></i>
         </button>
       </form>

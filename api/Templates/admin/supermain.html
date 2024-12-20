@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,6 +23,8 @@
 
     <main>
       <h2 style="color: brown">I am superadmin</h2>
+      <a href="{% url 'apiword' %}">WORD</a>
+      <a href="{% url 'apipost' %}">POST</a>
       {% block admin %} {% endblock %}
     </main>
 
