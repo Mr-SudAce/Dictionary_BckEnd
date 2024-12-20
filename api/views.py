@@ -75,15 +75,15 @@ def apiadmin(request):
     form = WordForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect("apiadmin")
-    context = {"ApiWordsList": ApiWordsList, "form": form}
+        return redirect("apiword")
+    context = {"ApiWordsList": ApiWordsList, "form": form} # user this for data flow
     return render(request, "admin/admin.html", context)
 
 
 def delapiadmin(request, id):
     word = Word.objects.get(id=id)
     word.delete()
-    return redirect("apiadmin")
+    return redirect("apiword")
 
 
 def updateadmin(request, id):
