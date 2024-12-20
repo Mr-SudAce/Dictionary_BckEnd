@@ -1,0 +1,83 @@
+{% extends "admin/supermain.html" %} {% block admin %}
+<h1>Hi, I am admin</h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Words</th>
+      <th>Description</th>
+      <th>Antonyms</th>
+      <th>Synonyms</th>
+      <th>Example</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for word in ApiWordsList %}
+    <tr>
+      <td>{{ word.id }} - {{ word.word }}</td>
+      <td>{{ word.description }}</td>
+      <td>{{ word.antonyms }}</td>
+      <td>{{ word.synonyms }}</td>
+      <td>{{ word.example }}</td>
+      <td>
+        <!-- edit -->
+        <a href="{% url 'updateword' word.id %}" class="btn btn-warning btn-sm"
+          >Edit</a
+        >
+        |
+        <!-- delete -->
+        <form
+          action="{% url 'deleteword' word.id %}"
+          method="POST"
+          style="display: inline"
+          onsubmit="return confirm('Are you sure you want to delete this word?');"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="_method" value="DELETE" />
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<form
+  action="{% if word.id %}{% url 'updateword' word.id %}{% else %}{% url 'apiword' %}{% endif %}"
+  method="POST"
+  class="mt-4"
+>
+  {% csrf_token %}
+
+  <div class="form-group">
+    <label for="words">Words</label>
+    {{ form.word}}
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    {{ form.description}}
+  </div>
+
+  <div class="form-group">
+    <label for="antonyms">Antonyms</label>
+    {{ form.antonyms}}
+  </div>
+
+  <div class="form-group">
+    <label for="synonyms">Synonyms</label>
+    {{ form.synonyms}}
+  </div>
+
+  <div class="form-group">
+    <label for="example">Example</label>
+    {{ form.example}}
+  </div>
+
+  <div class="form-group mt-3">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+
+{% endblock %}
