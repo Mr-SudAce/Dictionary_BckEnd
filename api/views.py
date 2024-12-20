@@ -60,8 +60,6 @@ def WordDetail(request, id):
         return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
 
 
-
-
 ######################### POSTAPI ############################
 @api_view(["GET", "POST"])
 def PostView(request):
@@ -109,46 +107,6 @@ def PostDetail(request, id):
         return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ################################## Templates ###########################
 
 baseURL = "http://127.0.0.1:8000"
@@ -162,11 +120,18 @@ def adminWordListApi(request):
     ApiWordsList = response.json() if response.status_code == 200 else []
     wordform = WordForm(request.POST or None)
 
-    if request.method == "POST" and "word_submit" in request.POST and  wordform.is_valid():
+    if (
+        request.method == "POST"
+        and "word_submit" in request.POST
+        and wordform.is_valid()
+    ):
         wordform.save()
         messages.success(request, "Word added successfully!")
         return redirect("apiword")
-    context = {"ApiWordsList": ApiWordsList, "wordform": wordform}  # user this for data flow
+    context = {
+        "ApiWordsList": ApiWordsList,
+        "wordform": wordform,
+    }  # user this for data flow
     return render(request, "admin/admin.html", context)
 
 
@@ -198,17 +163,24 @@ def adminPostListApi(request):
     response = requests.get(GetPOST)
     ApiPostsList = response.json() if response.status_code == 200 else []
     postform = PostForm(request.POST or None)
-    
-    if request.method == "POST" and "post_submit" in request.POST and postform.is_valid():
+
+    if (
+        request.method == "POST"
+        and "post_submit" in request.POST
+        and postform.is_valid()
+    ):
         postform.save()
         messages.success(request, "Post added successfully!")
         return redirect("apipost")
-    context = {"ApiPostsList": ApiPostsList, "postform": postform}  # user this for data flow
+    context = {
+        "ApiPostsList": ApiPostsList,
+        "postform": postform,
+    }  # user this for data flow
     return render(request, "admin/post.html", context)
 
 
 def adminPostDelApi(request, id):
-    post = get_object_or_404(PostModel,id=id)
+    post = get_object_or_404(PostModel, id=id)
     post.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apipost")
@@ -216,20 +188,13 @@ def adminPostDelApi(request, id):
 
 def adminPostUpdateApi(request, id):
     post = get_object_or_404(PostModel, id=id)
-    postform = PostForm(request.POST, instance=post)
     if request.method == "POST":
-        if postform.is_valid():
-            postform.save()
+        pform = PostForm(request.POST, request.FILES, instance=post)
+        if pform.is_valid():
+            pform.save()
             messages.success(request, "Post updated successfully!")
             return redirect("apipost")
-        else:
-            return redirect("apipost")
     else:
-        postform = PostModel(instance=post)
+        pform = PostForm(instance=post)
 
-    context = {
-        "postform": postform,
-        "post": post,
-    }
-
-    return render(request, "admin/post.html", context)
+    return render(request, "admin/post.html", {"postform": pform, "post": post})
