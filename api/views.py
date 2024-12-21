@@ -50,7 +50,7 @@ def WordDetail(request, id):
     try:
         word = WordModel.objects.get(id=id)
     except WordModel.DoesNotExist:
-        return Response({"Word Doesn't Exists"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error":"Word Doesn't Exists"}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
         serialized = WordSerializer(word)
@@ -61,16 +61,15 @@ def WordDetail(request, id):
         if serialized.is_valid():
             serialized.save()
             return JsonResponse(
-                {"Updated Successfully"},
-                serialized.data,
+                {"message":"Updated Successfully","data" : serialized.data},
+                
                 status=status.HTTP_202_ACCEPTED,
             )
-        return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == "DELETE":
         word.delete()
-        return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
-
+        return HttpResponse({"message" : "DELETE SUCCESSFULLY"}, status.HTTP_204_NO_CONTENT)
 
 ######################### POSTAPI ############################
 @api_view(["GET", "POST"])
