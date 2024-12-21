@@ -12,6 +12,18 @@ from .forms import *
 
 # Create your views here.
 
+# Landing page
+def supermain(request):
+    return render(request, 'admin/supermain.html')
+
+
+
+
+
+
+
+
+
 
 ######################### WORDAPI ############################
 @api_view(["GET", "POST"])
@@ -109,9 +121,11 @@ def PostDetail(request, id):
 
 ################################## Templates ###########################
 
+
+json = "?format=json"
 baseURL = "http://127.0.0.1:8000"
-GetWord = f"{baseURL}/api/word/"  # WordAPI Url
-GetPOST = f"{baseURL}/api/post/"  # PostAPI Url
+GetWord = f"{baseURL}/api/word/{json}"  # WordAPI Url
+GetPOST = f"{baseURL}/api/post/{json}"  # PostAPI Url
 
 
 # WORD CRUD OPERATION

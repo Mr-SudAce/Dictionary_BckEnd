@@ -134,6 +134,9 @@ MEDIA_URL = '/media/'  # Ensure it starts with a forward slash
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Check that this path exists or create the 'media' folder manually
 
 
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
