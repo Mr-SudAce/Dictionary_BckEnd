@@ -1,4 +1,7 @@
-{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+{% extends "admin/supermain.html" %} 
+{% load static %} 
+
+{% block admin %}
 
 <div class="container mt-4 position-relative">
   <!-- Page Header -->
@@ -10,12 +13,6 @@
       role="alert"
     >
       {{ message }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
     </div>
     {% endfor %}
   </div>
@@ -40,21 +37,23 @@
         <tr>
           <td>{{ forloop.counter }}</td>
           <td>{{ post.title }}</td>
-          <td>{{ post.description }}</td>
+          <td>{{ post.description|truncatewords:20 }}</td>
           <td>
+
+            <!-- {{post.image}} -->
             {% if post.image %}
             <img
-              src="{{ post.image.url }}"
+              src="{{ post.image }}"
               alt="{{ post.title }}"
               class="img-fluid"
-              style="max-width: 80px"
+              style="max-width: 80px; height: auto"
             />
             {% else %}
             <img
-              src="{% static 'pi.png' %}"
+              src="{% static 'images/default.jpg' %}"
               alt="No Image Available"
               class="img-fluid"
-              style="max-width: 80px"
+              style="max-width: 80px; height: auto"
             />
             {% endif %}
           </td>
@@ -91,8 +90,11 @@
   <div class="card mt-5">
     <div class="card-header bg-primary text-white">
       <h5 class="mb-0 text-center">
-        {% if postform.instance.id %} Update Post {% else %} Add New Post {%
-        endif %}
+        {% if postform.instance.id %} 
+          Update Post 
+        {% else %} 
+          Add New Post 
+        {% endif %}
       </h5>
     </div>
     <div class="card-body">

@@ -16,7 +16,7 @@ class WordModel(models.Model):
 
 class PostModel(models.Model):
     title = models.CharField(max_length=100, default="", unique=True)
-    image = models.ImageField(upload_to="images/", default="")  # Set default image path
+    image = models.ImageField(upload_to="images/", blank=True)  # Set default image path
     description = models.TextField(default="")  # Use TextField for longer descriptions
     
     def __str__(self):
