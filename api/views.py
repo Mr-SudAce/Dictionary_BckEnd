@@ -175,7 +175,7 @@ def adminWordUpdateApi(request, id):
 def adminPostListApi(request):
     response = requests.get(GetPOST)
     ApiPostsList = response.json() if response.status_code == 200 else []
-    postform = PostForm(request.POST or None)
+    postform = PostForm(request.POST, request.FILES or None)
 
     if (
         request.method == "POST"
