@@ -34,6 +34,7 @@
           <th class="text-center" style="width: 20px">#</th>
           <th class="text-center" style="width: 100px">Title</th>
           <th class="text-center" style="width: 100px">Description</th>
+          <th class="text-center" style="width: 100px">Full Description</th>
           <th class="text-center" style="width: 100px">Image</th>
           <th class="text-center" style="width: 100px">Actions</th>
         </tr>
@@ -44,22 +45,33 @@
         <tr style="height: 100px">
           <td class="text-center align-middle">{{ forloop.counter }}</td>
           <td class="text-center align-middle">{{ post.title }}</td>
-          <td class="text-center align-middle" style="padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50px;">{{ post.description }}</td>
+          <td
+            class="text-center align-middle text-truncate"
+            style="max-width: 50px; padding: 0 10px"
+          >
+            {{ post.description }}
+          </td>
+          <td
+            class="text-center align-middle text-truncate"
+            style="max-width: 50px; padding: 0 10px"
+          >
+            {{ post.full_desc }}
+          </td>
           <td class="text-center align-middle">
             {% if post.image %}
             <img
               src="{{ post.image }}"
               alt="{{ post.title }}"
               class="rounded shadow-sm"
-              style="max-width: 80px; height: 80px; object-fit: contain;"
+              style="max-width: 80px; height: 80px; object-fit: contain"
               loading="lazy"
             />
             {% else %}
             <img
-              src="{% static 'images/default.jpg' %}"
-              alt="No Image Available"
+              src="{% static 'default.jpg' %}"
+              alt="No Image"
               class="rounded shadow-sm"
-              style="max-width: 80px; height: 80px; object-fit: contain;"
+              style="max-width: 80px; height: 80px; object-fit: contain"
               loading="lazy"
             />
             {% endif %}
@@ -77,7 +89,7 @@
                 action="{% url 'deletepost' post.id %}"
                 method="POST"
                 onsubmit="return confirm('Are you sure you want to delete this post?');"
-                style="display: inline;"
+                style="display: inline"
               >
                 {% csrf_token %}
                 <button
@@ -94,7 +106,7 @@
         {% endfor %}
         {% else %}
         <tr>
-          <td colspan="5" class="text-center py-3">
+          <td colspan="6" class="text-center py-3">
             <p class="m-0 fw-bold text-muted">No Posts Available</p>
           </td>
         </tr>
@@ -112,7 +124,7 @@
     </div>
     <div class="card-body">
       <form
-        action="{% if postform.instance.id %}{% url 'updatepost' id=postform.instance.id %}{% else %}{% url 'apipost' %}{% endif %}"
+        action="{% if postform.instance.id %}{% url 'updatepost' postform.instance.id %}{% else %}{% url 'apipost' %}{% endif %}"
         method="POST"
         enctype="multipart/form-data"
       >
@@ -121,16 +133,7 @@
           {% for field in postform %}
           <tr>
             <td>{{ field.label_tag }}</td>
-            <td>
-              {{ field }}
-              {% if field.errors %}
-              <div class="text-danger small">
-                {% for error in field.errors %}
-                <p class="m-0 d-none">{{ error }}</p>
-                {% endfor %}
-              </div>
-              {% endif %}
-            </td>
+            <td>{{ field }}</td>
           </tr>
           {% endfor %}
         </table>

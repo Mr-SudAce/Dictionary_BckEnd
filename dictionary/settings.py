@@ -127,13 +127,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # Static files settings
 STATIC_URL = '/static/'  # Ensure it starts with a forward slash
+MEDIA_URL = '/media/'  # Ensure it starts with a forward slash
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Media files settings
-MEDIA_URL = '/media/'  # Ensure it starts with a forward slash
+# Media/Static files settings
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Check that this path exists or create the 'media' folder manually
 
 
