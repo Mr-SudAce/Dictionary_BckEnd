@@ -2,7 +2,7 @@
 {% load static %}
 {% block admin %}
 
-<div class="container py-5">
+<div class="">
   <!-- Alert Messages -->
   {% if messages %}
   <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
@@ -17,11 +17,12 @@
 
   <!-- Page Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="text-dark">Footer Management</h1>
+    <h1 class="text-dark" style="font-size: 4vh;">Footer Management</h1>
     <button
       class="btn btn-outline-dark fw-bolder"
       data-bs-toggle="modal"
       data-bs-target="#footerFormModal"
+      style="font-size: 2vh;"
     >
       Add New Footer <i class="bi bi-plus-lg fw-bolder"></i>
     </button>
@@ -30,13 +31,13 @@
   <!-- Footer Table -->
   <div class="card shadow-sm border-0">
     <div class="table-responsive" style="border-radius: 8px;">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="bg-light">
+      <table class="table table-bordered table-striped table-hover align-middle mb-0">
+        <thead class="bg-light" style="height: 4rem;">
           <tr class="bg-dark text-white">
-            <th class="text-center" style="width: 10%;">#</th>
-            <th>Heading</th>
-            <th>Description</th>
-            <th class="text-center" style="width: 20%;">Actions</th>
+            <th class="text-center align-middle" style="width: 10%;">#</th>
+            <th class="text-center align-middle">Heading</th>
+            <th class="text-center align-middle">Description</th>
+            <th class="text-center align-middle" style="width: 20%;">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -44,7 +45,7 @@
           {% for footer in ApiFooterList %}
           <tr>
             <td class="text-center fw-bolder">{{ forloop.counter }}</td>
-            <td>{{ footer.heading }}</td>
+            <td class="text-center align-middle">{{ footer.heading }}</td>
             <td class="text-truncate" style="max-width: 250px;">{{ footer.description|safe }}</td>
             <td class="text-center">
               <div class="btn-group gap-2">

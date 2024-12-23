@@ -2,7 +2,14 @@
 {% load static %}
 {% block admin %}
 
-<div class="container py-5">
+
+<style>
+  .descp p{
+    margin: 0;
+  }
+</style>
+
+<div class="">
   <!-- Alert Messages -->
   {% if messages %}
   <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
@@ -17,11 +24,12 @@
 
   <!-- Page Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="text-dark">Word Management</h1>
+    <h1 class="text-dark" style="font-size: 4vh;">Word Management</h1>
     <button
       class="btn btn-outline-dark fw-bolder"
       data-bs-toggle="modal"
       data-bs-target="#wordFormModal"
+      style="font-size: 2vh;"
     >
       Add New Word <i class="bi bi-plus-lg fw-bolder"></i>
     </button>
@@ -82,20 +90,17 @@
 
   <!-- Words Table -->
   <div class="card shadow-sm border-0 mt-4">
-    <!-- <div class="card-header text-white bg-dark">
-      <h5 class="mb-0">Existing Words</h5>
-    </div> -->
     <div class="table-responsive" style="border-radius: 8px;">
-      <table class="table table-hover align-middle mb-0">
-        <thead class="bg-dark text-white">
-          <tr class="">
-            <th class="text-center" style="width: 5%;">#</th>
-            <th>Word</th>
-            <th>Description</th>
-            <th>Antonyms</th>
-            <th>Synonyms</th>
-            <th>Example</th>
-            <th class="text-center" style="width: 15%;">Actions</th>
+      <table class="table table-bordered table-striped table-hover align-middle mb-0">
+        <thead class="bg-dark text-white" style="height: 4rem;">
+          <tr>
+            <th class="text-center align-middle" style="width: 5%;">#</th>
+            <th class="text-center align-middle">Word</th>
+            <th class="text-center align-middle">Description</th>
+            <th class="text-center align-middle">Antonyms</th>
+            <th class="text-center align-middle">Synonyms</th>
+            <th class="text-center align-middle">Example</th>
+            <th class="text-center align-middle" style="width: 15%;">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -103,11 +108,12 @@
             {% for word in ApiWordsList %}
             <tr>
               <td class="text-center">{{ forloop.counter }}</td>
-              <td>{{ word.word }}</td>
-              <td class="text-truncate" style="max-width: 250px;">{{ word.description|safe|slice:30 }}</td>
-              <td>{{ word.antonyms }}</td>
-              <td>{{ word.synonyms }}</td>
-              <td>{{ word.example }}</td>
+              <td class="align-middle text-center">{{ word.word }}</td>
+              
+              <td class="text-truncate descp" style="max-width: 250px;">{{ word.description|safe|slice:30 }}</td>
+              <td class="align-middle text-center">{{ word.antonyms }}</td>
+              <td class="align-middle text-center">{{ word.synonyms }}</td>
+              <td class="align-middle text-center">{{ word.example }}</td>
               <td class="text-center">
                 <div class="btn-group gap-2">
                   <a
