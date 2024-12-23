@@ -31,17 +31,66 @@
   </head>
   <body>
     <header>
-      <h1>Main Header</h1>
+      <h1>Admin Dashboard</h1>
     </header>
 
     <main>
-      <h2 style="color: brown">I am superadmin</h2>
-      <a href="{% url 'apiword' %}">WORD</a>
-      <a href="{% url 'apipost' %}">POST</a>
-      <a href="{% url 'apifooter' %}">FOOTER</a>
-      <!-- <a href="{% url 'apipost' %}">POST</a>
-      <a href="{% url 'apiword' %}">WORD</a>
-      <a href="{% url 'apipost' %}">POST</a> -->
+      <nav
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 20px;
+          background-color: #f8f9fa;
+          padding: 10px 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <a
+          href="{% url 'apiword' %}"
+          style="
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s, transform 0.3s;
+          "
+          onmouseover="this.style.color='#000'; this.style.transform='scale(1.05)';"
+          onmouseout="this.style.color='#000'; this.style.transform='scale(1)';"
+          >WORD</a
+        >
+        <a
+          href="{% url 'apipost' %}"
+          style="
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s, transform 0.3s;
+          "
+          onmouseover="this.style.color='#000'; this.style.transform='scale(1.05)';"
+          onmouseout="this.style.color='#000'; this.style.transform='scale(1)';"
+          >POST</a
+        >
+        <a
+          href="{% url 'apifooter' %}"
+          style="
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s, transform 0.3s;
+          "
+          onmouseover="this.style.color='#000'; this.style.transform='scale(1.05)';"
+          onmouseout="this.style.color='#000'; this.style.transform='scale(1)';"
+          >FOOTER</a
+        >
+      </nav>
+
+      <!-- <a href="{% url 'apipost' %}">POST</a> -->
+      <!-- <a href="{% url 'apiword' %}">WORD</a> -->
+      <!-- <a href="{% url 'apipost' %}">POST</a> -->
 
       {% block admin %} {% endblock %}
     </main>
@@ -58,72 +107,71 @@
     ></script>
 
     <script
-  src="https://cdn.tiny.cloud/1/jkk7x68jr5yjhxnwjqps72q25l1g0acffet2mln2x26a99ua/tinymce/7/tinymce.min.js"
-  referrerpolicy="origin"
-></script>
+      src="https://cdn.tiny.cloud/1/jkk7x68jr5yjhxnwjqps72q25l1g0acffet2mln2x26a99ua/tinymce/7/tinymce.min.js"
+      referrerpolicy="origin"
+    ></script>
 
-<script>
-  tinymce.init({
-    selector: "textarea",
-    plugins: [
-      // Core editing features
-      "anchor",
-      "autolink",
-      "charmap",
-      "codesample",
-      "emoticons",
-      "image",
-      "link",
-      "lists",
-      "media",
-      "searchreplace",
-      "table",
-      "visualblocks",
-      "wordcount",
-      // Your account includes a free trial of TinyMCE premium features
-      // Try the most popular premium features until Jan 6, 2025:
-      "checklist",
-      "mediaembed",
-      "casechange",
-      "export",
-      "formatpainter",
-      "pageembed",
-      "a11ychecker",
-      "tinymcespellchecker",
-      "permanentpen",
-      "powerpaste",
-      "advtable",
-      "advcode",
-      "editimage",
-      "advtemplate",
-      "ai",
-      "mentions",
-      "tinycomments",
-      "tableofcontents",
-      "footnotes",
-      "mergetags",
-      "autocorrect",
-      "typography",
-      "inlinecss",
-      "markdown",
-      "importword",
-      "exportword",
-      "exportpdf",
-    ],
-    toolbar:
-      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-    tinycomments_mode: "embedded",
-    tinycomments_author: "Author name",
-    mergetags_list: [
-      { value: "First.Name", title: "First Name" },
-      { value: "Email", title: "Email" },
-    ],
-    ai_request: (request, respondWith) =>
-      respondWith.string(() =>
-        Promise.reject("See docs to implement AI Assistant")
-      ),
-  });
-</script>
-
+    <script>
+      tinymce.init({
+        selector: "textarea",
+        plugins: [
+          // Core editing features
+          "anchor",
+          "autolink",
+          "charmap",
+          "codesample",
+          "emoticons",
+          "image",
+          "link",
+          "lists",
+          "media",
+          "searchreplace",
+          "table",
+          "visualblocks",
+          "wordcount",
+          // Your account includes a free trial of TinyMCE premium features
+          // Try the most popular premium features until Jan 6, 2025:
+          "checklist",
+          "mediaembed",
+          "casechange",
+          "export",
+          "formatpainter",
+          "pageembed",
+          "a11ychecker",
+          "tinymcespellchecker",
+          "permanentpen",
+          "powerpaste",
+          "advtable",
+          "advcode",
+          "editimage",
+          "advtemplate",
+          "ai",
+          "mentions",
+          "tinycomments",
+          "tableofcontents",
+          "footnotes",
+          "mergetags",
+          "autocorrect",
+          "typography",
+          "inlinecss",
+          "markdown",
+          "importword",
+          "exportword",
+          "exportpdf",
+        ],
+        toolbar:
+          "undo redo code | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
+        tinycomments_mode: "embedded",
+        tinycomments_author: "Author name",
+        mergetags_list: [
+          { value: "First.Name", title: "First Name" },
+          { value: "Email", title: "Email" },
+        ],
+        ai_request: (request, respondWith) =>
+          respondWith.string(() =>
+            Promise.reject("See docs to implement AI Assistant")
+          ),
+      });
+    </script>
   </body>
 </html>

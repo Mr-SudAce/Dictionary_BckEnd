@@ -1,122 +1,150 @@
 {% extends "admin/supermain.html" %}
-
+{% load static %}
 {% block admin %}
-<div class="container mt-4 position-relative">
-  <!-- Page Header -->
+
+<div class="container py-5">
+  <!-- Alert Messages -->
   {% if messages %}
-  <div class="mt-4 position-absolute" style="top: -17px; right: 12px">
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
     {% for message in messages %}
-    <div
-      class="alert alert-{{ message.tags }} alert-dismissible fade show m-0"
-      role="alert"
-    >
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
       {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
   </div>
   {% endif %}
 
-  <h1 class="text-center mb-4">Word Management</h1>
-
-  <!-- Words Table -->
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark">
-        <tr>
-          <th class="text-center">#</th>
-          <th class="text-center">Word</th>
-          <th class="text-center">Description</th>
-          <th class="text-center">Antonyms</th>
-          <th class="text-center">Synonyms</th>
-          <th class="text-center">Example</th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% if ApiWordsList %}
-          {% for word in ApiWordsList %}
-          <tr style="height: 50px">
-            <td class="text-center align-middle">{{ forloop.counter }}</td>
-            <td class="text-center align-middle">{{ word.word }}</td>
-            <td class="text-center align-middle" style="padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50px;">{{ word.description }}</td>
-            <td class="text-center align-middle">{{ word.antonyms }}</td>
-            <td class="text-center align-middle">{{ word.synonyms }}</td>
-            <td class="text-center align-middle">{{ word.example }}</td>
-            <td class="text-center align-middle">
-              <div class="d-flex justify-content-center gap-2">
-                <a
-                  href="{% url 'updateword' word.id %}"
-                  class="btn btn-warning btn-sm"
-                  title="Edit Word"
-                >
-                  <i class="bi bi-pencil-square"></i>
-                </a>
-                <form
-                  action="{% url 'deleteword' word.id %}"
-                  method="POST"
-                  onsubmit="return confirm('Are you sure you want to delete this word?');"
-                  style="display: inline;"
-                >
-                  {% csrf_token %}
-                  <button
-                    type="submit"
-                    class="btn btn-danger btn-sm"
-                    title="Delete Word"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </form>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        {% else %}
-        <tr>
-          <td colspan="7" class="text-center py-3">
-            <p class="m-0 fw-bold text-muted">No Words Available</p>
-          </td>
-        </tr>
-        {% endif %}
-      </tbody>
-    </table>
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-dark">Word Management</h1>
+    <button
+      class="btn btn-outline-dark"
+      data-bs-toggle="modal"
+      data-bs-target="#wordFormModal"
+    >
+      Add New Word <i class="bi bi-plus-lg"></i>
+    </button>
   </div>
 
-  <!-- Word Form -->
-  <div class="card mt-5">
-    <div class="card-header bg-primary">
-      <h5 class="mb-0 text-center text-white">
-        {% if wordform.instance.id %} Update Word {% else %} Add New Word {% endif %}
-      </h5>
-    </div>
-    <div class="card-body">
-      <form
-        action="{% if wordform.instance.id %}{% url 'updateword' wordform.instance.id %}{% else %}{% url 'apiword' %}{% endif %}"
-        method="POST"
-      >
-        {% csrf_token %}
-        <table class="table table-borderless">
-          {% for field in wordform %}
-          <tr>
-            <td>{{ field.label_tag }}</td>
-            <td>
-              {{ field }} 
-              {% if field.errors %}
-              <div class="text-danger small">
-                {% for error in field.errors %}
-                <p class="m-0 d-none">{{ error }}</p>
-                {% endfor %}
+  <!-- Word Form Modal -->
+  <div
+    class="modal fade"
+    id="wordFormModal"
+    tabindex="-1"
+    aria-labelledby="wordFormModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="wordFormModalLabel">
+            {% if wordform.instance.id %} Update Word {% else %} Add New Word {% endif %}
+          </h5>
+          <button
+            type="button"
+            class="btn-close bg-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            action="{% if wordform.instance.id %}{% url 'updateword' wordform.instance.id %}{% else %}{% url 'apiword' %}{% endif %}"
+            method="POST"
+          >
+            {% csrf_token %}
+            <div class="row g-3">
+              {% for field in wordform %}
+              <div class="col-md-6">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="text-danger small">
+                    {% for error in field.errors %}
+                      <p class="m-0">{{ error }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
-              {% endif %}
-            </td>
+              {% endfor %}
+            </div>
+            <div class="d-flex justify-content-end mt-4">
+              <button type="submit" name="word_submit" class="btn btn-success">
+                Submit <i class="bi bi-check-circle"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Words Table -->
+  <div class="card shadow-sm border-0 mt-4">
+    <!-- <div class="card-header text-white bg-dark">
+      <h5 class="mb-0">Existing Words</h5>
+    </div> -->
+    <div class="table-responsive" style="border-radius: 8px;">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-dark text-white">
+          <tr class="">
+            <th class="text-center" style="width: 5%;">#</th>
+            <th>Word</th>
+            <th>Description</th>
+            <th>Antonyms</th>
+            <th>Synonyms</th>
+            <th>Example</th>
+            <th class="text-center" style="width: 15%;">Actions</th>
           </tr>
-          {% endfor %}
-        </table>
-        <button type="submit" name="word_submit" class="btn btn-success w-100">
-          Submit
-          <i class="bi bi-check-circle"></i>
-        </button>
-      </form>
+        </thead>
+        <tbody>
+          {% if ApiWordsList %}
+            {% for word in ApiWordsList %}
+            <tr>
+              <td class="text-center">{{ forloop.counter }}</td>
+              <td>{{ word.word }}</td>
+              <td class="text-truncate" style="max-width: 250px;">{{ word.description|safe|slice:30 }}</td>
+              <td>{{ word.antonyms }}</td>
+              <td>{{ word.synonyms }}</td>
+              <td>{{ word.example }}</td>
+              <td class="text-center">
+                <div class="btn-group gap-2">
+                  <a
+                    href="{% url 'updateword' word.id %}"
+                    class="btn btn-sm btn-outline-warning"
+                    title="Edit Word"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </a>
+                  <form
+                    action="{% url 'deleteword' word.id %}"
+                    method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this word?');"
+                    class="d-inline"
+                  >
+                    {% csrf_token %}
+                    <button
+                      type="submit"
+                      class="btn btn-sm btn-outline-danger"
+                      title="Delete Word"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">No words available.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
+
 {% endblock %}

@@ -2,14 +2,15 @@
 {% load static %}
 {% block admin %}
 
-<div class="container mt-4 position-relative">
+<div class="container mt-4 position-relative" style="color: #333">
   <!-- Alert Messages -->
   {% if messages %}
-  <div class="mt-4 position-absolute" style="top: -17px; right: 12px">
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
     {% for message in messages %}
     <div
       class="alert alert-{{ message.tags }} alert-dismissible fade show m-0"
       role="alert"
+      style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)"
     >
       {{ message }}
       <button
@@ -17,6 +18,7 @@
         class="btn-close"
         data-bs-dismiss="alert"
         aria-label="Close"
+        style="outline: none"
       ></button>
     </div>
     {% endfor %}
@@ -24,63 +26,106 @@
   {% endif %}
 
   <!-- Page Header -->
-  <h1 class="text-center mb-4">Post Management</h1>
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="text-dark">Post Management</h1>
+    <button
+      class="btn btn-outline-dark"
+      data-bs-toggle="modal"
+      data-bs-target="#postFormModal"
+    >
+      Add New Post <i class="bi bi-plus-lg"></i>
+    </button>
+  </div>
+
+  <!-- Post Form -->
+  <div
+    class="modal fade"
+    id="postFormModal"
+    tabindex="-1"
+    aria-labelledby="postFormModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="postFormModalLabel">
+            {% if postform.instance.id %} Update Post {% else %} Add New Post {% endif %}
+          </h5>
+          <button
+            type="button"
+            class="btn-close bg-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            action="{% if postform.instance.id %}{% url 'updatepost' postform.instance.id %}{% else %}{% url 'apipost' %}{% endif %}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <div class="row g-3">
+              {% for field in postform %}
+              <div class="col-12">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+              </div>
+              {% endfor %}
+            </div>
+            <div class="d-flex justify-content-end mt-4">
+              <button type="submit" name="post_submit" class="btn btn-success">
+                Submit <i class="bi bi-check-circle"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Post Table -->
-  <div class="table-responsive">
+  <div
+    class="table-responsive mt-4"
+    style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;"
+  >
     <table class="table table-bordered table-striped">
       <thead class="table-dark">
         <tr>
-          <th class="text-center" style="width: 20px">#</th>
-          <th class="text-center" style="width: 100px">Title</th>
-          <th class="text-center" style="width: 100px">Description</th>
-          <th class="text-center" style="width: 100px">Full Description</th>
-          <th class="text-center" style="width: 100px">Image</th>
-          <th class="text-center" style="width: 100px">Actions</th>
+          <th class="text-center" style="width: 5%">#</th>
+          <th class="text-center" style="width: 20%">Title</th>
+          <th class="text-center" style="width: 25%">Description</th>
+          <th class="text-center" style="width: 25%">Full Description</th>
+          <th class="text-center" style="width: 15%">Image</th>
+          <th class="text-center" style="width: 10%">Actions</th>
         </tr>
       </thead>
       <tbody>
         {% if ApiPostsList %}
         {% for post in ApiPostsList %}
         <tr style="height: 100px">
-          <td class="text-center align-middle">{{ forloop.counter }}</td>
-          <td class="text-center align-middle">{{ post.title }}</td>
-          <td
-            class="text-center align-middle text-truncate"
-            style="max-width: 50px; padding: 0 10px"
-          >
-            {{ post.description }}
+          <td class="text-center align-middle" style="font-weight: 600">
+            {{ forloop.counter }}
           </td>
-          <td
-            class="text-center align-middle text-truncate"
-            style="max-width: 50px; padding: 0 10px"
-          >
-            {{ post.full_desc }}
+          <td class="text-center align-middle">{{ post.title }}</td>
+          <td class="text-center align-middle text-truncate" style="max-width: 50px; padding: 0 10px;">
+            {{ post.full_desc|slice:20|safe }}
+          </td>
+          <td class="text-center align-middle text-truncate" style="padding: 0 10px;">
+            {{ post.full_desc|safe|slice:50 }}
           </td>
           <td class="text-center align-middle">
             {% if post.image %}
-            <img
-              src="{{ post.image }}"
-              alt="{{ post.title }}"
-              class="rounded shadow-sm"
-              style="max-width: 80px; height: 80px; object-fit: contain"
-              loading="lazy"
-            />
+            <img src="{{ post.image }}" alt="{{ post.title }}" class="rounded shadow-sm" style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;" loading="lazy" />
             {% else %}
-            <img
-              src="{% static 'default.jpg' %}"
-              alt="No Image"
-              class="rounded shadow-sm"
-              style="max-width: 80px; height: 80px; object-fit: contain"
-              loading="lazy"
-            />
+            <img src="{% static 'default.jpg' %}" alt="No Image" class="rounded shadow-sm" style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;" loading="lazy" />
             {% endif %}
           </td>
           <td class="text-center align-middle">
-            <div class="d-flex justify-content-center gap-2">
+            <div class="btn-group gap-2">
               <a
                 href="{% url 'updatepost' post.id %}"
-                class="btn btn-warning btn-sm px-3 shadow-sm"
+                class="btn btn-sm btn-outline-warning"
                 title="Edit Post"
               >
                 <i class="bi bi-pencil-square"></i>
@@ -89,12 +134,12 @@
                 action="{% url 'deletepost' post.id %}"
                 method="POST"
                 onsubmit="return confirm('Are you sure you want to delete this post?');"
-                style="display: inline"
+                class="d-inline"
               >
                 {% csrf_token %}
                 <button
                   type="submit"
-                  class="btn btn-danger btn-sm px-3 shadow-sm"
+                  class="btn btn-sm btn-outline-danger"
                   title="Delete Post"
                 >
                   <i class="bi bi-trash"></i>
@@ -113,36 +158,6 @@
         {% endif %}
       </tbody>
     </table>
-  </div>
-
-  <!-- Post Form -->
-  <div class="card mt-5">
-    <div class="card-header bg-primary text-white">
-      <h5 class="mb-0 text-center">
-        {% if postform.instance.id %} Update Post {% else %} Add New Post {% endif %}
-      </h5>
-    </div>
-    <div class="card-body">
-      <form
-        action="{% if postform.instance.id %}{% url 'updatepost' postform.instance.id %}{% else %}{% url 'apipost' %}{% endif %}"
-        method="POST"
-        enctype="multipart/form-data"
-      >
-        {% csrf_token %}
-        <table class="table table-borderless">
-          {% for field in postform %}
-          <tr>
-            <td>{{ field.label_tag }}</td>
-            <td>{{ field }}</td>
-          </tr>
-          {% endfor %}
-        </table>
-        <button type="submit" name="post_submit" class="btn btn-success w-100">
-          Submit
-          <i class="bi bi-check-circle"></i>
-        </button>
-      </form>
-    </div>
   </div>
 </div>
 
