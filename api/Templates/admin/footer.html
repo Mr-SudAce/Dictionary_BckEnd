@@ -1,0 +1,119 @@
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+
+<div class="container mt-4 position-relative">
+  <!-- Alert Messages -->
+  {% if messages %}
+  <div class="mt-4 position-absolute" style="top: -17px; right: 12px">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible fade show m-0"
+      role="alert"
+    >
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Page Header -->
+  <h1 class="text-center mb-4">Footer Management</h1>
+
+  <!-- footer Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th class="text-center" style="width: 20px">#</th>
+          <th class="text-center" style="width: 100px">Heading</th>
+          <th class="text-center" style="width: 100px">Description</th>
+          <th class="text-center" style="width: 100px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if ApiFooterList %} {% for footer in ApiFooterList %}
+        <tr style="height: 100px">
+          <!-- <p>{{ApiFooterList}}</p> -->
+          <td class="text-center align-middle">{{ forloop.counter }}</td>
+          <td class="text-center align-middle">{{ footer.heading }}</td>
+          <td
+            class="text-center align-middle text-truncate"
+            style="max-width: 50px; padding: 0 10px"
+          >
+            {{ footer.description|safe }}
+          </td>
+          <td class="text-center align-middle">
+            <div class="d-flex justify-content-center gap-2">
+              <a
+                href="{% url 'updatefooter' footer.id %}"
+                class="btn btn-warning btn-sm px-3 shadow-sm"
+                title="Edit footer"
+              >
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              <form
+                action="{% url 'deletefooter' footer.id %}"
+                method="POST"
+                onsubmit="return confirm('Are you sure you want to delete this footer?');"
+                style="display: inline"
+              >
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="btn btn-danger btn-sm px-3 shadow-sm"
+                  title="Delete footer"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %} {% else %}
+        <tr>
+          <td colspan="0" class="text-center py-3">
+            <p class="m-0 fw-bold text-muted">No footers Available</p>
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- footer Form -->
+  <div class="card mt-5">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0 text-center">
+        {% if footerform.instance.id %} Update footer {% else %} Add New footer
+        {%endif %}
+      </h5>
+    </div>
+    <div class="card-body">
+      <form
+        action="{% if footerform.instance.id %}{% url 'updatefooter' footerform.instance.id %}{% else %}{% url 'apifooter' %}{% endif %}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+        <table class="table table-borderless">
+          <!-- <textarea id="editor" name="content">{{ content }}</textarea> -->
+          {% for field in footerform %}
+          <tr>
+            <td>{{ field.label_tag }}</td>
+            <td>{{ field }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+        <button
+          type="submit"
+          name="footer_submit"
+          class="btn btn-success w-100"
+        >
+          Submit
+          <i class="bi bi-check-circle"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

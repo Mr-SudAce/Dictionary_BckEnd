@@ -20,11 +20,6 @@ def supermain(request):
 
 
 
-
-
-
-
-
 ######################### WORDAPI ############################
 @api_view(["GET", "POST"])
 def WordView(request):
@@ -118,13 +113,60 @@ def PostDetail(request, id):
         return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
 
 
+######################### POSTAPI ############################
+@api_view(["GET", "POST"])
+def FooterView(request):
+    try:
+        if request.method == "GET":
+            footer = FooterModel.objects.all()
+            serialized = FooterSerializer(footer, many=True)
+            return Response(serialized.data, status=status.HTTP_200_OK)
+
+        elif request.method == "POST":
+            serialized = FooterSerializer(data=request.data)
+            if serialized.is_valid():
+                serialized.save()
+                print(serialized.data)
+                return Response(serialized.data, status=status.HTTP_201_CREATED)
+            return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as error:
+        return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def FooterDetail(request, id):
+    try:
+        footer = FooterModel.objects.get(id=id)
+    except FooterModel.DoesNotExist:
+        return Response({"Footer Doesn't Exists"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        serialized = FooterSerializer(footer)
+        return JsonResponse(serialized.data)
+
+    elif request.method == "PUT":
+        serialized = FooterSerializer(footer, data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return JsonResponse(
+                {"Updated Successfully"},
+                serialized.data,
+                status=status.HTTP_202_ACCEPTED,
+            )
+        return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == "DELETE":
+        footer.delete()
+        return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
+
+
 ################################## Templates ###########################
 
 
-json = "?format=json"
 baseURL = "http://127.0.0.1:8000"
-GetWord = f"{baseURL}/api/word/{json}"  # WordAPI Url
-GetPOST = f"{baseURL}/api/post/{json}"  # PostAPI Url
+GetWord = f"{baseURL}/api/word/"  # WordAPI Url
+GetPOST = f"{baseURL}/api/post/"  # PostAPI Url
+GETFOOOTER = f"{baseURL}/api/footer/" #FooterAPI Url
 
 
 # WORD CRUD OPERATION
@@ -211,3 +253,47 @@ def adminPostUpdateApi(request, id):
         pform = PostForm(instance=post)
 
     return render(request, "admin/post.html", {"postform": pform, "post": post})
+
+
+
+
+# FOOTER CRUD OPERATION
+def adminFooterListApi(request):
+    response = requests.get(GETFOOOTER)
+    ApiFooterList = response.json() if response.status_code == 200 else []
+    footerform = FooterForm(request.POST, request.FILES or None)
+
+    if (
+        request.method == "POST"
+        and "footer_submit" in request.POST
+        and footerform.is_valid()
+    ):
+        footerform.save()
+        messages.success(request, "Footer added successfully!")
+        return redirect("apifooter")
+    context = {
+        "ApiFooterList": ApiFooterList,
+        "footerform": footerform,
+    }  # user this for data flow
+    return render(request, "admin/footer.html", context)
+
+
+def adminFooterDelApi(request, id):
+    footer = get_object_or_404(FooterModel, id=id)
+    footer.delete()
+    messages.warning(request, "Deleted Successfully")
+    return redirect("apifooter")
+
+
+def adminFooterUpdateApi(request, id):
+    footer = get_object_or_404(FooterModel, id=id)
+    if request.method == "POST":
+        f_form = FooterForm(request.POST, request.FILES, instance=footer)
+        if f_form.is_valid():
+            f_form.save()
+            messages.success(request, "Footer updated successfully!")
+            return redirect("apifooter")
+    else:
+        f_form = FooterForm(instance=footer)
+
+    return render(request, "admin/footer.html", {"footerform": f_form, "footer": footer})

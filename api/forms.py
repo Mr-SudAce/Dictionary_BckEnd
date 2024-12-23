@@ -7,8 +7,12 @@ class WordForm(forms.ModelForm):
         model = WordModel
         fields = '__all__'
 
-
 class PostForm(forms.ModelForm):
     class Meta:
         model = PostModel
+        fields = "__all__"
+
+class FooterForm(forms.ModelForm):
+    class Meta:
+        model = FooterModel
         fields = "__all__"
