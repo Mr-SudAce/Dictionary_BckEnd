@@ -16,3 +16,13 @@ class FooterForm(forms.ModelForm):
     class Meta:
         model = FooterModel
         fields = "__all__"
+
+class HeaderForm(forms.ModelForm):
+    class Meta:
+        model = HeaderModel
+        fields = "__all__"
+
+class PostCatForm(forms.ModelForm):
+    class Meta:
+        model = PostCategoryModel
+        fields = "__all__"

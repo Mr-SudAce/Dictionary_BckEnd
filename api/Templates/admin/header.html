@@ -1,0 +1,170 @@
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+
+<div class="">
+  <!-- Alert Messages -->
+  {% if messages %}
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Page Header -->
+  <h1 class="text-dark" style="font-size: 4vh">Header Management</h1>
+  <!-- <div class="d-flex justify-content-between align-items-center mb-4">
+    <button
+      class="btn btn-outline-dark fw-bolder"
+      style="font-size: 2vh"
+    >
+      Add New Header <i class="bi bi-plus-lg fw-bolder"></i>
+    </button>
+  </div> -->
+
+  <!-- Header Table -->
+  <div class="card shadow-sm border-0">
+    <div class="table-responsive" style="border-radius: 8px">
+      <table
+        class="table table-bordered table-striped table-hover align-middle mb-0"
+      >
+        <thead class="bg-light" style="height: 4rem">
+          <tr class="bg-dark text-white">
+            <th class="text-center align-middle" style="width: 10%">#</th>
+            <th class="text-center align-middle">Site Name</th>
+            <th class="text-center align-middle">Logo</th>
+            <th class="text-center align-middle" style="width: 20%">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if ApiHeaderList %} {% for header in ApiHeaderList %}
+          <tr>
+            <td class="text-center fw-bolder">{{ forloop.counter }}</td>
+            <td class="text-center align-middle">{{ header.site_title }}</td>
+            <td class="text-center">
+              {% if header.logo %}
+              <img
+                src="{{ header.logo }}"
+                alt="{{ header.site_title}}"
+                class="rounded shadow-sm"
+                style="
+                  max-width: 80px;
+                  height: 80px;
+                  object-fit: contain;
+                  border: 1px solid #ddd;
+                "
+                loading="lazy"
+              />
+              {% else %}
+              <img
+                src="{% static 'default.jpg' %}"
+                alt="No Logo"
+                class="rounded shadow-sm"
+                style="
+                  max-width: 80px;
+                  height: 80px;
+                  object-fit: contain;
+                  border: 1px solid #ddd;
+                "
+                loading="lazy"
+              />
+              {% endif %}
+            </td>
+            <td class="text-center">
+              <div class="btn-group gap-2">
+                <a
+                  href="{% url 'updateheader' header.id %}"
+                  class="btn btn-sm btn-outline-warning"
+                  title="Edit Header"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+                <!-- <form
+                  action="{% url 'deleteheader' header.id %}"
+                  method="POST"
+                  onsubmit="return confirm('Are you sure you want to delete this header?');"
+                  class="d-inline"
+                >
+                  {% csrf_token %}
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-outline-danger"
+                    title="Delete Header"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form> -->
+              </div>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="4" class="text-center text-muted py-4">
+              No headers available.
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Header Form Modal -->
+  <div
+    class=""
+    tabindex="-1"
+    aria-labelledby="headerFormModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="headerFormModalLabel">
+            {% if headerform.instance.id %} Update Header {% else %} Add New
+            Header {% endif %}
+          </h5>
+        </div>
+        <div class="modal-body">
+          <form
+            action="{% if headerform.instance.id %}{% url 'updateheader' headerform.instance.id %}{% else %}{% url 'apiheader' %}{% endif %}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <div class="row g-3">
+              {% for field in headerform %}
+              <div class="col-12">
+                <label for="{{ field.id_for_label }}" class="form-label"
+                  >{{ field.label }}</label
+                >
+                {{ field }}
+              </div>
+              {% endfor %}
+            </div>
+            <div class="d-flex justify-content-end mt-4">
+              <button
+                type="submit"
+                name="header_submit"
+                class="btn btn-success"
+              >
+                Submit <i class="bi bi-check-circle"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

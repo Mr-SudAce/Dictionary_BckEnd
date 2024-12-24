@@ -97,6 +97,7 @@
           <th class="text-center align-middle" style="width: 15%">Title</th>
           <th class="text-center align-middle" style="width: 20%">Description</th>
           <th class="text-center align-middle" style="width: 30%">Full Description</th>
+          <th class="text-center align-middle" style="width: 30%">Category</th>
           <th class="text-center align-middle" style="width: 15%">Image</th>
           <th class="text-center align-middle" style="width: 10%">Actions</th>
         </tr>
@@ -114,6 +115,9 @@
           </td>
           <td class="text-center align-middle text-truncate" style="padding: 0 10px;">
             {{ post.full_desc|safe|slice:50 }}
+          </td>          
+          <td class="text-center align-middle text-truncate" style="padding: 0 10px;">
+            {{post.postCat}}
           </td>
           <td class="text-center align-middle">
             {% if post.image %}
