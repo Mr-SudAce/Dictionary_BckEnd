@@ -29,7 +29,7 @@ class PostModel(models.Model):
     full_desc = HTMLField()
     postCat = models.ForeignKey(
         PostCategoryModel, 
-        related_name="postcategories", 
+        related_name="posts", 
         on_delete=models.CASCADE
     )
 

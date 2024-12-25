@@ -1,2 +1,2 @@
-.\venv\Scripts\Activate.ps1
+.\venv\Scripts\Activate
 python manage.py runserver

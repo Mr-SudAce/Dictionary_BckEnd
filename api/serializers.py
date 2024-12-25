@@ -5,27 +5,38 @@ from .models import *
 class WordSerializer(serializers.ModelSerializer):
     class Meta:
         model = WordModel
-        fields = "__all__"
-        
+        fields = [
+            "id",
+            "word",
+            "antonyms",
+            "synonyms",
+            "example",
+            "created_at",
+            "description",
+        ]
+
 
 class PostCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PostCategoryModel
-        fields = "__all__"
+        fields = fields = ["id", "cat_title"]
+
 
 class PostSerializer(serializers.ModelSerializer):
+    post_Cat = PostCategorySerializer(source="postCat", read_only=True)
+
     class Meta:
         model = PostModel
-        fields = "__all__"
-        
+        fields = fields = ["id", "title", "image", "full_desc", "post_Cat"]
+
 
 class FooterSerializer(serializers.ModelSerializer):
     class Meta:
         model = FooterModel
-        fields = "__all__"
+        fields = ["id", "heading", "description"]
+
 
 class HeaderSerializer(serializers.ModelSerializer):
     class Meta:
         model = HeaderModel
-        fields = "__all__"
-
+        fields = ["id", "site_title", "logo"]

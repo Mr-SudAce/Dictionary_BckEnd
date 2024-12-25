@@ -118,7 +118,7 @@ def PostDetail(request, id):
 def PostCatView(request):
     try:
         if request.method == "GET":
-            postcat = PostCategoryModel.objects.all()
+            postcat = PostCategoryModel.objects.prefetch_related("posts").all()
             serialized = PostCategorySerializer(postcat, many=True)
             return Response(serialized.data, status=status.HTTP_200_OK)
         elif request.method == "POST":
@@ -257,7 +257,7 @@ def HeaderDetail(request, id):
 baseURL = "http://127.0.0.1:8000"
 GetWord = f"{baseURL}/api/word/"  # WordAPI Url
 GetPOST = f"{baseURL}/api/post/"  # PostAPI Url
-GetPOSTCATE = f"{baseURL}/api/category/"  # PostCATEAPI Url
+GetPOSTCATE = f"{baseURL}/api/postcat/"  # PostCATEAPI Url
 GETFooter = f"{baseURL}/api/footer/"  # FooterAPI Url
 GETHeader = f"{baseURL}/api/header/"  # HeaderAPI Url
 

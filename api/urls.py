@@ -14,10 +14,10 @@ urlpatterns = [
     path("api/post/delete/<int:id>/", PostDetail, name="delete_post"),
     path("api/post/edit/<int:id>/", PostDetail, name="update_post"),
     # POST CATEGORY
-    path("api/category/", PostCatView, name="postcat_list"),
-    path("api/category/<int:id>/", PostCatDetailView, name="postcat_detail"),
-    path("api/category/delete/<int:id>/", PostCatDetailView, name="delete_postcat"),
-    path("api/category/edit/<int:id>/", PostCatDetailView, name="update_postcat"),
+    path("api/postcat/", PostCatView, name="postcat_list"),
+    path("api/postcat/<int:id>/", PostCatDetailView, name="postcat_detail"),
+    path("api/postcat/delete/<int:id>/", PostCatDetailView, name="delete_postcat"),
+    path("api/postcat/edit/<int:id>/", PostCatDetailView, name="update_postcat"),
     # Footer
     path("api/footer/", FooterView, name="footer_list"),
     path("api/footer/<int:id>", FooterDetail, name="footer_detail"),

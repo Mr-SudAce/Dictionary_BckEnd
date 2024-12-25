@@ -117,7 +117,7 @@
             {{ post.full_desc|safe|slice:50 }}
           </td>          
           <td class="text-center align-middle text-truncate" style="padding: 0 10px;">
-            {{post.postCat}}
+            {{post.post_Cat.cat_title}}
           </td>
           <td class="text-center align-middle">
             {% if post.image %}
