@@ -28,12 +28,12 @@ urlpatterns = [
     path("api/header/<int:id>", HeaderDetail, name="header_detail"),
     path("api/header/delete/<int:id>/", HeaderDetail, name="delete_header"),
     path("api/header/edit/<int:id>/", HeaderDetail, name="update_header"),
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     ########################## Template URL #######################
     # Word CRUD URL
     path("apiword/", adminWordListApi, name="apiword"),
@@ -55,4 +55,5 @@ urlpatterns = [
     path("apiheader/", adminHeaderListApi, name="apiheader"),
     path("apiheader/delete/<int:id>/", adminHeaderDelApi, name="deleteheader"),
     path("apiheader/edit/<int:id>/", adminHeaderUpdateApi, name="updateheader"),
+
 ]
