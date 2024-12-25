@@ -132,6 +132,7 @@ def PostCatView(request):
             {"error": str(error)}, serialized.data, status=status.HTTP_400_BAD_REQUEST
         )
 
+
 @api_view(["GET", "PUT", "DELETE"])
 def PostCatDetailView(request, id):
     try:

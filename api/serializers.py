@@ -14,9 +14,6 @@ class PostCategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class PostSerializer(serializers.ModelSerializer):
-    postCat = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=PostCategoryModel.objects.all()
-    )
     class Meta:
         model = PostModel
         fields = "__all__"
