@@ -1,11 +1,13 @@
-{% extends "admin/supermain.html" %}
-{% load static %}
-{% block admin %}
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}<style>
+  .fuldesc p {
+    margin: 0;
+  }
+</style>
 
-<div class=" position-relative" style="color: #333">
+<div class="position-relative" style="color: #333">
   <!-- Alert Messages -->
   {% if messages %}
-  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
     {% for message in messages %}
     <div
       class="alert alert-{{ message.tags }} alert-dismissible fade show m-0"
@@ -24,139 +26,176 @@
     {% endfor %}
   </div>
   {% endif %}
+  <!-- Alert Messages -->
 
   <!-- Page Header -->
   <div class="d-flex justify-content-between align-items-center">
-    <h1 class="text-dark" style="font-size: 4vh;">Post Management</h1>
+    <h1 class="text-dark" style="font-size: 4vh">Post Management</h1>
     <button
       class="btn btn-outline-dark fw-bolder"
       data-bs-toggle="modal"
       data-bs-target="#postFormModal"
-      style="font-size: 2vh;"
+      style="font-size: 2vh"
     >
       Add New Post <i class="bi bi-plus-lg fw-bolder"></i>
     </button>
   </div>
-
-  <!-- Post Form -->
-  <div
-    class="modal fade"
-    id="postFormModal"
-    tabindex="-1"
-    aria-labelledby="postFormModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title" id="postFormModalLabel">
-            {% if postform.instance.id %} Update Post {% else %} Add New Post {% endif %}
-          </h5>
-          <button
-            type="button"
-            class="btn-close bg-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <form
-            action="{% if postform.instance.id %}{% url 'updatepost' postform.instance.id %}{% else %}{% url 'apipost' %}{% endif %}"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            {% csrf_token %}
-            <div class="row g-3">
-              {% for field in postform %}
-              <div class="col-12">
-                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                {{ field }}
-              </div>
-              {% endfor %}
-            </div>
-            <div class="d-flex justify-content-end mt-4">
-              <button type="submit" name="post_submit" class="btn btn-success">
-                Submit <i class="bi bi-check-circle"></i>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Page Header -->
 
   <!-- Post Table -->
   <div
     class="table-responsive mt-4"
-    style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;"
+    style="
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    "
   >
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark" style="height: 4rem;">
+    <table class="table table-bordered table-striped m-0">
+      <thead class="table-dark" style="height: 4rem">
         <tr>
           <th class="text-center align-middle" style="width: 5%">#</th>
           <th class="text-center align-middle" style="width: 15%">Title</th>
-          <th class="text-center align-middle" style="width: 20%">Description</th>
-          <th class="text-center align-middle" style="width: 30%">Full Description</th>
-          <th class="text-center align-middle" style="width: 30%">Category</th>
+          <th class="text-center align-middle" style="width: 20%">
+            Description
+          </th>
+          <th class="text-center align-middle" style="width: 30%">
+            Full Description
+          </th>
+          <th class="text-center align-middle" style="width: 15%">Category</th>
           <th class="text-center align-middle" style="width: 15%">Image</th>
           <th class="text-center align-middle" style="width: 10%">Actions</th>
         </tr>
       </thead>
       <tbody>
-        {% if ApiPostsList %}
-        {% for post in ApiPostsList %}
-        <tr style="height: 100px">
-          <td class="text-center align-middle" style="font-weight: 600">
-            {{ forloop.counter }}
-          </td>
+        {% if ApiPostsList %} {% for post in ApiPostsList %}
+        <tr>
+          <td class="text-center align-middle">{{ forloop.counter }}</td>
           <td class="text-center align-middle">{{ post.title }}</td>
-          <td class="text-center align-middle text-truncate" style="max-width: 50px; padding: 0 10px;">
-            {{ post.full_desc|slice:20|safe }}
+          <td class="text-center align-middle fuldesc">
+            {{ post.full_desc|safe }}
           </td>
-          <td class="text-center align-middle text-truncate" style="padding: 0 10px;">
-            {{ post.full_desc|safe|slice:50 }}
-          </td>          
-          <td class="text-center align-middle text-truncate" style="padding: 0 10px;">
-            {{post.post_Cat.cat_title}}
+          <td class="text-center align-middle fuldesc">
+            {{ post.full_desc|safe|slice:20 }}
+          </td>
+          <td class="text-center align-middle">
+            {{ post.post_Cat.cat_title }}
           </td>
           <td class="text-center align-middle">
             {% if post.image %}
-            <img src="{{ post.image }}" alt="{{ post.title }}" class="rounded shadow-sm" style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;" loading="lazy" />
+            <img
+              src="{{ post.image }}"
+              alt="{{ post.title }}"
+              class="rounded shadow-sm"
+              style="
+                max-width: 80px;
+                height: 80px;
+                object-fit: contain;
+                border: 1px solid #ddd;
+              "
+              loading="lazy"
+            />
             {% else %}
-            <img src="{% static 'default.jpg' %}" alt="No Image" class="rounded shadow-sm" style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;" loading="lazy" />
+            <img
+              src="{% static 'default.png' %}"
+              alt="No Image"
+              class="rounded shadow-sm"
+              style="
+                max-width: 80px;
+                height: 80px;
+                object-fit: contain;
+                border: 1px solid #ddd;
+              "
+              loading="lazy"
+            />
             {% endif %}
           </td>
           <td class="text-center align-middle">
-            <div class="btn-group gap-2">
-              <a
-                href="{% url 'updatepost' post.id %}"
-                class="btn btn-sm btn-outline-warning"
-                title="Edit Post"
+            <!-- Edit Button -->
+            <a
+              href="{% url 'updatepost' post.id %}"
+              class="btn btn-sm btn-outline-warning"
+              data-bs-toggle="modal"
+              data-bs-target="#postFormModal{{ post.id }}"
+              title="Edit Post"
+            >
+              <i class="bi bi-pencil-square"></i>
+            </a>
+
+            <!-- Delete Form -->
+            <form
+              action="{% url 'deletepost' post.id %}"
+              method="POST"
+              class="d-inline"
+              onsubmit="return confirm('Are you sure you want to delete this post?');"
+            >
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="btn btn-sm btn-outline-danger"
+                title="Delete Post"
               >
-                <i class="bi bi-pencil-square"></i>
-              </a>
-              <form
-                action="{% url 'deletepost' post.id %}"
-                method="POST"
-                onsubmit="return confirm('Are you sure you want to delete this post?');"
-                class="d-inline"
-              >
-                {% csrf_token %}
-                <button
-                  type="submit"
-                  class="btn btn-sm btn-outline-danger"
-                  title="Delete Post"
-                >
-                  <i class="bi bi-trash"></i>
-                </button>
-              </form>
-            </div>
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
           </td>
         </tr>
-        {% endfor %}
-        {% else %}
+
+        <!-- Modal for Edit -->
+        <div
+          class="modal fade"
+          id="postFormModal{{ post.id }}"
+          tabindex="-1"
+          aria-labelledby="postFormModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="postFormModalLabel">
+                  Edit Post - {{ post.title }}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  action="{% url 'updatepost' post.id %}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  {% csrf_token %}
+                  <div class="row g-3">
+                    {% for field in postform %}
+                    <div class="col-12">
+                      <label for="{{ field.id_for_label }}" class="form-label"
+                        >{{ field.label }}</label
+                      >
+                      {{ field }}
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <div class="d-flex justify-content-end mt-4">
+                    <button
+                      type="submit"
+                      name="post_submit"
+                      class="btn btn-success"
+                    >
+                      Update <i class="bi bi-check-circle"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% else %}
         <tr>
-          <td colspan="6" class="text-center py-3">
+          <td colspan="7" class="text-center py-3">
             <p class="m-0 fw-bold text-muted">No Posts Available</p>
           </td>
         </tr>
@@ -164,6 +203,7 @@
       </tbody>
     </table>
   </div>
+  <!-- Post Table -->
 </div>
 
 {% endblock %}

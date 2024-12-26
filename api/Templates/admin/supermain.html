@@ -3,6 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="shortcut icon"
+      href="../../../static/logo1.png"
+      type="image/x-icon"
+    />
+
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -32,7 +39,7 @@
   </style>
 
   <body>
-    <main class="d-flex flex-column" style="height: 120vh">
+    <main class="d-flex flex-column" style="height: 100vh">
       <!-- Header -->
       <header
         class="bg-dark text-white text-center fw-bolder position-sticky top-0"
@@ -92,7 +99,7 @@
         <section class="col-9">
           <div
             class="main-content h-100 p-3 overflow-scroll"
-            style="max-height: 100vh"
+            style="max-height: 90vh"
           >
             {% block admin %} {% endblock %}
           </div>

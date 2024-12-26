@@ -22,7 +22,8 @@
     {% endfor %}
   </div>
   {% endif %}
-
+  <!-- Alert Messages -->
+  
   <!-- Page Header -->
   <div class="d-flex justify-content-between align-items-center">
     <h1 class="text-dark" style="font-size: 4vh">Post Category Management</h1>
@@ -35,8 +36,10 @@
       Add New Category <i class="bi bi-plus-lg fw-bolder"></i>
     </button>
   </div>
+  <!-- Page Header -->
 
-  <!-- Post Form -->
+
+  <!-- PostCategory Form Modal -->
   <div
     class="modal fade"
     id="postcateFormModal"
@@ -89,8 +92,9 @@
       </div>
     </div>
   </div>
+  <!-- PostCategory Form Modal -->
 
-  <!-- Post Table -->
+  <!-- Postcategory Table -->
   <div
     class="table-responsive mt-4"
     style="
@@ -99,11 +103,13 @@
       overflow: hidden;
     "
   >
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped m-0">
       <thead class="table-dark" style="height: 4rem">
         <tr>
           <th class="text-center align-middle" style="width: 5%">#</th>
-          <th class="text-center align-middle" style="width: 15%">Category Name</th>
+          <th class="text-center align-middle" style="width: 15%">
+            Category Name
+          </th>
           <th class="text-center align-middle" style="width: 10%">Actions</th>
         </tr>
       </thead>
@@ -113,16 +119,14 @@
           <td class="text-center align-middle" style="font-weight: 600">
             {{ forloop.counter }}
           </td>
-          
           <td class="text-center align-middle">{{ postcate.cat_title }}</td>
-
-
-
           <td class="text-center align-middle">
             <div class="btn-group gap-2">
               <a
                 href="{% url 'updatepostcat' postcate.id %}"
                 class="btn btn-sm btn-outline-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#postcateFormModal{{postcate.id}}"
                 title="Edit Category"
               >
                 <i class="bi bi-pencil-square"></i>
@@ -145,16 +149,71 @@
             </div>
           </td>
         </tr>
+        <!-- Modal for Edit -->
+        <div
+          class="modal fade"
+          id="postcateFormModal{{ postcate.id }}"
+          tabindex="-1"
+          aria-labelledby="postcateFormModal"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="postcateFormModal">
+                  Edit Post - {{ postcate.cat_title }}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  action="{% url 'updatepostcat' postcate.id %}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  {% csrf_token %}
+                  <div class="row g-3">
+                    {% for field in postcateform %}
+                    <div class="col-12">
+                      <label for="{{ field.id_for_label }}" class="form-label"
+                        >{{ field.label }}</label
+                      >
+                      {{ field }}
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <div class="d-flex justify-content-end mt-4">
+                    <button
+                      type="submit"
+                      name="postCat_submit"
+                      class="btn btn-success"
+                    >
+                      Update <i class="bi bi-check-circle"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal for Edit -->
         {% endfor %} {% else %}
         <tr>
           <td colspan="6" class="text-center py-3">
-            <p class="m-0 fw-bold text-muted">No Categorys Available</p>
+            <p class="m-0 fw-bold text-muted">No Categories Available</p>
           </td>
         </tr>
         {% endif %}
       </tbody>
     </table>
   </div>
+  <!-- Postcategory Table -->
+  
 </div>
 
 {% endblock %}

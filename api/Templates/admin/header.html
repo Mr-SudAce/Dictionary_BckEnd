@@ -23,17 +23,9 @@
 
   <!-- Page Header -->
   <h1 class="text-dark" style="font-size: 4vh">Header Management</h1>
-  <!-- <div class="d-flex justify-content-between align-items-center mb-4">
-    <button
-      class="btn btn-outline-dark fw-bolder"
-      style="font-size: 2vh"
-    >
-      Add New Header <i class="bi bi-plus-lg fw-bolder"></i>
-    </button>
-  </div> -->
 
   <!-- Header Table -->
-  <div class="card shadow-sm border-0">
+  <div class="card shadow-sm border-0 mt-4">
     <div class="table-responsive" style="border-radius: 8px">
       <table
         class="table table-bordered table-striped table-hover align-middle mb-0"
@@ -86,9 +78,12 @@
                   href="{% url 'updateheader' header.id %}"
                   class="btn btn-sm btn-outline-warning"
                   title="Edit Header"
+                  data-bs-toggle="modal"
+                  data-bs-target="#headerFormModal{{ header.id }}"
                 >
                   <i class="bi bi-pencil-square"></i>
                 </a>
+                <!-- Delete Button (Uncomment if needed) -->
                 <!-- <form
                   action="{% url 'deleteheader' header.id %}"
                   method="POST"
@@ -120,23 +115,30 @@
   </div>
 
   <!-- Header Form Modal -->
+  {% for header in ApiHeaderList %}
   <div
-    class=""
+    class="modal fade"
+    id="headerFormModal{{ header.id }}"
     tabindex="-1"
-    aria-labelledby="headerFormModalLabel"
+    aria-labelledby="headerFormModalLabel{{ header.id }}"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title" id="headerFormModalLabel">
-            {% if headerform.instance.id %} Update Header {% else %} Add New
-            Header {% endif %}
+          <h5 class="modal-title" id="headerFormModalLabel{{ header.id }}">
+            {% if header.id %} Update Header {% else %} Add New Header {% endif%}
           </h5>
+          <button
+            type="button"
+            class="btn-close bg-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body">
           <form
-            action="{% if headerform.instance.id %}{% url 'updateheader' headerform.instance.id %}{% else %}{% url 'apiheader' %}{% endif %}"
+            action="{% if header.id %}{% url 'updateheader' header.id %}{% else %}{% url 'apiheader' %}{% endif %}"
             method="POST"
             enctype="multipart/form-data"
           >
@@ -144,19 +146,15 @@
             <div class="row g-3">
               {% for field in headerform %}
               <div class="col-12">
-                <label for="{{ field.id_for_label }}" class="form-label"
-                  >{{ field.label }}</label
-                >
+                <label for="{{ field.id_for_label }}" class="form-label">
+                  {{ field.label }}
+                </label>
                 {{ field }}
               </div>
               {% endfor %}
             </div>
             <div class="d-flex justify-content-end mt-4">
-              <button
-                type="submit"
-                name="header_submit"
-                class="btn btn-success"
-              >
+              <button type="submit" class="btn btn-success">
                 Submit <i class="bi bi-check-circle"></i>
               </button>
             </div>
@@ -165,6 +163,7 @@
       </div>
     </div>
   </div>
+  {% endfor %}
 </div>
 
 {% endblock %}

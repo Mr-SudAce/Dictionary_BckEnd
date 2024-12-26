@@ -36,7 +36,6 @@ def WordView(request):
     except Exception as error:
         return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
 
-
 @api_view(["GET", "PUT", "DELETE"])
 def WordDetail(request, id):
     try:
@@ -85,7 +84,6 @@ def PostView(request):
     except Exception as error:
         return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
 
-
 @api_view(["GET", "PUT", "DELETE"])
 def PostDetail(request, id):
     try:
@@ -132,7 +130,6 @@ def PostCatView(request):
             {"error": str(error)}, serialized.data, status=status.HTTP_400_BAD_REQUEST
         )
 
-
 @api_view(["GET", "PUT", "DELETE"])
 def PostCatDetailView(request, id):
     try:
@@ -176,7 +173,6 @@ def FooterView(request):
             return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as error:
         return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(["GET", "PUT", "DELETE"])
 def FooterDetail(request, id):
@@ -223,7 +219,6 @@ def HeaderView(request):
     except Exception as error:
         return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
 
-
 @api_view(["GET", "PUT", "DELETE"])
 def HeaderDetail(request, id):
     try:
@@ -257,7 +252,7 @@ def HeaderDetail(request, id):
 baseURL = "http://127.0.0.1:8000"
 GetWord = f"{baseURL}/api/word/"  # WordAPI Url
 GetPOST = f"{baseURL}/api/post/"  # PostAPI Url
-GetPOSTCATE = f"{baseURL}/api/postcat/"  # PostCATEAPI Url
+GetPOSTCATE = f"{baseURL}/api/postcat/"  # Post_CategoryAPI Url
 GETFooter = f"{baseURL}/api/footer/"  # FooterAPI Url
 GETHeader = f"{baseURL}/api/header/"  # HeaderAPI Url
 
@@ -376,7 +371,7 @@ def adminPostCateUpdateApi(request, id):
             return redirect("apipostcat")
     else:
         postcateform = PostCatForm(instance=postcate)
-    
+
     return render(request, "admin/postcategory.html", {"postcateform":postcateform, "postcate": postcate})
 
 
@@ -456,6 +451,8 @@ def adminHeaderUpdateApi(request, id):
             head_form.save()
             messages.success(request, "Header updated successfully!")
             return redirect("apiheader")
+        else:
+            messages.error(request, "Error updating header. Please check the form.")
     else:
         head_form = HeaderForm(instance=header)
 
