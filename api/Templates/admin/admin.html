@@ -60,7 +60,7 @@
         </div>
         <div class="modal-body">
           <form
-            action="{% if wordform.instance.id %}{% url 'updateword' wordform.instance.id %}{% else %}{% url 'apiword' %}{% endif %}"
+            action="{% if wordform.id %}{% url 'updateword' wordform.id %}{% else %}{% url 'apiword' %}{% endif %}"
             method="POST"
             enctype="multipart/form-data"
           >

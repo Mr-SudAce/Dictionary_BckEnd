@@ -1,7 +1,6 @@
 {% extends "admin/supermain.html" %} {% load static %} {% block admin %}
 
-<link rel="stylesheet" href="{% static 'css/' %}">
-
+<link rel="stylesheet" href="{% static 'css/' %}" />
 
 <div class="position-relative">
   <!-- Alert Messages -->
@@ -139,6 +138,59 @@
             </div>
           </td>
         </tr>
+        <!-- Modal for Edit -->
+        <div
+          class="modal fade"
+          id="postcateFormModal{{ postcate.id }}"
+          tabindex="-1"
+          aria-labelledby="postcateFormLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="postcateFormLabel">
+                  Edit Post - {{ postcate.cat_title }}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  action="{% url 'updatepostcat' postcate.id %}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  {% csrf_token %}
+                  <div class="row g-3">
+                    {% for field in postcateform %}
+                    <div class="col-12">
+                      <label for="{{ field.id_for_label }}" class="form-label"
+                        >{{ field.label }}</label
+                      >
+                      {{ field }}
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <div class="d-flex justify-content-end mt-4">
+                    <button
+                      type="submit"
+                      name="post_submit"
+                      class="btn btn-success"
+                    >
+                      Update <i class="bi bi-check-circle"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {% endfor %} {% else %}
         <tr>
           <td colspan="6" class="text-center py-3">

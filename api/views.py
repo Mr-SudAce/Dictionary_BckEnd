@@ -300,11 +300,11 @@ def DeleteHeader(request, id):
 
 ################################## Templates ###########################
 baseURL = "http://127.0.0.1:8000"
-Get_Word = f"{baseURL}/api/word/"  # WordAPI Url
-Get_POST = f"{baseURL}/api/post/"  # PostAPI Url
-Get_POSTCATE = f"{baseURL}/api/postcat/"  # Post_CategoryAPI Url
-GET_Footer = f"{baseURL}/api/footer/"  # FooterAPI Url
-GET_Header = f"{baseURL}/api/header/"  # HeaderAPI Url
+Get_Word = f"{baseURL}/api/all/word/"  # WordAPI Url
+Get_POST = f"{baseURL}/api/all/post/"  # PostAPI Url
+Get_POSTCATE = f"{baseURL}/api/all/postcat/"  # Post_CategoryAPI Url
+GET_Footer = f"{baseURL}/api/all/footer/"  # FooterAPI Url
+GET_Header = f"{baseURL}/api/all/header/"  # HeaderAPI Url
 
 
 # WORD CRUD OPERATION

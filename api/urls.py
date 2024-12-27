@@ -11,7 +11,7 @@ urlpatterns = [
     path("api/word/update/<int:id>/", UpdateWord, name="update_word"),
     path("api/word/delete/<int:id>/", DeleteWord, name="delete_word"),
     ########################## Word #######################
-    
+
     ####################### POST CATEGORY #######################
     path("api/postcat/", CreatePostCategory, name="create_postcat"),
     path("api/all/postcat/", GetAllCategories, name="get_allpostcat"),
