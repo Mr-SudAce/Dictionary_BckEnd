@@ -19,37 +19,39 @@ def supermain(request):
 
 
 ######################### WORDAPI ############################
-@api_view(["GET", "POST"])
-def WordView(request):
+@api_view(["POST"])
+def CreateWord(request):
     try:
-        if request.method == "GET":
-            word = WordModel.objects.all()
-            serialized = WordSerializer(word, many=True)
-            return Response(serialized.data, status=status.HTTP_200_OK)
+        serialized = WordSerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
-        elif request.method == "POST":
-            serialized = WordSerializer(data=request.data)
-            if serialized.is_valid():
-                serialized.save()
-                return Response(serialized.data, status=status.HTTP_201_CREATED)
-            return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as error:
-        return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(["GET", "PUT", "DELETE"])
-def WordDetail(request, id):
+@api_view(["GET"])
+def GetAllWord(request):
     try:
-        word = WordModel.objects.get(id=id)
-    except WordModel.DoesNotExist:
-        return Response(
-            {"error": "Word Doesn't Exists"}, status=status.HTTP_404_NOT_FOUND
-        )
+        word = WordModel.objects.all()
+        serialized = WordSerializer(word, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Word Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == "GET":
+@api_view(["GET"])
+def GetWordById(request, id):
+    try:
+        word = get_object_or_404(WordModel, id=id)
         serialized = WordSerializer(word)
-        return JsonResponse(serialized.data)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Word Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    elif request.method == "PUT":
+@api_view(["PUT"])
+def UpdateWord(request, id):
+    try:
+        word = get_object_or_404(WordModel, id=id)
         serialized = WordSerializer(word, data=request.data)
         if serialized.is_valid():
             serialized.save()
@@ -58,208 +60,256 @@ def WordDetail(request, id):
                 status=status.HTTP_202_ACCEPTED,
             )
         return JsonResponse(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == "DELETE":
+@api_view(["DELETE"])
+def DeleteWord(request, id):
+    try:
+        word = get_object_or_404(WordModel, id=id)
         word.delete()
-        return HttpResponse(
-            {"message": "DELETE SUCCESSFULLY"}, status.HTTP_204_NO_CONTENT
+        return HttpResponse({"Word Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
+    except:
+        return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+######################### POST CATEGORY API ############################
+@api_view(["POST"])
+def CreatePostCategory(request):
+    try:
+        serialized = PostCategorySerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(
+                {"message": "Created Successfully", "data": serialized.data},
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def GetAllCategories(request):
+    try:
+        postcat = PostCategoryModel.objects.prefetch_related("posts").all()
+        serialized = PostCategorySerializer(postcat, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(["GET"])
+def GetCategoriesById(request, id):
+    try:
+        postcat = get_object_or_404(PostCategoryModel, id=id)
+        serialized = PostCategorySerializer(postcat)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(["PUT"])
+def UpdateCategory(request, id):
+    try:
+        postcat = get_object_or_404(PostCategoryModel, id=id)
+        serialized = PostCategorySerializer(postcat, data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return JsonResponse(
+                {"message": "Updated Successfully", "data": serialized.data},
+                status=status.HTTP_202_ACCEPTED,
+            )
+        return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["DELETE"])
+def DeleteCategory(request, id):
+    try:
+        postcat = get_object_or_404(PostCategoryModel, id=id)
+        postcat.delete()
+        return HttpResponse({"Category Deleted Successfully"}, status.HTTP_204_NO_CONTENT
         )
+    except:
+        return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ######################### POSTAPI ############################
-@api_view(["GET", "POST"])
-def PostView(request):
+@api_view(["POST"])
+def CreatePost(request):
     try:
-        if request.method == "GET":
-            post = PostModel.objects.all()
-            serialized = PostSerializer(post, many=True)
-            return Response(serialized.data, status=status.HTTP_200_OK)
+        serialized = PostSerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
-        elif request.method == "POST":
-            serialized = PostSerializer(data=request.data)
-            if serialized.is_valid():
-                serialized.save()
-                return Response(serialized.data, status=status.HTTP_201_CREATED)
-            return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as error:
-        return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(["GET", "PUT", "DELETE"])
-def PostDetail(request, id):
+@api_view(["GET"])
+def GetAllPost(request):
     try:
-        post = PostModel.objects.get(id=id)
-    except PostModel.DoesNotExist:
-        return Response({"Post Doesn't Exists"}, status=status.HTTP_404_NOT_FOUND)
+        post = PostModel.objects.all()
+        serialized = PostSerializer(post, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == "GET":
+@api_view(["GET"])
+def GetAllPostById(request, id):
+    try:
+        post = get_object_or_404(PostModel, id=id)
         serialized = PostSerializer(post)
-        return JsonResponse(serialized.data)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    elif request.method == "PUT":
+@api_view(["PUT"])
+def UpdatePost(request, id):
+    try:
+        post = get_object_or_404(PostModel, id=id)
         serialized = PostSerializer(post, data=request.data)
         if serialized.is_valid():
             serialized.save()
             return JsonResponse(
-                {"Updated Successfully"},
-                serialized.data,
+                {"message": "Updated Successfully", "data": serialized.data},
                 status=status.HTTP_202_ACCEPTED,
             )
         return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == "DELETE":
+@api_view(["DELETE"])
+def DeletePost(request, id):
+    try:
+        post = get_object_or_404(PostModel, id=id)
         post.delete()
-        return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
-
-
-######################### POST CATEGORY API ############################
-@api_view(["GET", "POST"])
-def PostCatView(request):
-    try:
-        if request.method == "GET":
-            postcat = PostCategoryModel.objects.prefetch_related("posts").all()
-            serialized = PostCategorySerializer(postcat, many=True)
-            return Response(serialized.data, status=status.HTTP_200_OK)
-        elif request.method == "POST":
-            serialized = PostCategorySerializer(data=request.data)
-            if serialized.is_valid():
-                serialized.save()
-                return Response(serialized.data, status=status.HTTP_201_CREATED)
-            return Response(serialized.data, kmstatus=status.HTTP_400_BAD_REQUEST)
-    except Exception as error:
-        return Response(
-            {"error": str(error)}, serialized.data, status=status.HTTP_400_BAD_REQUEST
-        )
-
-@api_view(["GET", "PUT", "DELETE"])
-def PostCatDetailView(request, id):
-    try:
-        postCat = PostCategoryModel.objects.get(id=id)
-    except PostCategoryModel.DoesNotExist:
-        return Response(
-            {"Post Category Doesn't Exist"}, status=status.HTTP_404_NOT_FOUND
-        )
-    if request.method == "GET":
-        serialized = PostCategorySerializer(postCat)
-        return JsonResponse(serialized.data)
-    elif request.method == "POST":
-        serialized = PostCategorySerializer(postCat, data=request.data)
-        if serialized.is_valid():
-            serialized.save()
-            return JsonResponse(
-                {"Updated Successfully"},
-                serialized.data,
-                status=status.HTTP_202_ACCEPTED,
-            )
-        return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == "DELETE":
-        postCat.delete()
-        return HttpResponse("Deleted Successfully", status=status.HTTP_204_NO_CONTENT)
+        return HttpResponse({"Post Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
+    except:
+        return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ######################### FOOTERAPI ############################
-@api_view(["GET", "POST"])
-def FooterView(request):
+@api_view(["POST"])
+def CreateFooter(request):
     try:
-        if request.method == "GET":
-            footer = FooterModel.objects.all()
-            serialized = FooterSerializer(footer, many=True)
-            return Response(serialized.data, status=status.HTTP_200_OK)
+        serialized = FooterSerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
-        elif request.method == "POST":
-            serialized = FooterSerializer(data=request.data)
-            if serialized.is_valid():
-                serialized.save()
-                return Response(serialized.data, status=status.HTTP_201_CREATED)
-            return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as error:
-        return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(["GET", "PUT", "DELETE"])
-def FooterDetail(request, id):
+@api_view(["GET"])
+def GetAllFooter(request):
     try:
-        footer = FooterModel.objects.get(id=id)
-    except FooterModel.DoesNotExist:
-        return Response({"Footer Doesn't Exists"}, status=status.HTTP_404_NOT_FOUND)
+        footer = FooterModel.objects.all()
+        serialized = FooterSerializer(footer, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Footer Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == "GET":
+@api_view(["GET"])
+def GetAllFooterById(request, id):
+    try:
+        footer = get_object_or_404(FooterModel, id=id)
         serialized = FooterSerializer(footer)
-        return JsonResponse(serialized.data)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Footer Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    elif request.method == "PUT":
+@api_view(["PUT"])
+def UpdateFooter(request, id):
+    try:
+        footer = get_object_or_404(FooterModel, id=id)
         serialized = FooterSerializer(footer, data=request.data)
         if serialized.is_valid():
             serialized.save()
             return JsonResponse(
-                {"Updated Successfully"},
-                serialized.data,
+                {"message": "Updated Successfully", "data": serialized.data},
                 status=status.HTTP_202_ACCEPTED,
             )
         return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == "DELETE":
+@api_view(["DELETE"])
+def DeleteFooter(request, id):
+    try:
+        footer = get_object_or_404(FooterModel, id=id)
         footer.delete()
-        return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
+        return HttpResponse({"Footer Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
+    except:
+        return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ######################### HEADERAPI ############################
-@api_view(["GET", "POST"])
-def HeaderView(request):
+@api_view(["POST"])
+def CreateHeader(request):
     try:
-        if request.method == "GET":
-            header = HeaderModel.objects.all()
-            serialized = HeaderSerializer(header, many=True)
-            return Response(serialized.data, status=status.HTTP_200_OK)
+        serialized = HeaderSerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
-        elif request.method == "POST":
-            serialized = HeaderSerializer(data=request.data)
-            if serialized.is_valid():
-                serialized.save()
-                return Response(serialized.data, status=status.HTTP_201_CREATED)
-            return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as error:
-        return Response({"error": str(error)}, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(["GET", "PUT", "DELETE"])
-def HeaderDetail(request, id):
+@api_view(["GET"])
+def GetAllHeader(request):
     try:
-        header = HeaderModel.objects.get(id=id)
-    except HeaderModel.DoesNotExist:
-        return Response({"Header Doesn't Exists"}, status=status.HTTP_404_NOT_FOUND)
+        header = HeaderModel.objects.all()
+        serialized = HeaderSerializer(header, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Header Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == "GET":
+@api_view(["GET"])
+def GetAllHeaderById(request, id):
+    try:
+        header = get_object_or_404(HeaderModel, id=id)
         serialized = HeaderSerializer(header)
-        return JsonResponse(serialized.data)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Header Found"}, status=status.HTTP_404_NOT_FOUND)
 
-    elif request.method == "PUT":
+@api_view(["PUT"])
+def UpdateHeader(request, id):
+    try:
+        header = get_object_or_404(HeaderModel, id=id)
         serialized = HeaderSerializer(header, data=request.data)
         if serialized.is_valid():
             serialized.save()
             return JsonResponse(
-                {"Updated Successfully"},
-                serialized.data,
+                {"message": "Updated Successfully", "data": serialized.data},
                 status=status.HTTP_202_ACCEPTED,
             )
         return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == "DELETE":
+@api_view(["DELETE"])
+def DeleteHeader(request, id):
+    try:
+        header = get_object_or_404(HeaderModel, id=id)
         header.delete()
-        return HttpResponse("DELETE SUCCESSFULLY", status.HTTP_204_NO_CONTENT)
+        return HttpResponse({"Header Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
+    except:
+        return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 ################################## Templates ###########################
-
-
 baseURL = "http://127.0.0.1:8000"
-GetWord = f"{baseURL}/api/word/"  # WordAPI Url
-GetPOST = f"{baseURL}/api/post/"  # PostAPI Url
-GetPOSTCATE = f"{baseURL}/api/postcat/"  # Post_CategoryAPI Url
-GETFooter = f"{baseURL}/api/footer/"  # FooterAPI Url
-GETHeader = f"{baseURL}/api/header/"  # HeaderAPI Url
+Get_Word = f"{baseURL}/api/word/"  # WordAPI Url
+Get_POST = f"{baseURL}/api/post/"  # PostAPI Url
+Get_POSTCATE = f"{baseURL}/api/postcat/"  # Post_CategoryAPI Url
+GET_Footer = f"{baseURL}/api/footer/"  # FooterAPI Url
+GET_Header = f"{baseURL}/api/header/"  # HeaderAPI Url
 
 
 # WORD CRUD OPERATION
 def adminWordListApi(request):
-    response = requests.get(GetWord)
+    response = requests.get(Get_Word)
     ApiWordsList = response.json() if response.status_code == 200 else []
     wordform = WordForm(request.POST or None)
 
@@ -301,7 +351,7 @@ def adminWordUpdateApi(request, id):
 
 # POST CRUD OPERATION
 def adminPostListApi(request):
-    response = requests.get(GetPOST)
+    response = requests.get(Get_POST)
     ApiPostsList = response.json() if response.status_code == 200 else []
     postform = PostForm(request.POST, request.FILES or None)
 
@@ -341,18 +391,19 @@ def adminPostUpdateApi(request, id):
 
 # POST CATEGORY OPERATION
 def adminPostCateListApi(request):
-    response = requests.get(GetPOSTCATE)
-    ApiPostCatList = response.json() if response.status_code==200 else []
+    response = requests.get(Get_POSTCATE)
+    ApiPostCatList = response.json() if response.status_code == 200 else []
     postcateform = PostCatForm(request.POST or None)
-    
-    if (request.method == "POST" and "postCat_submit" in request.POST and postcateform.is_valid()):
+
+    if (
+        request.method == "POST"
+        and "postCat_submit" in request.POST
+        and postcateform.is_valid()
+    ):
         postcateform.save()
         messages.success(request, "Post Category added Successfully!")
         return redirect("apipostcat")
-    context ={
-        "ApiPostCatList" : ApiPostCatList,
-        "postcateform" : postcateform
-    }
+    context = {"ApiPostCatList": ApiPostCatList, "postcateform": postcateform}
     return render(request, "admin/postcategory.html", context)
 
 def adminPostCateDelApi(request, id):
@@ -372,12 +423,16 @@ def adminPostCateUpdateApi(request, id):
     else:
         postcateform = PostCatForm(instance=postcate)
 
-    return render(request, "admin/postcategory.html", {"postcateform":postcateform, "postcate": postcate})
+    return render(
+        request,
+        "admin/postcategory.html",
+        {"postcateform": postcateform, "postcate": postcate},
+    )
 
 
 # FOOTER CRUD OPERATION
 def adminFooterListApi(request):
-    response = requests.get(GETFooter)
+    response = requests.get(GET_Footer)
     ApiFooterList = response.json() if response.status_code == 200 else []
     footerform = FooterForm(request.POST, request.FILES or None)
 
@@ -419,7 +474,7 @@ def adminFooterUpdateApi(request, id):
 
 # Header CRUD OPERATION
 def adminHeaderListApi(request):
-    response = requests.get(GETHeader)
+    response = requests.get(GET_Header)
     ApiHeaderList = response.json() if response.status_code == 200 else []
     headerform = HeaderForm(request.POST, request.FILES or None)
 

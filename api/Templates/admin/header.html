@@ -1,36 +1,29 @@
-{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+{% extends "admin/supermain.html" %}
+{% load static %}
+{% block admin %}
 
-<div class="">
-  <!-- Alert Messages -->
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+
+
+
+<div>
   {% if messages %}
-  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+  <div class="alert-position">
     {% for message in messages %}
-    <div
-      class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm"
-      role="alert"
-    >
+    <div class="alert alert-{{ message.tags }} alert-dismissible-custom fade show shadow-sm alert-custom" role="alert">
       {{ message }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
+      <button type="button" class="btn-close btn-close-custom" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
   </div>
   {% endif %}
 
-  <!-- Page Header -->
-  <h1 class="text-dark" style="font-size: 4vh">Header Management</h1>
+  <h1 class="page-header">Header Management</h1>
 
-  <!-- Header Table -->
-  <div class="card shadow-sm border-0 mt-4">
-    <div class="table-responsive" style="border-radius: 8px">
-      <table
-        class="table table-bordered table-striped table-hover align-middle mb-0"
-      >
-        <thead class="bg-light" style="height: 4rem">
+  <div class="table-card">
+    <div class="table-responsive table-responsive-custom">
+      <table class="table table-bordered table-striped table-hover align-middle table-custom">
+        <thead class="bg-light">
           <tr class="bg-dark text-white">
             <th class="text-center align-middle" style="width: 10%">#</th>
             <th class="text-center align-middle">Site Name</th>
@@ -39,74 +32,30 @@
           </tr>
         </thead>
         <tbody>
-          {% if ApiHeaderList %} {% for header in ApiHeaderList %}
+          {% if ApiHeaderList %}
+          {% for header in ApiHeaderList %}
           <tr>
             <td class="text-center fw-bolder">{{ forloop.counter }}</td>
             <td class="text-center align-middle">{{ header.site_title }}</td>
             <td class="text-center">
               {% if header.logo %}
-              <img
-                src="{{ header.logo }}"
-                alt="{{ header.site_title}}"
-                class="rounded shadow-sm"
-                style="
-                  max-width: 80px;
-                  height: 80px;
-                  object-fit: contain;
-                  border: 1px solid #ddd;
-                "
-                loading="lazy"
-              />
+              <img src="{{ header.logo }}" alt="{{ header.site_title}}" class="rounded shadow-sm" />
               {% else %}
-              <img
-                src="{% static 'default.jpg' %}"
-                alt="No Logo"
-                class="rounded shadow-sm"
-                style="
-                  max-width: 80px;
-                  height: 80px;
-                  object-fit: contain;
-                  border: 1px solid #ddd;
-                "
-                loading="lazy"
-              />
+              <img src="{% static 'default.jpg' %}" alt="No Logo" class="rounded shadow-sm" />
               {% endif %}
             </td>
             <td class="text-center">
-              <div class="btn-group gap-2">
-                <a
-                  href="{% url 'updateheader' header.id %}"
-                  class="btn btn-sm btn-outline-warning"
-                  title="Edit Header"
-                  data-bs-toggle="modal"
-                  data-bs-target="#headerFormModal{{ header.id }}"
-                >
+              <div class="btn-group gap-2 btn-group-custom">
+                <a href="{% url 'updateheader' header.id %}" class="btn btn-sm btn-outline-warning" title="Edit Header" data-bs-toggle="modal" data-bs-target="#headerFormModal{{ header.id }}">
                   <i class="bi bi-pencil-square"></i>
                 </a>
-                <!-- Delete Button (Uncomment if needed) -->
-                <!-- <form
-                  action="{% url 'deleteheader' header.id %}"
-                  method="POST"
-                  onsubmit="return confirm('Are you sure you want to delete this header?');"
-                  class="d-inline"
-                >
-                  {% csrf_token %}
-                  <button
-                    type="submit"
-                    class="btn btn-sm btn-outline-danger"
-                    title="Delete Header"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </form> -->
               </div>
             </td>
           </tr>
-          {% endfor %} {% else %}
+          {% endfor %}
+          {% else %}
           <tr>
-            <td colspan="4" class="text-center text-muted py-4">
-              No headers available.
-            </td>
+            <td colspan="4" class="text-center text-muted py-4">No headers available.</td>
           </tr>
           {% endif %}
         </tbody>
@@ -114,49 +63,29 @@
     </div>
   </div>
 
-  <!-- Header Form Modal -->
   {% for header in ApiHeaderList %}
-  <div
-    class="modal fade"
-    id="headerFormModal{{ header.id }}"
-    tabindex="-1"
-    aria-labelledby="headerFormModalLabel{{ header.id }}"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="headerFormModal{{ header.id }}" tabindex="-1" aria-labelledby="headerFormModalLabel{{ header.id }}" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header bg-dark text-white">
+        <div class="modal-header modal-header-custom">
           <h5 class="modal-title" id="headerFormModalLabel{{ header.id }}">
-            {% if header.id %} Update Header {% else %} Add New Header {% endif%}
+            {% if header.id %} Update Header {% else %} Add New Header {% endif %}
           </h5>
-          <button
-            type="button"
-            class="btn-close bg-white"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close btn-close-custom" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form
-            action="{% if header.id %}{% url 'updateheader' header.id %}{% else %}{% url 'apiheader' %}{% endif %}"
-            method="POST"
-            enctype="multipart/form-data"
-          >
+          <form action="{% if header.id %}{% url 'updateheader' header.id %}{% else %}{% url 'apiheader' %}{% endif %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row g-3">
               {% for field in headerform %}
               <div class="col-12">
-                <label for="{{ field.id_for_label }}" class="form-label">
-                  {{ field.label }}
-                </label>
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                 {{ field }}
               </div>
               {% endfor %}
             </div>
-            <div class="d-flex justify-content-end mt-4">
-              <button type="submit" class="btn btn-success">
-                Submit <i class="bi bi-check-circle"></i>
-              </button>
+            <div class="d-flex justify-content-end form-submit-btn">
+              <button type="submit" class="btn btn-success">Submit <i class="bi bi-check-circle"></i></button>
             </div>
           </form>
         </div>

@@ -1,5 +1,7 @@
 {% extends "admin/supermain.html" %} {% load static %} {% block admin %}
 
+<link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+
 <div class="">
   <!-- Alert Messages -->
   {% if messages %}
@@ -107,7 +109,7 @@
           <tr>
             <td class="text-center fw-bolder">{{ forloop.counter }}</td>
             <td class="text-center align-middle">{{ footer.heading }}</td>
-            <td class="text-truncate" style="max-width: 250px">
+            <td class="text-truncate text-center descp" style="max-width: 250px">
               {{ footer.description|safe }}
             </td>
             <td class="text-center">
@@ -193,7 +195,6 @@
             </div>
           </div>
           <!-- Modal for Edit -->
-
           {% endfor %} {% else %}
           <tr>
             <td colspan="4" class="text-center text-muted py-4">

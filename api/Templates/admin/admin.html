@@ -1,15 +1,11 @@
 {% extends "admin/supermain.html" %} {% load static %} {% block admin %}
 
-<style>
-  .descp p {
-    margin: 0;
-  }
-</style>
+<link rel="stylesheet" href="{% static 'css/word.css' %}" />
 
 <div class="">
   <!-- Alert Messages -->
   {% if messages %}
-  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+  <div class="position-fixed top-0 end-0 p-3">
     {% for message in messages %}
     <div
       class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm"
@@ -53,7 +49,7 @@
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title" id="wordFormModalLabel">
             {% if wordform.instance.id %} Update Word {% else %} Add New Word 
-            {%endif %}
+            {% endif %}
           </h5>
           <button
             type="button"
@@ -98,7 +94,7 @@
 
   <!-- Words Table -->
   <div class="card shadow-sm border-0 mt-4">
-    <div class="table-responsive" style="border-radius: 8px">
+    <div class="table-responsive">
       <table
         class="table table-bordered table-striped table-hover align-middle mb-0"
       >
@@ -118,7 +114,7 @@
           <tr>
             <td class="text-center">{{ forloop.counter }}</td>
             <td class="align-middle text-center">{{ word.word }}</td>
-            <td class="text-truncate descp" style="max-width: 250px">
+            <td class="text-truncate descp">
               {{ word.description|safe|slice:30 }}
             </td>
             <td class="align-middle text-center">{{ word.antonyms }}</td>
@@ -127,17 +123,15 @@
             <td class="text-center">
               <div class="btn-group gap-2">
                 <!-- Edit Button that Triggers Modal with Word Data -->
-                
                 <a
-                href="{% url 'updateword' word.id %}"
-                class="btn btn-sm btn-outline-warning"
-                data-bs-toggle="modal"
-                data-bs-target="#wordFormModal{{word.id}}"
-                title="Edit Word"
-              >
+                  href="{% url 'updateword' word.id %}"
+                  class="btn btn-sm btn-outline-warning"
+                  data-bs-toggle="modal"
+                  data-bs-target="#wordFormModal{{word.id}}"
+                  title="Edit Word"
+                >
                   <i class="bi bi-pencil-square"></i>
                 </a>
-                
                 <form
                   action="{% url 'deleteword' word.id %}"
                   method="POST"
@@ -169,7 +163,7 @@
               <div class="modal-content">
                 <div class="modal-header bg-dark text-white">
                   <h5 class="modal-title" id="wordFormModal">
-                    Edit word - {{ word.word }}
+                    Edit word - {{ word.word }} - {{word.id}}
                   </h5>
                   <button
                     type="button"
@@ -210,25 +204,6 @@
             </div>
           </div>
           <!-- Modal for Edit -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
           {% endfor %} {% else %}
           <tr>

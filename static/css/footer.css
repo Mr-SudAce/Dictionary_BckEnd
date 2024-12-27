@@ -1,0 +1,31 @@
+.descp p {
+    margin: 0;
+}
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.footer .alert {
+    background-color: #f1f1f1;
+}
+
+/* Additional styles as per your footer.css */
+.table-responsive {
+    border-radius: 8px;
+}
+
+.modal-header {
+    background-color: #343a40;
+    color: white;
+}
+
+.btn-outline-dark {
+    font-size: 1.2rem;
+}
+
+.table th {
+    background-color: #343a40;
+    color: white;
+}

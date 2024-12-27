@@ -1,6 +1,9 @@
 {% extends "admin/supermain.html" %} {% load static %} {% block admin %}
 
-<div class="position-relative" style="color: #333">
+<link rel="stylesheet" href="{% static 'css/' %}">
+
+
+<div class="position-relative">
   <!-- Alert Messages -->
   {% if messages %}
   <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
@@ -8,7 +11,6 @@
     <div
       class="alert alert-{{ message.tags }} alert-dismissible fade show m-0"
       role="alert"
-      style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)"
     >
       {{ message }}
       <button
@@ -16,28 +18,25 @@
         class="btn-close"
         data-bs-dismiss="alert"
         aria-label="Close"
-        style="outline: none"
       ></button>
     </div>
     {% endfor %}
   </div>
   {% endif %}
   <!-- Alert Messages -->
-  
+
   <!-- Page Header -->
   <div class="d-flex justify-content-between align-items-center">
-    <h1 class="text-dark" style="font-size: 4vh">Post Category Management</h1>
+    <h1 class="text-dark">Post Category Management</h1>
     <button
       class="btn btn-outline-dark fw-bolder"
       data-bs-toggle="modal"
       data-bs-target="#postcateFormModal"
-      style="font-size: 2vh"
     >
       Add New Category <i class="bi bi-plus-lg fw-bolder"></i>
     </button>
   </div>
   <!-- Page Header -->
-
 
   <!-- PostCategory Form Modal -->
   <div
@@ -95,16 +94,9 @@
   <!-- PostCategory Form Modal -->
 
   <!-- Postcategory Table -->
-  <div
-    class="table-responsive mt-4"
-    style="
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      overflow: hidden;
-    "
-  >
+  <div class="table-responsive mt-4">
     <table class="table table-bordered table-striped m-0">
-      <thead class="table-dark" style="height: 4rem">
+      <thead class="table-dark">
         <tr>
           <th class="text-center align-middle" style="width: 5%">#</th>
           <th class="text-center align-middle" style="width: 15%">
@@ -115,10 +107,8 @@
       </thead>
       <tbody>
         {% if ApiPostCatList %} {% for postcate in ApiPostCatList %}
-        <tr style="height: 50px">
-          <td class="text-center align-middle" style="font-weight: 600">
-            {{ forloop.counter }}
-          </td>
+        <tr>
+          <td class="text-center align-middle">{{ forloop.counter }}</td>
           <td class="text-center align-middle">{{ postcate.cat_title }}</td>
           <td class="text-center align-middle">
             <div class="btn-group gap-2">
@@ -149,59 +139,6 @@
             </div>
           </td>
         </tr>
-        <!-- Modal for Edit -->
-        <div
-          class="modal fade"
-          id="postcateFormModal{{ postcate.id }}"
-          tabindex="-1"
-          aria-labelledby="postcateFormModal"
-          aria-hidden="true"
-        >
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="postcateFormModal">
-                  Edit Post - {{ postcate.cat_title }}
-                </h5>
-                <button
-                  type="button"
-                  class="btn-close bg-white"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div class="modal-body">
-                <form
-                  action="{% url 'updatepostcat' postcate.id %}"
-                  method="POST"
-                  enctype="multipart/form-data"
-                >
-                  {% csrf_token %}
-                  <div class="row g-3">
-                    {% for field in postcateform %}
-                    <div class="col-12">
-                      <label for="{{ field.id_for_label }}" class="form-label"
-                        >{{ field.label }}</label
-                      >
-                      {{ field }}
-                    </div>
-                    {% endfor %}
-                  </div>
-                  <div class="d-flex justify-content-end mt-4">
-                    <button
-                      type="submit"
-                      name="postCat_submit"
-                      class="btn btn-success"
-                    >
-                      Update <i class="bi bi-check-circle"></i>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Modal for Edit -->
         {% endfor %} {% else %}
         <tr>
           <td colspan="6" class="text-center py-3">
@@ -213,7 +150,6 @@
     </table>
   </div>
   <!-- Postcategory Table -->
-  
 </div>
 
 {% endblock %}

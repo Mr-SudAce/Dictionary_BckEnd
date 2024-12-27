@@ -5,7 +5,7 @@ from tinymce.models import HTMLField
 
 
 class WordModel(models.Model):
-    word = models.CharField(max_length=100, unique=True, default="")
+    word = models.CharField(max_length=100, default="")
     antonyms = models.CharField(max_length=100, default="", blank=True)
     synonyms = models.CharField(max_length=100, default="", blank=True)
     example = models.CharField(max_length=500, default="", blank=True)
@@ -17,14 +17,14 @@ class WordModel(models.Model):
 
 
 class PostCategoryModel(models.Model):
-    cat_title = models.CharField(max_length=100, unique=True, default="")
+    cat_title = models.CharField(max_length=100, default="")
 
     def __str__(self):
         return self.cat_title
 
 
 class PostModel(models.Model):
-    title = models.CharField(max_length=100, unique=True, default="")
+    title = models.CharField(max_length=100, default="")
     image = models.ImageField(upload_to="images/", blank=True)
     full_desc = HTMLField()
     postCat = models.ForeignKey(

@@ -1,0 +1,76 @@
+.alert-position {
+    z-index: 1050;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 10px;
+}
+
+.alert-custom {
+    border-radius: 0.25rem;
+}
+
+.alert-dismissible-custom {
+    padding-right: 2.5rem;
+}
+
+.alert .btn-close-custom {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+}
+
+/* Unique Styles for Page Header */
+.page-header {
+    font-size: 4vh;
+    color: black;
+}
+
+/* Unique Styles for Table */
+.table-card {
+    border-radius: 8px;
+}
+
+.table-responsive-custom {
+    border-radius: 8px;
+}
+
+.table-custom th,
+.table-custom td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-custom thead.bg-light {
+    height: 4rem;
+}
+
+.table-custom tbody tr td {
+    vertical-align: middle;
+}
+
+.table-custom td img {
+    max-width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+}
+
+/* Modal Header Customization */
+.modal-header-custom {
+    background-color: #343a40;
+    color: white;
+}
+
+.modal-header-custom .btn-close-custom {
+    background-color: white;
+}
+
+/* Button Group Customization */
+.btn-group-custom .btn {
+    gap: 0.5rem;
+}
+
+.form-submit-btn {
+    margin-top: 1rem;
+}

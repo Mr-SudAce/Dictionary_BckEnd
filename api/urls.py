@@ -3,31 +3,44 @@ from .views import *
 
 urlpatterns = [
     # API URL
+    
     ########################## Word #######################
-    path("api/word/", WordView, name="word_list"),
-    path("api/word/<int:id>", WordDetail, name="word_detail"),
-    path("api/word/delete/<int:id>/", WordDetail, name="delete_word"),
-    path("api/word/edit/<int:id>/", WordDetail, name="update_word"),
-    # POST
-    path("api/post/", PostView, name="post_list"),
-    path("api/post/<int:id>", PostDetail, name="post_detail"),
-    path("api/post/delete/<int:id>/", PostDetail, name="delete_post"),
-    path("api/post/edit/<int:id>/", PostDetail, name="update_post"),
-    # POST CATEGORY
-    path("api/postcat/", PostCatView, name="postcat_list"),
-    path("api/postcat/<int:id>/", PostCatDetailView, name="postcat_detail"),
-    path("api/postcat/delete/<int:id>/", PostCatDetailView, name="delete_postcat"),
-    path("api/postcat/edit/<int:id>/", PostCatDetailView, name="update_postcat"),
-    # Footer
-    path("api/footer/", FooterView, name="footer_list"),
-    path("api/footer/<int:id>", FooterDetail, name="footer_detail"),
-    path("api/footer/delete/<int:id>/", FooterDetail, name="delete_footer"),
-    path("api/footer/edit/<int:id>/", FooterDetail, name="update_footer"),
-    # Header
-    path("api/header/", HeaderView, name="header_list"),
-    path("api/header/<int:id>", HeaderDetail, name="header_detail"),
-    path("api/header/delete/<int:id>/", HeaderDetail, name="delete_header"),
-    path("api/header/edit/<int:id>/", HeaderDetail, name="update_header"),
+    path("api/word/post/", CreateWord, name="create_post_word"),
+    path("api/word/all/", GetAllWord, name="get_word"),
+    path("api/word/<int:id>/", GetWordById, name="get_wordby_id"),
+    path("api/word/update/<int:id>/", UpdateWord, name="update_word"),
+    path("api/word/delete/<int:id>/", DeleteWord, name="delete_word"),
+    ########################## Word #######################
+    
+    ####################### POST CATEGORY #######################
+    path("api/postcat/post/", CreatePostCategory, name="create_postcat"),
+    path("api/postcat/all/", GetAllCategories, name="postcat_list"),
+    path("api/postcat/<int:id>/", GetCategoriesById, name="get_postcatby_id"),
+    path("api/postcat/update/<int:id>/", UpdateCategory, name="update_postcat"),
+    path("api/postcat/delete/<int:id>/", DeleteCategory, name="delete_postcat"),
+    ####################### POST CATEGORY #######################
+    
+    ####################### POST #######################
+    path("api/post/post/", CreatePost, name="create_post"),
+    path("api/post/all/", GetAllPost, name="post_list"),
+    path("api/post/<int:id>/", GetAllPostById, name="get_postby_id"),
+    path("api/post/update/<int:id>/", UpdatePost, name="update_post"),
+    path("api/post/delete/<int:id>/", DeletePost, name="delete_post"),
+    ####################### POST #######################
+    ####################### Footer #######################
+    path("api/footer/post/", CreateFooter, name="create_footer"),
+    path("api/footer/all/", GetAllFooter, name="footer_list"),
+    path("api/footer/<int:id>/", GetAllFooterById, name="get_footerby_id"),
+    path("api/footer/delete/<int:id>/", DeleteFooter, name="delete_footer"),
+    path("api/footer/update/<int:id>/", UpdateFooter, name="update_footer"),
+    ####################### Footer #######################
+    ####################### Header #######################
+    path("api/header/post/", CreateHeader, name="create_header"),
+    path("api/header/all/", GetAllHeader, name="header_list"),
+    path("api/header/<int:id>/", GetAllHeaderById, name="get_headerby_id"),
+    path("api/header/delete/<int:id>/", DeleteHeader, name="delete_header"),
+    path("api/header/update/<int:id>/", UpdateHeader, name="update_header"),
+    ####################### Header #######################
 
 
 
