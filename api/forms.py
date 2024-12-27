@@ -26,3 +26,8 @@ class PostCatForm(forms.ModelForm):
     class Meta:
         model = PostCategoryModel
         fields = "__all__"
+
+class PageForm(forms.ModelForm):
+    class Meta:
+        model = PageModel
+        fields = "__all__"

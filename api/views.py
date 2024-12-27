@@ -30,6 +30,7 @@ def CreateWord(request):
     except:
         return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["GET"])
 def GetAllWord(request):
     try:
@@ -39,6 +40,7 @@ def GetAllWord(request):
     except:
         return HttpResponse({"No Word Found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(["GET"])
 def GetWordById(request, id):
     try:
@@ -47,6 +49,7 @@ def GetWordById(request, id):
         return Response(serialized.data, status=status.HTTP_200_OK)
     except:
         return HttpResponse({"No Word Found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(["PUT"])
 def UpdateWord(request, id):
@@ -63,6 +66,7 @@ def UpdateWord(request, id):
     except:
         return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["DELETE"])
 def DeleteWord(request, id):
     try:
@@ -71,7 +75,6 @@ def DeleteWord(request, id):
         return HttpResponse({"Word Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
     except:
         return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 ######################### POST CATEGORY API ############################
@@ -89,6 +92,7 @@ def CreatePostCategory(request):
     except:
         return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["GET"])
 def GetAllCategories(request):
     try:
@@ -98,6 +102,7 @@ def GetAllCategories(request):
     except:
         return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(["GET"])
 def GetCategoriesById(request, id):
     try:
@@ -106,6 +111,7 @@ def GetCategoriesById(request, id):
         return Response(serialized.data, status=status.HTTP_200_OK)
     except:
         return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(["PUT"])
 def UpdateCategory(request, id):
@@ -122,12 +128,14 @@ def UpdateCategory(request, id):
     except:
         return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["DELETE"])
 def DeleteCategory(request, id):
     try:
         postcat = get_object_or_404(PostCategoryModel, id=id)
         postcat.delete()
-        return HttpResponse({"Category Deleted Successfully"}, status.HTTP_204_NO_CONTENT
+        return HttpResponse(
+            {"Category Deleted Successfully"}, status.HTTP_204_NO_CONTENT
         )
     except:
         return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
@@ -145,6 +153,7 @@ def CreatePost(request):
     except:
         return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["GET"])
 def GetAllPost(request):
     try:
@@ -154,6 +163,7 @@ def GetAllPost(request):
     except:
         return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(["GET"])
 def GetAllPostById(request, id):
     try:
@@ -162,6 +172,7 @@ def GetAllPostById(request, id):
         return Response(serialized.data, status=status.HTTP_200_OK)
     except:
         return HttpResponse({"No Category Found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(["PUT"])
 def UpdatePost(request, id):
@@ -177,6 +188,7 @@ def UpdatePost(request, id):
         return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
     except:
         return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["DELETE"])
 def DeletePost(request, id):
@@ -200,6 +212,7 @@ def CreateFooter(request):
     except:
         return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["GET"])
 def GetAllFooter(request):
     try:
@@ -209,6 +222,7 @@ def GetAllFooter(request):
     except:
         return HttpResponse({"No Footer Found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(["GET"])
 def GetAllFooterById(request, id):
     try:
@@ -217,6 +231,7 @@ def GetAllFooterById(request, id):
         return Response(serialized.data, status=status.HTTP_200_OK)
     except:
         return HttpResponse({"No Footer Found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(["PUT"])
 def UpdateFooter(request, id):
@@ -232,6 +247,7 @@ def UpdateFooter(request, id):
         return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
     except:
         return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["DELETE"])
 def DeleteFooter(request, id):
@@ -255,6 +271,7 @@ def CreateHeader(request):
     except:
         return HttpResponse({"message": "Failed"}, status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["GET"])
 def GetAllHeader(request):
     try:
@@ -264,6 +281,7 @@ def GetAllHeader(request):
     except:
         return HttpResponse({"No Header Found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(["GET"])
 def GetAllHeaderById(request, id):
     try:
@@ -271,7 +289,8 @@ def GetAllHeaderById(request, id):
         serialized = HeaderSerializer(header)
         return Response(serialized.data, status=status.HTTP_200_OK)
     except:
-        return HttpResponse({"No Header Found"}, status=status.HTTP_404_NOT_FOUND)
+        return HttpResponse({"No Header Found"}, status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(["PUT"])
 def UpdateHeader(request, id):
@@ -288,6 +307,7 @@ def UpdateHeader(request, id):
     except:
         return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["DELETE"])
 def DeleteHeader(request, id):
     try:
@@ -298,6 +318,62 @@ def DeleteHeader(request, id):
         return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+######################### PAGEAPI ############################
+@api_view(["POST"])
+def CreatePage(request):
+    try:
+        serialized = PageSerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+def GetAllPage(request):
+    try:
+        page = PageModel.objects.all()
+        serialized = PageSerializer(page, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Page Found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["GET"])
+def GetAllPageById(request, id):
+    try:
+        page = get_object_or_404(PageModel, id=id)
+        serialized = PageSerializer(page)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({f"{id} doesn't exist"}, status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["PUT"])
+def UpdatePage(request, id):
+    try:
+        page = get_object_or_404(PageModel, id=id)
+        serialized = PageSerializer(page, data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return JsonResponse(
+                {"message": "Updated Successfully", "data": serialized.data},
+                status=status.HTTP_202_ACCEPTED,
+            )
+        return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["DELETE"])
+def DeletePage(request, id):
+    page = PageModel.objects.get(id=id)
+    page.delete()
+    return JsonResponse({"message": "Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
+
+
 ################################## Templates ###########################
 baseURL = "http://127.0.0.1:8000"
 Get_Word = f"{baseURL}/api/all/word/"  # WordAPI Url
@@ -305,6 +381,7 @@ Get_POST = f"{baseURL}/api/all/post/"  # PostAPI Url
 Get_POSTCATE = f"{baseURL}/api/all/postcat/"  # Post_CategoryAPI Url
 GET_Footer = f"{baseURL}/api/all/footer/"  # FooterAPI Url
 GET_Header = f"{baseURL}/api/all/header/"  # HeaderAPI Url
+GET_Page = f"{baseURL}/api/all/page/"  # PAGEAPI Url
 
 
 # WORD CRUD OPERATION
@@ -327,11 +404,13 @@ def adminWordListApi(request):
     }  # user this for data flow
     return render(request, "admin/admin.html", context)
 
+
 def adminWordDelApi(request, id):
     word = get_object_or_404(WordModel, id=id)
     word.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apiword")
+
 
 def adminWordUpdateApi(request, id):
     word = get_object_or_404(WordModel, id=id)
@@ -369,11 +448,13 @@ def adminPostListApi(request):
     }  # user this for data flow
     return render(request, "admin/post.html", context)
 
+
 def adminPostDelApi(request, id):
     post = get_object_or_404(PostModel, id=id)
     post.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apipost")
+
 
 def adminPostUpdateApi(request, id):
     post = get_object_or_404(PostModel, id=id)
@@ -406,11 +487,13 @@ def adminPostCateListApi(request):
     context = {"ApiPostCatList": ApiPostCatList, "postcateform": postcateform}
     return render(request, "admin/postcategory.html", context)
 
+
 def adminPostCateDelApi(request, id):
     postcate = get_object_or_404(PostCategoryModel, id=id)
     postcate.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apipostcat")
+
 
 def adminPostCateUpdateApi(request, id):
     postcate = get_object_or_404(PostCategoryModel, id=id)
@@ -450,11 +533,13 @@ def adminFooterListApi(request):
     }  # user this for data flow
     return render(request, "admin/footer.html", context)
 
+
 def adminFooterDelApi(request, id):
     footer = get_object_or_404(FooterModel, id=id)
     footer.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apifooter")
+
 
 def adminFooterUpdateApi(request, id):
     footer = get_object_or_404(FooterModel, id=id)
@@ -492,11 +577,13 @@ def adminHeaderListApi(request):
     }  # user this for data flow
     return render(request, "admin/header.html", context)
 
+
 def adminHeaderDelApi(request, id):
     header = get_object_or_404(HeaderModel, id=id)
     header.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apiheader")
+
 
 def adminHeaderUpdateApi(request, id):
     header = get_object_or_404(HeaderModel, id=id)
@@ -514,3 +601,41 @@ def adminHeaderUpdateApi(request, id):
     return render(
         request, "admin/header.html", {"headerform": head_form, "header": header}
     )
+
+
+# Page CRUD OPERATION
+def adminPageListApi(request):
+    response = requests.get(GET_Page)
+    ApiPageList = response.json() if response.status_code == 200 else []
+    pageform = PageForm(request.POST or None)
+
+    if (request.method == "POST" and "page_submit" in request.POST and pageform.is_valid()):
+        pageform.save()
+        messages.success(request, "Page added Successfully!")
+        return redirect("apipage")
+    context = {"ApiPageList": ApiPageList, "pageform": pageform}
+
+    return render(request, "admin/page.html", context)
+
+
+def adminPageDelApi(request, id):
+    page = get_object_or_404(PageModel, id=id)
+    page.delete()
+    messages.warning(request, "Deleted Successfully")
+    return redirect("apipage")
+
+
+def adminPageUpdateApi(request, id):
+    page = get_object_or_404(PageModel, id=id)
+    if request.method == "POST":
+        page_form = PageForm(request.POST, instance=page)
+        if page_form.is_valid():
+            page_form.save()
+            messages.success(request, "Page Updated Sucessfully!")
+            return redirect("apipage")
+        else:
+            messages.error(request, "Error updating page. Please check the form.")
+    else:
+        page_form = PageForm(instance=page)
+
+    return render(request, "admin/page.html", {"pageform": page_form, "page": page})

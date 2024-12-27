@@ -15,12 +15,10 @@ class WordSerializer(serializers.ModelSerializer):
             "description",
         ]
 
-
 class PostCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PostCategoryModel
         fields = fields = ["id", "cat_title"]
-
 
 class PostSerializer(serializers.ModelSerializer):
     post_Cat = PostCategorySerializer(source="postCat", read_only=True)
@@ -29,14 +27,17 @@ class PostSerializer(serializers.ModelSerializer):
         model = PostModel
         fields = fields = ["id", "title", "image", "full_desc", "post_Cat"]
 
-
 class FooterSerializer(serializers.ModelSerializer):
     class Meta:
         model = FooterModel
         fields = ["id", "heading", "description"]
 
-
 class HeaderSerializer(serializers.ModelSerializer):
     class Meta:
         model = HeaderModel
         fields = ["id", "site_title", "logo"]
+
+class PageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PageModel
+        fields = ['id', 'page_title']

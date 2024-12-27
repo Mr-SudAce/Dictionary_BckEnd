@@ -49,7 +49,7 @@
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title" id="wordFormModalLabel">
             {% if wordform.instance.id %} Update Word {% else %} Add New Word 
-            {% endif %}
+            {%endif %}
           </h5>
           <button
             type="button"
@@ -67,7 +67,7 @@
             {% csrf_token %}
             <div class="row g-3">
               {% for field in wordform %}
-              <div class="col-md-6">
+              <div class="col-12">
                 <label for="{{ field.id_for_label }}" class="form-label"
                   >{{ field.label }}</label
                 >
@@ -121,32 +121,28 @@
             <td class="align-middle text-center">{{ word.synonyms }}</td>
             <td class="align-middle text-center">{{ word.example }}</td>
             <td class="text-center">
-              <div class="btn-group gap-2">
-                <!-- Edit Button that Triggers Modal with Word Data -->
-                <a
-                  href="{% url 'updateword' word.id %}"
-                  class="btn btn-sm btn-outline-warning"
-                  data-bs-toggle="modal"
-                  data-bs-target="#wordFormModal{{word.id}}"
-                  title="Edit Word"
-                >
-                  <i class="bi bi-pencil-square"></i>
-                </a>
-                <form
-                  action="{% url 'deleteword' word.id %}"
-                  method="POST"
-                  onsubmit="return confirm('Are you sure you want to delete this word?');"
-                  class="d-inline"
-                >
-                  {% csrf_token %}
-                  <button
-                    type="submit"
+              <div class="btn-group gap-1">
+                  <!-- Edit Button -->
+                  <a
+                    href="{% url 'updateword' word.id %}"
+                    class="btn btn-sm btn-outline-warning"
+                    data-bs-toggle="modal"
+                    data-bs-target="#wordFormModal{{ word.id }}"
+                    title="Edit Word"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </a>
+
+                  <!-- Delete Form -->
+                  <a
+                    href="{% url 'deleteword' word.id %}"
                     class="btn btn-sm btn-outline-danger"
+                    onclick="return confirm('Are you sure you want to delete this word?');"
                     title="Delete Word"
                   >
                     <i class="bi bi-trash"></i>
-                  </button>
-                </form>
+                  </a>
+                </div>
               </div>
             </td>
           </tr>
