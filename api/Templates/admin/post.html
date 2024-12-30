@@ -123,10 +123,10 @@
           <td class="text-center align-middle">{{ forloop.counter }}</td>
           <td class="text-center align-middle">{{ post.title }}</td>
           <td class="text-center align-middle fuldesc">
-            {{ post.full_desc|safe }}
-          </td>
-          <td class="text-center align-middle fuldesc">
             {{ post.full_desc|safe|slice:20 }}
+          </td>
+          <td class="text-start align-middle fuldesc">
+            {{ post.full_desc|safe|slice:40 }}...
           </td>
           <td class="text-center align-middle">
             {{ post.post_Cat.cat_title }}

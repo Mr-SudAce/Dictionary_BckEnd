@@ -16,8 +16,8 @@ class WordModel(models.Model):
         return self.word
 
 class PostCategoryModel(models.Model):
+    cat_order = models.IntegerField(default=0, unique=True)
     cat_title = models.CharField(max_length=100, unique=True, default="")
-
     def __str__(self):
         return self.cat_title
 
