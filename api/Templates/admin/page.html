@@ -166,16 +166,13 @@
                 enctype="multipart/form-data"
               >
                 {% csrf_token %}
-                <div class="row g-3">
-                  {% for field in pageform %}
-                  <div class="col-12">
-                    <label for="{{ field.id_for_label }}" class="form-label"
-                      >{{ field.label }}</label
-                    >
-                    {{ field }}
-                  </div>
-                  {% endfor %}
+                <div class="modal-body">
+                  <!--page_title-->
+                  <label for="id_page_title_{{ post.id }}" class="form-label">Page_title</label>
+                  <input type="text" name="page_title" id="id_page_title_{{ post.id }}" class="form-control" value="{{ post.page_title }}" required>
                 </div>
+
+
                 <div class="d-flex justify-content-end mt-4">
                   <button
                     type="submit"

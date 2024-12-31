@@ -99,16 +99,47 @@
                     enctype="multipart/form-data"
                   >
                     {% csrf_token %}
-                    <div class="row g-3">
-                      {% for field in headerform %}
-                      <div class="col-12">
-                        <label for="{{ field.id_for_label }}" class="form-label"
-                          >{{ field.label }}</label
-                        >
-                        {{ field }}
-                      </div>
-                      {% endfor %}
+                    <div class="modal-body">
+                      <!--site_title-->
+                      <label
+                        for="id_site_title_{{ header.id }}"
+                        class="form-label"
+                        >Site_title</label
+                      >
+                      <input
+                        type="text"
+                        name="site_title"
+                        id="id_site_title_{{ header.id }}"
+                        class="form-control"
+                        value="{{ header.site_title }}"
+                        required
+                      />
+
+                      <!--logo-->
+                      <label for="id_logo_{{ header.id }}" class="form-label"
+                        >Logo</label
+                      >
+                      <input
+                        type="file"
+                        name="logo"
+                        id="id_logo_{{ header.id }}"
+                        class="form-control"
+                      />
+                      {% if header.logo %}
+                      <img
+                        src="{{ header.logo }}"
+                        alt="{{ header.title }}"
+                        style="
+                          max-width: 80px;
+                          height: 80px;
+                          object-fit: contain;
+                          border: 1px solid #ddd;
+                        "
+                        loading="lazy"
+                      />
+                      {% endif %}
                     </div>
+
                     <div class="d-flex justify-content-end mt-4">
                       <button
                         type="submit"
@@ -134,9 +165,6 @@
       </table>
     </div>
   </div>
-
 </div>
-
-
 
 {% endblock %}

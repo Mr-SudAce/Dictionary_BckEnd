@@ -65,16 +65,19 @@
             enctype="multipart/form-data"
           >
             {% csrf_token %}
-            <div class="row g-3">
-              {% for field in footerform %}
-              <div class="col-12">
-                <label for="{{ field.id_for_label }}" class="form-label"
-                  >{{ field.label }}</label
-                >
-                {{ field }}
-              </div>
-              {% endfor %}
+            <div class="modal-body">
+              <!--heading-->
+              <label for="id_heading_{{ footer.id }}" class="form-label">Heading</label>
+              <input type="text" name="heading" id="id_heading_{{ footer.id }}" class="form-control" value="{{ footer.heading }}" required>
+
+              <!--description-->
+              <label for="id_description_{{ footer.id }}" class="form-label">Cat_title</label>
+              <input type="text" name="description" id="id_description_{{ footer.id }}" class="form-control" value="{{ footer.description }}" required>
+
             </div>
+
+
+
             <div class="d-flex justify-content-end mt-4">
               <button
                 type="submit"

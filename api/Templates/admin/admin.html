@@ -175,16 +175,28 @@
                     enctype="multipart/form-data"
                   >
                     {% csrf_token %}
-                    <div class="row g-3">
-                      {% for field in wordform %}
-                      <div class="col-12">
-                        <label for="{{ field.id_for_label }}" class="form-label"
-                          >{{ field.label }}</label
-                        >
-                        {{ field }}
-                      </div>
-                      {% endfor %}
+                    <div class="modal-body">
+                      <!-- Word -->
+                      <label for="id_word_{{ post.id }}" class="form-label">Word</label>
+                      <input type="text" name="word" id="id_word_{{ post.id }}" class="form-control" value="{{ post.word }}" required>
+        
+                      <!-- Antonyms -->
+                      <label for="id_antonyms_{{ post.id }}" class="form-label">Antonyms</label>
+                      <input type="text" name="antonyms" id="id_antonyms_{{ post.id }}" class="form-control" value="{{ post.antonyms }}" required>
+        
+                      <!-- Synonyms -->
+                      <label for="id_synonyms_{{ post.id }}" class="form-label">Synonyms</label>
+                      <input type="text" name="synonyms" id="id_synonyms_{{ post.id }}" class="form-control" value="{{ post.synonyms }}" required>
+        
+                      <!-- Description -->
+                      <label for="id_description_{{ post.id }}" class="form-label">Description</label>
+                      <textarea name="description" id="id_description_{{ post.id }}" class="form-control" value="{{ post.description }}" required></textarea>
+
+                      <!-- Example -->
+                      <label for="id_example_{{ post.id }}" class="form-label">Example</label>
+                      <textarea name="example" id="id_example_{{ post.id }}" class="form-control" value="{{ post.example }}" required></textarea>
                     </div>
+
                     <div class="d-flex justify-content-end mt-4">
                       <button
                         type="submit"
