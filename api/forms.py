@@ -10,7 +10,16 @@ class WordForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = PostModel
-        fields = "__all__"
+        fields = ['title', 'image', 'full_desc', 'postCat']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'postCat': forms.Select(attrs={'class': 'form-select'}),
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['postCat'].queryset = PostCategoryModel.objects.all()
 
 class FooterForm(forms.ModelForm):
     class Meta:

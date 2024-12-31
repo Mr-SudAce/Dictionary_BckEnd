@@ -196,5 +196,12 @@
           ),
       });
     </script>
+    <script>
+      setTimeout(() => {
+        document.querySelectorAll(".alert").forEach((alert) => {
+          alert.style.display = "none";
+        });
+      }, 5000);
+    </script>
   </body>
 </html>

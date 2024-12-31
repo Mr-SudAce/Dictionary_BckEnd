@@ -457,17 +457,17 @@ def adminPostDelApi(request, id):
 
 
 def adminPostUpdateApi(request, id):
-    post = get_object_or_404(PostModel, id=id)
+    post_instance = get_object_or_404(PostModel, id=id)
     if request.method == "POST":
-        pform = PostForm(request.POST, request.FILES, instance=post)
+        pform = PostForm(request.POST, request.FILES, instance=post_instance)
         if pform.is_valid():
             pform.save()
             messages.success(request, "Post updated successfully!")
             return redirect("apipost")
     else:
-        pform = PostForm(instance=post)
+        pform = PostForm(instance=post_instance)
 
-    return render(request, "admin/post.html", {"postform": pform, "post": post})
+    return render(request, "admin/post.html", {"postform": pform, "post_instance": post_instance})
 
 
 # POST CATEGORY OPERATION

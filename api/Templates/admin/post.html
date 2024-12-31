@@ -4,31 +4,20 @@
   }
 </style>
 
-<div class="position-relative" style="color: #333">
-  <!-- Alert Messages -->
-  {% if messages %}
-  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
-    {% for message in messages %}
-    <div
-      class="alert alert-{{ message.tags }} alert-dismissible fade show m-0"
-      role="alert"
-      style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)"
-    >
-      {{ message }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-        style="outline: none"
-      ></button>
-    </div>
-    {% endfor %}
+<!-- /////////////////////////////////////Alert Message/////////////////////////////// -->
+{% if messages %}
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show m-0" role="alert" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="outline: none"></button>
   </div>
-  {% endif %}
-  <!-- Alert Messages -->
+  {% endfor %}
+</div>
+{% endif %}
+<!-- /////////////////////////////////////Alert Message/////////////////////////////// -->
 
-  <!-- Page Header -->
+<!-- /////////////////////////////////////Page Header/////////////////////////////// -->
   <div class="d-flex justify-content-between align-items-center">
     <h1 class="text-dark" style="font-size: 4vh">Post Management</h1>
     <button
@@ -40,9 +29,9 @@
       Add New Post <i class="bi bi-plus-lg fw-bolder"></i>
     </button>
   </div>
-  <!-- Page Header -->
+<!-- /////////////////////////////////////Page Header/////////////////////////////// -->
 
-  <!-- post Form Modal -->
+<!-- /////////////////////////////////////Add Post/////////////////////////////////////// -->
   <div
     class="modal fade"
     id="postFormModal"
@@ -54,8 +43,7 @@
       <div class="modal-content">
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title" id="postFormLabel">
-            {% if postform.instance.id %} Update Post {% else %} Add New Post
-            {%endif %}
+            Add New Post
           </h5>
           <button
             type="button"
@@ -66,7 +54,7 @@
         </div>
         <div class="modal-body">
           <form
-            action="{% if postform.instance.id %}{% url 'updatepost' postform.instance.id %}{% else %}{% url 'apipost' %}{% endif %}"
+            action="{% url 'apipost' %}"
             method="POST"
             enctype="multipart/form-data"
           >
@@ -91,8 +79,10 @@
       </div>
     </div>
   </div>
+<!-- /////////////////////////////////////Add Post/////////////////////////////////////// -->
 
-  <!-- Post Table -->
+
+<!-- /////////////////////////////////////Table/////////////////////////////////////// -->
   <div
     class="table-responsive mt-4"
     style="
@@ -186,7 +176,7 @@
           </td>
         </tr>
 
-        <!-- Modal for Edit -->
+        <!-- /////////////////////////////////////Edit Post/////////////////////////////////////// -->
         <div
           class="modal fade"
           id="postFormModal{{ post.id }}"
@@ -214,15 +204,31 @@
                   enctype="multipart/form-data"
                 >
                   {% csrf_token %}
-                  <div class="row g-3">
-                    {% for field in postform %}
-                    <div class="col-12">
-                      <label for="{{ field.id_for_label }}" class="form-label"
-                        >{{ field.label }}</label
-                      >
-                      {{ field }}
-                    </div>
-                    {% endfor %}
+                  <div class="modal-body">
+                    <!-- Title -->
+                    <label for="id_title_{{ post.id }}" class="form-label">Title</label>
+                    <input type="text" name="title" id="id_title_{{ post.id }}" class="form-control" value="{{ post.title }}" required>
+      
+                    <!-- Description -->
+                    <label for="id_full_desc_{{ post.id }}" class="form-label">Full Description</label>
+                    <textarea name="full_desc" id="id_full_desc_{{ post.id }}" class="form-control" required>{{ post.full_desc }}</textarea>
+      
+                    <!-- Category -->
+                    <label for="id_postCat_{{ post.id }}" class="form-label">Category</label>
+                    <select name="postCat" id="id_postCat_{{ post.id }}" class="form-control" required>
+                      {% for category in ApiPostsList %}
+                        <option value="{{ category.post_Cat.id }}" {% if category.post_Cat.id == post.postCat.id %}selected{% endif %}>
+                          {{ category.post_Cat.cat_title }}
+                        </option>
+                      {% endfor %}
+                    </select>
+      
+                    <!-- Image -->
+                    <label for="id_image_{{ post.id }}" class="form-label">Image</label>
+                    <input type="file" name="image" id="id_image_{{ post.id }}" class="form-control">
+                    {% if post.image %}
+                      <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;" loading="lazy">
+                    {% endif %}
                   </div>
                   <div class="d-flex justify-content-end mt-4">
                     <button
@@ -238,6 +244,7 @@
             </div>
           </div>
         </div>
+        <!-- /////////////////////////////////////Edit Post/////////////////////////////////////// -->
         {% endfor %} {% else %}
         <tr>
           <td colspan="7" class="text-center py-3">
@@ -248,7 +255,7 @@
       </tbody>
     </table>
   </div>
-  <!-- Post Table -->
+<!-- /////////////////////////////////////Table/////////////////////////////////////// -->
 </div>
 
 {% endblock %}
