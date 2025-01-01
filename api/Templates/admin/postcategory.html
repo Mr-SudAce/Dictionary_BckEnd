@@ -167,15 +167,15 @@
                   enctype="multipart/form-data"
                 >
                   {% csrf_token %}
-                  <div class="row g-3">
-                    {% for field in postcateform %}
-                    <div class="col-12">
-                      <label for="{{ field.id_for_label }}" class="form-label"
-                        >{{ field.label }}</label
-                      >
-                      {{ field }}
-                    </div>
-                    {% endfor %}
+                  <div class="modal-body">
+                    <!--cat_order-->
+                    <label for="id_cat_order_{{ postcate.id }}" class="form-label">Cat_order</label>
+                    <input type="text" name="cat_order" id="id_cat_order_{{ postcate.id }}" class="form-control" value="{{ postcate.cat_order }}" required>
+      
+                    
+                    <!--cat_title-->
+                    <label for="id_cat_title_{{ postcate.id }}" class="form-label">Cat_title</label>
+                    <input type="text" name="cat_title" id="id_cat_title_{{ postcate.id }}" class="form-control" value="{{ postcate.cat_title }}" required>
                   </div>
                   <div class="d-flex justify-content-end mt-4">
                     <button
