@@ -50,6 +50,7 @@ class HeaderModel(models.Model):
 
 class PageModel(models.Model):
     page_title = models.CharField(max_length=100, unique=True, default="")
+    page_description = HTMLField()
     
     def __str__(self):
         return self.page_title

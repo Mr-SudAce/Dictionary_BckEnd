@@ -1,7 +1,9 @@
 {% extends "admin/supermain.html" %} {% load static %} {% block admin %}
-
-<link rel="stylesheet" href="{% static 'css/page.css' %}" />
-<style></style>
+<style>
+  .descp p {
+    margin: 0;
+  }
+</style>
 
 <div class="pagemain">
   <!-- Alert Message -->
@@ -10,7 +12,7 @@
   <div class="alertmessage p-3">
     {% for message in messages %}
     <div
-      class="alertbox  alert alert-{{ message.tags }} alert-dismissible fade show m-0"
+      class="alertbox  alert alert-{{ message.tags }} alert-dismissible fade show m-0 absolute"
       role="alert"
     >
       {{ message }}
@@ -29,7 +31,7 @@
 </div>
 
 <!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center flex-wrap">
   <h1 class="text-dark" style="font-size: 4vh">Page Management</h1>
   <button
     class="btn btn-outline-dark fw-bolder"
@@ -105,6 +107,7 @@
       <tr>
         <th class="text-center align-middle" style="width: 2%">#</th>
         <th class="text-center align-middle" style="width: 15%">Title</th>
+        <th class="text-center align-middle" style="width: 15%">Content</th>
         <th class="text-center align-middle" style="width: 3%">Actions</th>
       </tr>
     </thead>
@@ -113,6 +116,8 @@
       <tr>
         <td class="text-center align-middle">{{ forloop.counter }}</td>
         <td class="text-center align-middle">{{ page.page_title }}</td>
+        <td class="text-center align-middle descp">
+          {{page.page_description|safe}}
         </td>
         <td class="text-center align-middle">
           <!-- Edit Button -->
@@ -134,7 +139,6 @@
           >
             <i class="bi bi-trash"></i>
           </a>
-
         </td>
       </tr>
 
@@ -168,10 +172,33 @@
                 {% csrf_token %}
                 <div class="modal-body">
                   <!--page_title-->
-                  <label for="id_page_title_{{ page.id }}" class="form-label">Page_title</label>
-                  <input type="text" name="page_title" id="id_page_title_{{ page.id }}" class="form-control" value="{{ page.page_title }}" required>
-                </div>
+                  <label for="id_page_title_{{ page.id }}" class="form-label"
+                    >Title</label
+                  >
+                  <input
+                    type="text"
+                    name="page_title"
+                    id="id_page_title_{{ page.id }}"
+                    class="form-control"
+                    value="{{ page.page_title }}"
+                    required
+                  />
 
+                  <!-- page description -->
+                  <label
+                    for="id_page_description_{{ page.id }}"
+                    class="form-label"
+                    >Description</label
+                  >
+                  <textarea
+                    name="page_description"
+                    id="id_page_description_{{ page.id }}"
+                    class="form-control"
+                    required
+                  >
+{{ page.page_description }}</textarea
+                  >
+                </div>
 
                 <div class="d-flex justify-content-end mt-4">
                   <button
@@ -198,6 +225,5 @@
   </table>
 </div>
 <!-- Post Table -->
- 
 
 {% endblock %}

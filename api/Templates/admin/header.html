@@ -1,4 +1,6 @@
-{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+{% extends "admin/supermain.html" %}
+{% load static %}
+{% block admin %}
 
 <link rel="stylesheet" href="{% static 'css/header.css' %}" />
 
@@ -38,7 +40,8 @@
           </tr>
         </thead>
         <tbody>
-          {% if ApiHeaderList %} {% for header in ApiHeaderList %}
+          {% if ApiHeaderList %}
+          {% for header in ApiHeaderList %}
           <tr>
             <td class="text-center fw-bolder">{{ forloop.counter }}</td>
             <td class="text-center align-middle">{{ header.site_title }}</td>
@@ -46,7 +49,7 @@
               {% if header.logo %}
               <img
                 src="{{ header.logo }}"
-                alt="{{ header.site_title}}"
+                alt="{{ header.site_title }}"
                 class="rounded shadow-sm"
               />
               {% else %}
@@ -100,10 +103,7 @@
                   >
                     {% csrf_token %}
                     <div class="modal-body">
-                      <!--site_title-->
-                      <label
-                        for="id_site_title_{{ header.id }}"
-                        class="form-label"
+                      <label for="id_site_title_{{ header.id }}" class="form-label"
                         >Site_title</label
                       >
                       <input
@@ -115,10 +115,7 @@
                         required
                       />
 
-                      <!--logo-->
-                      <label for="id_logo_{{ header.id }}" class="form-label"
-                        >Logo</label
-                      >
+                      <label for="id_logo_{{ header.id }}" class="form-label">Logo</label>
                       <input
                         type="file"
                         name="logo"
@@ -128,13 +125,8 @@
                       {% if header.logo %}
                       <img
                         src="{{ header.logo }}"
-                        alt="{{ header.title }}"
-                        style="
-                          max-width: 80px;
-                          height: 80px;
-                          object-fit: contain;
-                          border: 1px solid #ddd;
-                        "
+                        alt="{{ header.site_title }}"
+                        style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;"
                         loading="lazy"
                       />
                       {% endif %}
@@ -154,7 +146,8 @@
               </div>
             </div>
           </div>
-          {% endfor %} {% else %}
+          {% endfor %}
+          {% else %}
           <tr>
             <td colspan="4" class="text-center text-muted py-4">
               No headers available.
@@ -166,5 +159,73 @@
     </div>
   </div>
 </div>
+
+{% if not ApiHeaderList %}
+<div class="text-center mt-4">
+  <a
+    href="{% url 'apiheader' %}"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#addHeaderModal"
+  >
+    Add Header
+  </a>
+</div>
+
+<!-- Modal for Add -->
+<div
+  class="modal fade"
+  id="addHeaderModal"
+  tabindex="-1"
+  aria-labelledby="addHeaderModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="addHeaderModalLabel">Add Header</h5>
+        <button
+          type="button"
+          class="btn-close bg-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="{% url 'apiheader' %}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
+          <div class="modal-body">
+            <label for="id_site_title" class="form-label">Site_title</label>
+            <input
+              type="text"
+              name="site_title"
+              id="id_site_title"
+              class="form-control"
+              required
+            />
+
+            <label for="id_logo" class="form-label">Logo</label>
+            <input type="file" name="logo" id="id_logo" class="form-control" />
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button
+              type="submit"
+              name="header_submit"
+              class="btn btn-success"
+            >
+              Submit <i class="bi bi-check-circle"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 {% endblock %}

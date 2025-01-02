@@ -50,9 +50,9 @@
 
       <div class="row m-0 flex-grow-1 overflow-hidden">
         <!-- Sidebar -->
-        <aside class="col-2 sidebar position-sticky left-0">
+        <aside class="col-12 col-md-3 col-lg-2 bg-light p-0">
           <div class="sidebar-header p-3 border-bottom">
-            <p class="text-dark m-0 fw-bolder" style="font-size: 3vh">
+            <p class="text-dark m-0 fw-bolder text-center text-md-start" style="font-size: 3vh">
               Dashboard
             </p>
           </div>
@@ -103,9 +103,9 @@
         </aside>
 
         <!-- Main Content -->
-        <section class="col-9">
+        <section class="col-12 col-md-9 col-lg-10">
           <div
-            class="main-content h-100 p-3 overflow-scroll"
+            class="main-content h-100 p-3 overflow-auto"
             style="max-height: 90vh"
           >
             {% block admin %} {% endblock %}
@@ -138,7 +138,6 @@
       tinymce.init({
         selector: "textarea",
         plugins: [
-          // Core editing features
           "anchor",
           "autolink",
           "charmap",
@@ -152,9 +151,6 @@
           "table",
           "visualblocks",
           "wordcount",
-          // Your account includes a free trial of TinyMCE premium features
-          // Try the most popular premium features until Jan 6, 2025:
-          
         ],
         toolbar:
           "undo redo code | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",

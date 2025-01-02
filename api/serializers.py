@@ -45,4 +45,4 @@ class HeaderSerializer(serializers.ModelSerializer):
 class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageModel
-        fields = ["id", "page_title"]
+        fields = ["id", "page_title", "page_description"]
