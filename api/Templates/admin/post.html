@@ -209,21 +209,18 @@
                     <!-- Title -->
                     <label for="id_title_{{ post.id }}" class="form-label">Title</label>
                     <input type="text" name="title" id="id_title_{{ post.id }}" class="form-control" value="{{ post.title }}" required>
-      
                     <!-- Description -->
                     <label for="id_full_desc_{{ post.id }}" class="form-label">Full Description</label>
                     <textarea name="full_desc" id="id_full_desc_{{ post.id }}" class="form-control" required>{{ post.full_desc }}</textarea>
-                    
                     <!-- Category -->
                     <label for="id_postCat_{{ post.id }}" class="form-label">Category</label>
                     <select name="postCat" id="id_postCat_{{ post.id }}" class="form-control" required>
-                      {% for category in ApiPostsList %}
-                        <option value="{{ category.post_Cat.id }}" {% if category.post_Cat.id == post.postCat.id %}selected{% endif %}>
-                          {{ category.post_Cat.cat_title }}
-                        </option>
+                      {% for category in ApiPostCatList %}
+                      <option value="{{ category.id }}" {% if category.id == post.post_Cat.id %} selected {% endif %}>
+                        {{ category.cat_title }}
+                      </option>
                       {% endfor %}
                     </select>
-      
                     <!-- Image -->
                     <label for="id_image_{{ post.id }}" class="form-label">Image</label>
                     <input type="file" name="image" id="id_image_{{ post.id }}" class="form-control">

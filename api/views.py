@@ -431,8 +431,12 @@ def adminWordUpdateApi(request, id):
 # POST CRUD OPERATION
 def adminPostListApi(request):
     response = requests.get(Get_POST)
+    response1 = requests.get(Get_POSTCATE)
     ApiPostsList = response.json() if response.status_code == 200 else []
+    ApiPostCatList = response1.json() if response1.status_code == 200 else []
     postform = PostForm(request.POST, request.FILES or None)
+    # postcateform = PostCatForm(request.POST or None)
+
 
     if (
         request.method == "POST"
@@ -443,6 +447,7 @@ def adminPostListApi(request):
         messages.success(request, "Post added successfully!")
         return redirect("apipost")
     context = {
+        "ApiPostCatList": ApiPostCatList,
         "ApiPostsList": ApiPostsList,
         "postform": postform,
     }  # user this for data flow
