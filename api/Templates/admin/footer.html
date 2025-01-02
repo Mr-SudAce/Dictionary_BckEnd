@@ -71,8 +71,9 @@
               <input type="text" name="heading" id="id_heading_{{ footer.id }}" class="form-control" value="{{ footer.heading }}" required>
 
               <!--description-->
-              <label for="id_description_{{ footer.id }}" class="form-label">Cat_title</label>
-              <input type="text" name="description" id="id_description_{{ footer.id }}" class="form-control" value="{{ footer.description }}" required>
+              <label for="id_description_{{ footer.id }}" class="form-label">Description</label>
+              <textarea name="description" id="id_description_{{ footer.id }}" class="form-control" required>{{ footer.description }}</textarea>
+              <!-- <input type="text" name="description" id="id_description_{{ footer.id }}" class="form-control" value="{{ footer.description }}" required> -->
 
             </div>
 
