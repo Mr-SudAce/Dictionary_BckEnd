@@ -40,3 +40,8 @@ class PageForm(forms.ModelForm):
     class Meta:
         model = PageModel
         fields = "__all__"
+        
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = BlogModel
+        fields = "__all__"

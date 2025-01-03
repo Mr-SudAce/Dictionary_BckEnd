@@ -46,3 +46,16 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageModel
         fields = ["id", "page_title", "page_description"]
+
+
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlogModel
+        fields = [
+            "id",
+            "blog_title",
+            "blog_description",
+            "blog_image",
+            "blog_author",
+            "created_at",
+        ]

@@ -45,6 +45,13 @@ urlpatterns = [
     path("api/page/delete/<int:id>/", DeletePage, name="delete_page"),
     path("api/page/update/<int:id>/", UpdatePage, name="update_page"),
     ####################### Page #######################
+    ####################### Blog #######################
+    path("api/blog/", CreateBlog, name="create_blog"),
+    path("api/all/blog/", GetAllBlog, name="get_allblog"),
+    path("api/blog/<int:id>/", GetAllBlogById, name="get_blogby_id"),
+    path("api/blog/delete/<int:id>/", DeleteBlog, name="delete_blog"),
+    path("api/blog/update/<int:id>/", UpdateBlog, name="update_blog"),
+    ####################### Blog #######################
     
     
     ########################## Template URL #######################
@@ -72,4 +79,8 @@ urlpatterns = [
     path("apipage/", adminPageListApi, name="apipage"),
     path("apipage/delete/<int:id>/", adminPageDelApi, name="deletepage"),
     path("apipage/edit/<int:id>/", adminPageUpdateApi, name="updatepage"),
+    # Blog CRUD URL
+    path("apiblog/", adminBlogListApi, name="apiblog"),
+    path("apiblog/delete/<int:id>/", adminBlogDelApi, name="deleteblog"),
+    path("apiblog/edit/<int:id>/", adminBlogUpdateApi, name="updateblog"),
 ]

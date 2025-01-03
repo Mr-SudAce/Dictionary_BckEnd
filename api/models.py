@@ -54,3 +54,14 @@ class PageModel(models.Model):
     
     def __str__(self):
         return self.page_title
+
+class BlogModel(models.Model):
+    blog_title = models.CharField(max_length=100, unique=True, default="")
+    blog_description = HTMLField()
+    blog_image = models.ImageField(upload_to="images/")
+    blog_author = models.CharField(max_length=100, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+
+    def __str__(self):
+        return self.blog_title

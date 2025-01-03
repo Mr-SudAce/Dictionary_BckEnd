@@ -373,6 +373,58 @@ def DeletePage(request, id):
     page.delete()
     return JsonResponse({"message": "Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
 
+######################### BLOGAPI ############################
+@api_view(["POST"])
+def CreateBlog(request):
+    try:
+        serialized = BlogSerializer(data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data, status=status.HTTP_201_CREATED)
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return JsonResponse({"error": f"Blog creation failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+def GetAllBlog(request):
+    try:
+        blog = BlogModel.objects.all()
+        serialized = BlogSerializer(blog, many=True)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({"No Blog Found"}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(["GET"])
+def GetAllBlogById(request, id):
+    try:
+        blog = get_object_or_404(BlogModel, id=id)
+        serialized = BlogSerializer(blog)
+        return Response(serialized.data, status=status.HTTP_200_OK)
+    except:
+        return HttpResponse({f"{id} doesn't exist"}, status.HTTP_204_NO_CONTENT)
+
+@api_view(["PUT"])
+def UpdateBlog(request, id):
+    try:
+        blog = get_object_or_404(BlogModel, id=id)
+        serialized = BlogSerializer(blog, data=request.data)
+        if serialized.is_valid():
+            serialized.save()
+            return JsonResponse(
+                {"message": "Updated Successfully", "data": serialized.data},
+                status=status.HTTP_202_ACCEPTED,
+            )
+        return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["DELETE"])
+def DeleteBlog(request, id):
+    blog = BlogModel.objects.get(id=id)
+    blog.delete()
+    return JsonResponse({"message": "Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
+
 
 ################################## Templates ###########################
 baseURL = "http://127.0.0.1:8000"
@@ -382,6 +434,7 @@ Get_POSTCATE = f"{baseURL}/api/all/postcat/"  # Post_CategoryAPI Url
 GET_Footer = f"{baseURL}/api/all/footer/"  # FooterAPI Url
 GET_Header = f"{baseURL}/api/all/header/"  # HeaderAPI Url
 GET_Page = f"{baseURL}/api/all/page/"  # PAGEAPI Url
+GET_Blog = f"{baseURL}/api/all/blog/"  # BLOGAPI Url
 
 
 # WORD CRUD OPERATION
@@ -644,3 +697,44 @@ def adminPageUpdateApi(request, id):
         page_form = PageForm(instance=page)
 
     return render(request, "admin/page.html", {"pageform": page_form, "page": page})
+
+
+# Blog CRUD OPERATION
+def adminBlogListApi(request):
+    response = requests.get(GET_Blog)
+    ApiBlogList = response.json() if response.status_code == 200 else []
+    blogform = BlogForm(request.POST, request.FILES or None)
+
+    if (request.method == "POST" and "blog_submit" in request.POST and blogform.is_valid()):
+        blogform.save()
+        messages.success(request, "Blog added Successfully!")
+        return redirect("apiblog")
+    context = {
+        "ApiBlogList": ApiBlogList,
+        "blogform": blogform
+        }
+
+    return render(request, "admin/blog.html", context)
+
+
+def adminBlogDelApi(request, id):
+    blog = get_object_or_404(BlogModel, id=id)
+    blog.delete()
+    messages.warning(request, "Deleted Successfully")
+    return redirect("apiblog")
+
+
+def adminBlogUpdateApi(request, id):
+    blog = get_object_or_404(BlogModel, id=id)
+    if request.method == "POST":
+        blog_form = BlogForm(request.POST, instance=blog)
+        if blog_form.is_valid():
+            blog_form.save()
+            messages.success(request, "Blog Updated Sucessfully!")
+            return redirect("apiblog")
+        else:
+            messages.error(request, "Error updating blog. Please check the form.")
+    else:
+        blog_form = BlogForm(instance=blog)
+
+    return render(request, "admin/blog.html", {"blogform": blog_form, "blog": blog})
