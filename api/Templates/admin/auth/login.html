@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f5f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            max-width: 1200px;
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .left {
+            flex: 1;
+            background: url('image.png') no-repeat center;
+            background-size: cover;
+        }
+
+        .right {
+            flex: 1;
+            padding: 50px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #a1615d;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #7b4b47;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.9rem;
+            color: #7b7b7b;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-bottom: 2px solid #d6d6d6;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #a1615d;
+        }
+
+        .checkbox-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-container label {
+            font-size: 0.9rem;
+            color: #7b7b7b;
+        }
+
+        .checkbox-container a {
+            text-decoration: none;
+            font-size: 0.9rem;
+            color: #a1615d;
+            transition: color 0.3s;
+        }
+
+        .checkbox-container a:hover {
+            color: #7b4b47;
+        }
+
+        .btn {
+            background-color: #a1615d;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #7b4b47;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left"></div>
+        <div class="right">
+            <div class="logo">Moonlight</div>
+            <h1>WELCOME</h1>
+            <p>Fill your data to enter. Thank you!!!</p>
+            <form>
+                <div class="form-group">
+                    <input type="email" placeholder="User" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <div class="checkbox-container">
+                    <label>
+                        <input type="checkbox"> Remember login
+                    </label>
+                    <a href="#">Recover password</a>
+                </div>
+                <button class="btn" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

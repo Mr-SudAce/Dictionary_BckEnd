@@ -2,6 +2,15 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    # Authentication
+    ########################## Login #######################
+    ########################## Login #######################
+    ########################## Register #######################
+    ########################## Register #######################
+    
+    
+    
+    
     # API URL
     ########################## Word #######################
     path("api/word/", CreateWord, name="create_post_word"),
