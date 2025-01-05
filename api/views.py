@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from django.contrib import messages
+
 import requests
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -9,8 +10,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .serializers import *
 from .models import *
 from .forms import *
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
+
+# Login
+def adminlogin(request):
+    return render(request, "admin/auth/login.html")
+
+def adminregister(request):
+    return render(request, "admin/auth/register.html")
+
 
 
 # Landing page

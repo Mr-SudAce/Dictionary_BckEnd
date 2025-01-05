@@ -64,32 +64,37 @@ urlpatterns = [
     
     
     ########################## Template URL #######################
+    
+    # Login
+    path("login/", adminlogin, name="admin_login"),
+    path("register/", adminregister, name="admin_register"),
+    
     # Word CRUD URL
-    path("apiword/", adminWordListApi, name="apiword"),
-    path("apiword/delete/<int:id>/", adminWordDelApi, name="deleteword"),
-    path("apiword/edit/<int:id>/", adminWordUpdateApi, name="updateword"),
+    path("word/", adminWordListApi, name="apiword"),
+    path("word/delete/<int:id>/", adminWordDelApi, name="deleteword"),
+    path("word/edit/<int:id>/", adminWordUpdateApi, name="updateword"),
     # Post CRUD URL
-    path("apipost/", adminPostListApi, name="apipost"),
-    path("apipost/delete/<int:id>/", adminPostDelApi, name="deletepost"),
-    path("apipost/edit/<int:id>/", adminPostUpdateApi, name="updatepost"),
+    path("post/", adminPostListApi, name="apipost"),
+    path("post/delete/<int:id>/", adminPostDelApi, name="deletepost"),
+    path("post/edit/<int:id>/", adminPostUpdateApi, name="updatepost"),
     # Post CATEGORY CRUD URL
-    path("apipostcat/", adminPostCateListApi, name="apipostcat"),
-    path("apipostcat/delete/<int:id>/", adminPostCateDelApi, name="deletepostcat"),
-    path("apipostcat/edit/<int:id>/", adminPostCateUpdateApi, name="updatepostcat"),
+    path("postcat/", adminPostCateListApi, name="apipostcat"),
+    path("postcat/delete/<int:id>/", adminPostCateDelApi, name="deletepostcat"),
+    path("postcat/edit/<int:id>/", adminPostCateUpdateApi, name="updatepostcat"),
     # Footer CRUD URL
-    path("apifooter/", adminFooterListApi, name="apifooter"),
-    path("apifooter/delete/<int:id>/", adminFooterDelApi, name="deletefooter"),
-    path("apifooter/edit/<int:id>/", adminFooterUpdateApi, name="updatefooter"),
+    path("footer/", adminFooterListApi, name="apifooter"),
+    path("footer/delete/<int:id>/", adminFooterDelApi, name="deletefooter"),
+    path("footer/edit/<int:id>/", adminFooterUpdateApi, name="updatefooter"),
     # Header CRUD URL
-    path("apiheader/", adminHeaderListApi, name="apiheader"),
-    path("apiheader/delete/<int:id>/", adminHeaderDelApi, name="deleteheader"),
-    path("apiheader/edit/<int:id>/", adminHeaderUpdateApi, name="updateheader"),
+    path("header/", adminHeaderListApi, name="apiheader"),
+    path("header/delete/<int:id>/", adminHeaderDelApi, name="deleteheader"),
+    path("header/edit/<int:id>/", adminHeaderUpdateApi, name="updateheader"),
     # Page CRUD URL
-    path("apipage/", adminPageListApi, name="apipage"),
-    path("apipage/delete/<int:id>/", adminPageDelApi, name="deletepage"),
-    path("apipage/edit/<int:id>/", adminPageUpdateApi, name="updatepage"),
+    path("page/", adminPageListApi, name="apipage"),
+    path("page/delete/<int:id>/", adminPageDelApi, name="deletepage"),
+    path("page/edit/<int:id>/", adminPageUpdateApi, name="updatepage"),
     # Blog CRUD URL
-    path("apiblog/", adminBlogListApi, name="apiblog"),
-    path("apiblog/delete/<int:id>/", adminBlogDelApi, name="deleteblog"),
-    path("apiblog/edit/<int:id>/", adminBlogUpdateApi, name="updateblog"),
+    path("blog/", adminBlogListApi, name="apiblog"),
+    path("blog/delete/<int:id>/", adminBlogDelApi, name="deleteblog"),
+    path("blog/edit/<int:id>/", adminBlogUpdateApi, name="updateblog"),
 ]
