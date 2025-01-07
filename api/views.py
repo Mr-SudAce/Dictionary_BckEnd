@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from django.contrib import messages
-
 import requests
 from rest_framework.parsers import JSONParser
 from rest_framework import status
@@ -10,22 +9,79 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .serializers import *
 from .models import *
 from .forms import *
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password, make_password
+from .forms import RegistrationForm, LoginForm, UserCreationForm
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
-# Login
-def adminlogin(request):
-    return render(request, "admin/auth/login.html")
 
-def adminregister(request):
-    return render(request, "admin/auth/register.html")
-
-
-
-# Landing page
+# Admin Login
+@login_required
+@csrf_exempt
 def supermain(request):
     return render(request, "admin/supermain.html")
+
+@csrf_exempt
+def admin_register(request):
+    if request.method == "POST":
+        
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        if len(password) < 8:
+            messages.error(request, "Password should be at least 8 characters long")
+            return redirect('admin_register')
+        
+        if password!= confirm_password:
+            messages.error(request, "Password Do not match")
+            return redirect('admin_register')
+        
+        if User.objects.filter(username=username).exists():
+            messages.error(request, f"{username} already Exists")
+            return redirect("admin_register")
+        
+        if User.objects.filter(email=email).exists():
+            messages.error(request, f"{email} already Exists")
+            return redirect("admin_register")
+        
+        
+        user = User.objects.create_user(username=username, email=email, password=password,)
+        user.is_staff = True
+        user.save()
+        print("regsiter user",user)
+        messages.success(request, f"Account created successfully! You can now log in.")
+        return redirect("admin_login")
+    
+    return render(request, "admin/auth/register.html")
+
+@csrf_exempt
+def admin_login(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        print("user is: ", user)
+        if user:
+            login(request, user)
+            print(user)
+            messages.success(request, f"Login Successfully <br> Welcome, {username}!")
+            return redirect("supermain")
+        else:
+            messages.error(request, f"Invalid username and Password.")
+    return render(request, "admin/auth/login.html")
+
+
+def admin_logout(request):
+    logout(request)
+    messages.success(request, "Logged out successfully!")
+    return redirect("admin_login")
 
 
 ######################### WORDAPI ############################
@@ -383,6 +439,7 @@ def DeletePage(request, id):
     page.delete()
     return JsonResponse({"message": "Deleted Successfully"}, status.HTTP_204_NO_CONTENT)
 
+
 ######################### BLOGAPI ############################
 @api_view(["POST"])
 def CreateBlog(request):
@@ -393,7 +450,10 @@ def CreateBlog(request):
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        return JsonResponse({"error": f"Blog creation failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(
+            {"error": f"Blog creation failed: {str(e)}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 @api_view(["GET"])
@@ -405,6 +465,7 @@ def GetAllBlog(request):
     except:
         return HttpResponse({"No Blog Found"}, status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(["GET"])
 def GetAllBlogById(request, id):
     try:
@@ -413,6 +474,7 @@ def GetAllBlogById(request, id):
         return Response(serialized.data, status=status.HTTP_200_OK)
     except:
         return HttpResponse({f"{id} doesn't exist"}, status.HTTP_204_NO_CONTENT)
+
 
 @api_view(["PUT"])
 def UpdateBlog(request, id):
@@ -428,6 +490,7 @@ def UpdateBlog(request, id):
         return JsonResponse(serialized.data, status=status.HTTP_400_BAD_REQUEST)
     except:
         return HttpResponse({"Updatation Failed"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["DELETE"])
 def DeleteBlog(request, id):
@@ -500,7 +563,6 @@ def adminPostListApi(request):
     postform = PostForm(request.POST, request.FILES or None)
     # postcateform = PostCatForm(request.POST or None)
 
-
     if (
         request.method == "POST"
         and "post_submit" in request.POST
@@ -535,7 +597,9 @@ def adminPostUpdateApi(request, id):
     else:
         pform = PostForm(instance=post_instance)
 
-    return render(request, "admin/post.html", {"postform": pform, "post_instance": post_instance})
+    return render(
+        request, "admin/post.html", {"postform": pform, "post_instance": post_instance}
+    )
 
 
 # POST CATEGORY OPERATION
@@ -677,7 +741,11 @@ def adminPageListApi(request):
     ApiPageList = response.json() if response.status_code == 200 else []
     pageform = PageForm(request.POST or None)
 
-    if (request.method == "POST" and "page_submit" in request.POST and pageform.is_valid()):
+    if (
+        request.method == "POST"
+        and "page_submit" in request.POST
+        and pageform.is_valid()
+    ):
         pageform.save()
         messages.success(request, "Page added Successfully!")
         return redirect("apipage")
@@ -715,14 +783,15 @@ def adminBlogListApi(request):
     ApiBlogList = response.json() if response.status_code == 200 else []
     blogform = BlogForm(request.POST, request.FILES or None)
 
-    if (request.method == "POST" and "blog_submit" in request.POST and blogform.is_valid()):
+    if (
+        request.method == "POST"
+        and "blog_submit" in request.POST
+        and blogform.is_valid()
+    ):
         blogform.save()
         messages.success(request, "Blog added Successfully!")
         return redirect("apiblog")
-    context = {
-        "ApiBlogList": ApiBlogList,
-        "blogform": blogform
-        }
+    context = {"ApiBlogList": ApiBlogList, "blogform": blogform}
 
     return render(request, "admin/blog.html", context)
 

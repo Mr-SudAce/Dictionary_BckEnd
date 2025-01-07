@@ -65,9 +65,11 @@ urlpatterns = [
     
     ########################## Template URL #######################
     
-    # Login
-    path("login/", adminlogin, name="admin_login"),
-    path("register/", adminregister, name="admin_register"),
+    # Login/ register
+    path("", supermain, name="supermain"),
+    path('accounts/register/', admin_register, name='admin_register'),
+    path('accounts/login/', admin_login, name='admin_login'),
+    path('logout/', admin_logout, name='admin_logout'),
     
     # Word CRUD URL
     path("word/", adminWordListApi, name="apiword"),

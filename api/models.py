@@ -1,7 +1,11 @@
 from django.db import models
+from .models import *
 from tinymce.models import HTMLField
+# from django.contrib.auth.admin import UserAdmin
+# from django.contrib.auth.models import AbstractUser,Group, Permission
+# from .models import CustomUser
+# from django.contrib.auth.decorators import admin
 
-# Models for Word, Posts, Categories, Footer, and Header
 
 
 class WordModel(models.Model):

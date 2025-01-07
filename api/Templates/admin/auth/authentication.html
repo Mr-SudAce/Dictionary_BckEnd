@@ -17,141 +17,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
 <title>{% block authtitle %}{% endblock%}</title>
-<style>
-    body {
-        margin: 0;
-        font-family: "Roboto";
-        background-color: #f8f5f2;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
+<link rel="stylesheet" href="{% static 'css/authentication.css' %}">
 
-    .auth_container {
-        display: flex;
-        max-width: 65rem;
-        max-height: auto;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        background: #fff;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        border-radius: 12px;
-        overflow: hidden;
-    }
+<body class="">
 
-    .reg_left h1 {
-        top: -2rem;
-        right: 11rem;
-    }
 
-    .reg_left {
-        flex: 1;
-        padding: 50px 30px;
-        display: flex;
-        row-gap: 20px;
-        width: 120vh;
-        flex-direction: column;
-        justify-content: center;
-    }
 
-    .reg_right {
-        flex: 1;
-        background-size: contain;
-    }
-    
-    .login_left {
-        flex: 1;
-        background-size: contain;
-    }
-
-    .login_right h1 {
-        top: -4rem;
-        right: 10rem;
-    }
-    .login_right {
-        flex: 1;
-        padding: 50px 30px;
-        display: flex;
-        width: 120vh;
-        row-gap: 20px;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: black;
-        margin-bottom: 20px;
-    }
-
-    p {
-        font-size: 0.9rem;
-        color: #7b7b7b;
-        margin-bottom: 30px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 10px;
-        font-size: 1rem;
-        border: none;
-        border-bottom: 2px solid #d6d6d6;
-        outline: none;
-        transition: border-color 0.3s;
-    }
-
-    .form-group input:focus {
-        border-color: #000;
-    }
-
-    .checkbox-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-    }
-
-    .checkbox-container label {
-        font-size: 0.9rem;
-        color: #7b7b7b;
-    }
-
-    .checkbox-container a {
-        text-decoration: none;
-        font-size: 0.9rem;
-        color: #000;
-        transition: color 0.3s;
-    }
-
-    .checkbox-container a:hover {
-        color: #000;
-    }
-
-    .btn {
-        background-color: #000;
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
-        font-size: 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .btn:hover {
-        background-color: #333;
-    }
-</style>
-
-<body>
     {% block auth %}{% endblock %}
+
+
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll(".alert").forEach((alert) => {
+                alert.style.display = "none";
+            });
+        }, 3000);
+    </script>
 </body>
 
 </html>

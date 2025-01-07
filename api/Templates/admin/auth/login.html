@@ -3,27 +3,48 @@
 
 <title>{% block authtitle %} Login {% endblock %}</title>
 {% block auth %}
-<div class="auth_container">
-    <div class="login_left">
-        <img src="{% static 'login.jpeg' %}" alt="Login Image">
+<!-- <div class="position-relative"> -->
+    {% if messages %}
+    <div class="position-absolute top-0 end-0 m-2 alert ">
+        {% for message in messages %}
+        <p class="text-danger m-0">{{ message }}</p>
+        {% endfor %}
     </div>
-    <div class="login_right position-relative">
-        <h1 class="position-absolute text-uppercase">WELCOME</h1>
-        <form method="post" action="#">
-            <div class="form-group">
-                <input type="email" placeholder="Username" required>
-            </div>
-            <div class="form-group">
-                <input type="password" placeholder="Password" required>
-            </div>
-            <div class="checkbox-container">
-                <label>
-                    <input type="checkbox"> Remember login
-                </label>
-                <a href="#">Forgot Password ?</a>
-            </div>
-            <button class="btn" type="submit">Login</button>
-        </form>
+    {% endif %}
+
+    <div class="auth_container">
+        <div class="login_left">
+            <img src="{% static 'login.jpeg' %}" alt="Login Image">
+        </div>
+        <div class="login_right position-relative">
+            <form method="post" action="{% url 'admin_login' %}">
+                <h1 class=" text-uppercase position-absolute top-0 end-0">Login</h1>
+                {% csrf_token %}
+
+
+
+                <div class="form-group">
+                    <input type="text" name="username" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+
+
+
+
+                <div class="checkbox-container">
+                    <label>
+                        <input type="checkbox" name="remember_me"> Remember login
+                    </label>
+                    <a href="{% url 'admin_register' %}">Register here?</a>
+                </div>
+                <button class="btn" type="submit">Login</button>
+            </form>
+
+
+
+        </div>
     </div>
-</div>
+<!-- </div> -->
 {% endblock %}
