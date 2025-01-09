@@ -32,7 +32,9 @@
     <header class="bg-dark text-white text-center fw-bolder position-sticky top-0 d-flex"
       style="padding: 1%; font-size: 3vh; width: 100%; height: 8vh; z-index: 100">
       <span class="position-absolute justify-center" style="font-size: 20px;">
-        Admin Dashboard
+        <a href="{% url 'supermain' %}" style="color: white; text-decoration: none;">
+          Admin Dashboard
+        </a>
       </span>
       <span class="position-absolute end-0 d-flex">
         <a href="{% url 'auth_logout' %}" class="text-decoration-none"><i
@@ -47,13 +49,18 @@
       <!-- Sidebar -->
       <aside class="col-12 col-md-3 col-lg-2 bg-light p-0">
         <div class="sidebar-header p-3 border-bottom align-middle">
-          <p class="text-dark m-0 fw-bolder text-center text-md-start m-0" style="font-size: 3vh">
-            {% if user.username %} {{user.username}} {% else %} No User {% endif %}
+          <p class="d-flex flex-column justify-center align-middle">
+            <span class="text-dark m-0 fw-bolder text-center m-0 " style="font-size: 3vh">
+              {% if user.username %} {{user.username}} {% else %} No User {% endif %}
+            </span>
+            <span class="text-center" style="font-size: 2vh">
+              {% if user.email%} {{user.email}} {% else %} No Admin {% endif %}
+            </span>
+            <span class="text-center" style="font-size: 2vh">
+              {% if user.is_superuser %} Superadmin {% else %} Admin {% endif %}
+            </span>
           </p>
-          <p style="font-size: 2vh">
-            {% if user.email%} {{user.email}} {% else %} No Admin {% endif %} <br>
-            {% if user.is_superuser %} Superadmin {% else %} Admin {% endif %}
-          </p>
+
         </div>
         <nav class="sidebar-menu d-flex flex-column gap-4 p-3">
           <a href="{% url 'apiword' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
@@ -95,9 +102,12 @@
             {% endfor %}
           </div>
           {% endif %}
-
           {% block admin %} {% endblock %}
 
+          {% url 'supermain' as supermain_url %}
+          {% if request.path == supermain_url %}
+              <p>Dashboard</p>
+          {% endif %}
         </div>
       </section>
     </div>
