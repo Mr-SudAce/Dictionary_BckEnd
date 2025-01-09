@@ -30,7 +30,7 @@
 
         <h1 class="position-absolute text-uppercase">Register</h1>
         {% csrf_token %}
-        <form method="post" action="{% url 'admin_register' %}">
+        <form method="post" action="{% url 'auth_register' %}">
             {% csrf_token %}
 
             <div class="form-group">
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="text-end">
-                    Already have an account? <a href="{% url 'admin_login' %}">Login</a>
+                    Already have an account? <a href="{% url 'auth_login' %}">Login</a>
                 </div>
             </div>
 

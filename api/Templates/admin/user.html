@@ -19,9 +19,9 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center">
         <h1 class="text-dark">User's</h1>
-        <button class="btn btn-outline-dark fw-bolder" data-bs-toggle="modal" data-bs-target="#UserModal">
+        <!-- <button class="btn btn-outline-dark fw-bolder" data-bs-toggle="modal" data-bs-target="#UserModal">
             Add User <i class="bi bi-plus-lg fw-bolder"></i>
-        </button>
+        </button> -->
     </div>
     <!-- Page Header -->
 
@@ -68,10 +68,10 @@
             <thead class="table-dark">
                 <tr>
                     <!-- <th class="text-center align-middle" style="width: 5%">#</th> -->
-                    <th class="text-center align-middle" style="width: 15%">
+                    <th class="text-center align-middle" style="width: 10%">
                         Username
                     </th>
-                    <th class="text-center align-middle" style="width: 5%">
+                    <th class="text-center align-middle" style="width: 15%">
                         Email
                     </th>
                     <th class="text-center align-middle" style="width: 5%">
@@ -84,6 +84,8 @@
                 {% if ApiUsersList %}
                 {% for user in ApiUsersList %}
                 <tr>
+                    {% if user.is_staff and not user.is_superuser %}
+                    <!-- <td class="text-center align-middle">{{ forloop.counter }}</td> -->
                     <td class="text-center align-middle">
                         {{ user.username }}
                     </td>
@@ -91,16 +93,8 @@
                         {{ user.email }}
                     </td>
                     <td class="text-center align-middle">
-                        {% if user.is_superuser %}
-                        <p class="text-success m-0">Superuser</p>
-                        {% elif user.is_staff %}
                         <p class="text-danger">Staff</p>
-                        {% else %}
-                        <p class="bg-light text-dark">User</p>
-                        {% endif %}
-                        <!-- {{ user.status }} -->
                     </td>
-
                     <td class="text-center align-middle">
                         <div class="btn-group gap-2">
                             <a href="{% url 'updateuser' user.id %}" class="btn btn-sm btn-outline-warning"
@@ -114,7 +108,8 @@
                             </a>
                         </div>
                     </td>
-                </tr>
+                    {% endif %}
+                </tr>   
 
                 <!-- Modal for Editing User -->
                 <div class="modal fade" id="userFormModal{{ user.id }}" tabindex="-1" aria-labelledby="userFormLabel"

@@ -35,17 +35,10 @@
         Admin Dashboard
       </span>
       <span class="position-absolute end-0 d-flex">
-        {% if user.is_superuser %}
-        <a href="{% url 'admin_logout' %}" class="text-decoration-none"><i
+        <a href="{% url 'auth_logout' %}" class="text-decoration-none"><i
             class="bi bi-box-arrow-in-right fs-2 d-flex px-4 justify-end items-center"
             style="top: 15px; right: 0; color: white;"></i>
         </a>
-        {% else %}
-        <a href="{% url 'user_logout' %}" class="text-decoration-none"><i
-            class="bi bi-box-arrow-in-right fs-2 d-flex px-4 justify-end items-center"
-            style="top: 15px; right: 0; color: white;"></i>
-        </a>
-        {% endif %}
 
       </span>
     </header>

@@ -509,13 +509,10 @@ GET_User = f"{baseURL}/api/all/user/"  # USER URL
 @csrf_exempt
 def supermain(request):
     return render(request, "admin/supermain.html")
-@csrf_exempt
-def authentication(request):
-    return render(request, "admin/authentication.html")
 
 
 @csrf_exempt
-def admin_register(request):
+def auth_register(request):
     if request.method == "POST":
 
         username = request.POST.get("username")
@@ -525,80 +522,19 @@ def admin_register(request):
 
         if len(password) < 8:
             messages.error(request, "Password should be at least 8 characters long")
-            return redirect("admin_register")
+            return redirect("auth_register")
 
         if password != confirm_password:
             messages.error(request, "Password Do not match")
-            return redirect("admin_register")
+            return redirect("auth_register")
 
         if User.objects.filter(username=username).exists():
             messages.error(request, f"{username} already Exists")
-            return redirect("admin_register")
+            return redirect("auth_register")
 
         if User.objects.filter(email=email).exists():
             messages.error(request, f"{email} already Exists")
-            return redirect("admin_register")
-
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-        )
-        user.is_superuser = True
-        user.save()
-        messages.success(
-            request, f"Admin Account created successfully! You can now log in."
-        )
-        return redirect("admin_login")
-
-    return render(request, "admin/auth/register.html")
-
-
-@csrf_exempt
-def admin_login(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            # messages.success(request, f"Login Successfully Welcome, {username}!")
-            return redirect("supermain")
-        else:
-            messages.error(request, f"Invalid username and Password.")
-    return render(request, "admin/auth/login.html")
-
-
-def admin_logout(request):
-    logout(request)
-    messages.success(request, "Logged out successfully!")
-    return redirect("admin_login")
-
-
-# User Login
-@csrf_exempt
-def user_register(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        confirm_password = request.POST.get("confirm_password")
-
-        if len(password) < 8:
-            messages.error(request, "Password should be at least 8 characters long")
-            return redirect("user_register")
-
-        if password != confirm_password:
-            messages.error(request, "Password Do not match")
-            return redirect("user_register")
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, f"{username} already Exists")
-            return redirect("user_register")
-
-        if User.objects.filter(email=email).exists():
-            messages.error(request, f"{email} already Exists")
-            return redirect("user_register")
+            return redirect("auth_register")
 
         user = User.objects.create_user(
             username=username,
@@ -606,38 +542,99 @@ def user_register(request):
             password=password,
         )
         user.is_staff = True
-        
         user.save()
         messages.success(
-            request, f"User Account created successfully! You can now log in."
+            request, f"Admin Account created successfully! You can now log in."
         )
-        return redirect("user_login")
+        return redirect("auth_login")
 
-    return render(request, "admin/user/User_register.html")
-
+    return render(request, "admin/auth/register.html")
 
 @csrf_exempt
-def user_login(request):
+def auth_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user:
-            if user.status == "Superuser":
+            if user.is_superuser:
                 login(request, user)
                 messages.success(request, f"Login Successfully Welcome, {username}!")
                 return redirect("supermain")
-            else:
-                return HttpResponse("Did match")
+            elif user.is_staff:
+                login(request, user)
+                messages.success(request, f"Login Successfully Welcome, {username}!")
+                return redirect("supermain")
         else:
             messages.error(request, f"Invalid username and Password.")
-    return render(request, "admin/user/User_login.html")
+    return render(request, "admin/auth/login.html")
 
-
-def user_logout(request):
+def auth_logout(request):
     logout(request)
     messages.success(request, "Logged out successfully!")
-    return redirect("user_login")
+    return redirect("auth_login")
+
+# # User Login
+# @csrf_exempt
+# def user_register(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         email = request.POST.get("email")
+#         password = request.POST.get("password")
+#         confirm_password = request.POST.get("confirm_password")
+
+#         if len(password) < 8:
+#             messages.error(request, "Password should be at least 8 characters long")
+#             return redirect("user_register")
+
+#         if password != confirm_password:
+#             messages.error(request, "Password Do not match")
+#             return redirect("user_register")
+
+#         if User.objects.filter(username=username).exists():
+#             messages.error(request, f"{username} already Exists")
+#             return redirect("user_register")
+
+#         if User.objects.filter(email=email).exists():
+#             messages.error(request, f"{email} already Exists")
+#             return redirect("user_register")
+
+#         user = User.objects.create_user(
+#             username=username,
+#             email=email,
+#             password=password,
+#         )
+#         user.is_staff = True
+        
+#         user.save()
+#         messages.success(
+#             request, f"User Account created successfully! You can now log in."
+#         )
+#         return redirect("user_login")
+
+#     return render(request, "admin/user/User_register.html")
+
+# @csrf_exempt
+# def user_login(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+#         user = authenticate(request, username=username, password=password)
+#         if user:
+#             if user.status == "Superuser":
+#                 login(request, user)
+#                 messages.success(request, f"Login Successfully Welcome, {username}!")
+#                 return redirect("supermain")
+#             else:
+#                 return HttpResponse("Did match")
+#         else:
+#             messages.error(request, f"Invalid username and Password.")
+#     return render(request, "admin/user/User_login.html")
+
+# def user_logout(request):
+#     logout(request)
+#     messages.success(request, "Logged out successfully!")
+#     return redirect("user_login")
 
 
 ##########################################################################################################################################################################
