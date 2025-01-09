@@ -2,25 +2,12 @@
 {% load static %}
 
 <title>{% block authtitle %} Register {% endblock %}</title>
-{% block auth %}
+{% block user_auth %}
 <div class="auth_container">
-
-    <!-- {% if form.errors %}
-    <div class="position-absolute top-0 end-0 m-0 px-1 alert alert-danger">
-        {% for field, errors in form.errors.items %}
-        <div>
-            {% for error in errors %}
-            <p class="m-0 text-danger">{{ error }}</p>
-            {% endfor %}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %} -->
-
     {% if messages %}
     <div class="position-absolute top-0 end-0 m-2 alert ">
-        {% for regmessage in messages %}
-        <p class="text-danger m-0">{{ regmessage }}</p>
+        {% for userregmessage in messages %}
+        <p class="text-danger m-0">{{ userregmessage }}</p>
         {% endfor %}
     </div>
     {% endif %}
@@ -30,7 +17,7 @@
 
         <h1 class="position-absolute text-uppercase">Register</h1>
         {% csrf_token %}
-        <form method="post" action="{% url 'admin_register' %}">
+        <form method="post" action="{% url 'user_register' %}">
             {% csrf_token %}
 
             <div class="form-group">
@@ -55,7 +42,7 @@
                 </div>
 
                 <div class="text-end">
-                    Already have an account? <a href="{% url 'admin_login' %}">Login</a>
+                    Already have an account? <a href="{% url 'user_login' %}">Login</a>
                 </div>
             </div>
 
@@ -64,7 +51,7 @@
 
     </div>
     <div class="reg_right">
-        <img src="{% static 'register.jpeg' %}" alt="Register Image">
+        <img src="{% static 'u_register.jpeg' %}" alt="Register Image">
     </div>
 </div>
 {% endblock %}

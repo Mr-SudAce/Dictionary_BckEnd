@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.models import User
 
 
 class WordSerializer(serializers.ModelSerializer):
@@ -59,3 +60,37 @@ class BlogSerializer(serializers.ModelSerializer):
             "blog_author",
             "created_at",
         ]
+
+
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ["id", "username", "email", "password"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "password",
+            "username",
+            "email",
+            "is_staff",
+            "is_superuser",
+            "status",
+            "first_name",
+            "last_name",
+            "date_joined",
+            "last_login",
+        ]
+
+    def get_status(self, obj):
+        if obj.is_superuser:
+            return "Superuser"
+        elif obj.is_staff:
+            return "Staff"
+        else:
+            return "User"

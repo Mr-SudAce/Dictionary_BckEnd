@@ -19,12 +19,31 @@
 <title>{% block authtitle %}{% endblock%}</title>
 <link rel="stylesheet" href="{% static 'css/authentication.css' %}">
 
-<body class="">
+<style>
+    .crd {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid black;
+        height: 220px;
+        width: 190px;
+        margin: 4px 8px;
+        overflow: hidden;
+    }
+
+    .crd i {
+        color: #333;
+        font-size: 10rem;
+    }
+</style>
+
+<body>
 
 
 
     {% block auth %}{% endblock %}
-
+    {% block user_auth %}{% endblock %}
 
 
     <script>

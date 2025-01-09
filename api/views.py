@@ -1,14 +1,16 @@
-from rest_framework.response import Response
-from django.contrib import messages
-import requests
-from rest_framework.parsers import JSONParser
-from rest_framework import status
-from django.http import HttpResponse, JsonResponse
-from rest_framework.decorators import api_view
-from django.shortcuts import render, redirect, get_object_or_404
 from .serializers import *
 from .models import *
 from .forms import *
+from django.contrib import messages
+import requests
+from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
+from rest_framework import status
+from rest_framework.decorators import api_view
+
+# import re
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -20,70 +22,59 @@ from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 
-# Admin Login
-@login_required
-@csrf_exempt
-def supermain(request):
-    return render(request, "admin/supermain.html")
-
-
-@csrf_exempt
-def admin_register(request):
-    if request.method == "POST":
-
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        confirm_password = request.POST.get("confirm_password")
-
-        if len(password) < 8:
-            messages.error(request, "Password should be at least 8 characters long")
-            return redirect("admin_register")
-
-        if password != confirm_password:
-            messages.error(request, "Password Do not match")
-            return redirect("admin_register")
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, f"{username} already Exists")
-            return redirect("admin_register")
-
-        if User.objects.filter(email=email).exists():
-            messages.error(request, f"{email} already Exists")
-            return redirect("admin_register")
-
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
+######################### USERAPI ############################
+@api_view(["POST"])
+def CreateUser(request):
+    try:
+        serialized = UserSerializer(data=request.data)
+        if serialized.is_valid():
+            user = serialized.save()
+            if user:
+                return Response(
+                    {"message": "User created successfully"},
+                    status=status.HTTP_201_CREATED,
+                )
+        return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response(
+            {"message": f"Failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST
         )
-        user.is_staff = True
-        user.save()
-        messages.success(request, f"Account created successfully! You can now log in.")
-        return redirect("admin_login")
-
-    return render(request, "admin/auth/register.html")
 
 
-@csrf_exempt
-def admin_login(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            messages.success(request, f"Login Successfully <br> Welcome, {username}!")
-            return redirect("supermain")
-        else:
-            messages.error(request, f"Invalid username and Password.")
-    return render(request, "admin/auth/login.html")
+@api_view(["GET"])
+def GetAllUser(request):
+    users = User.objects.all()
+    serialized = UserSerializer(users, many=True)
+    return Response(serialized.data, status=status.HTTP_200_OK)
 
 
-def admin_logout(request):
-    logout(request)
-    messages.success(request, "Logged out successfully!")
-    return redirect("admin_login")
+@api_view(["GET"])
+def GetUserById(request, id):
+    users = get_object_or_404(User, id=id)
+    serialized = UserSerializer(users)
+    return Response(serialized.data, status=status.HTTP_200_OK)
+
+
+@api_view(["PUT"])
+def UpdateUser(request, id):
+    users = get_object_or_404(User, id=id)
+    serialized = UserSerializer(users, data=request.data, partial=True)
+    if serialized.is_valid():
+        serialized.save()
+        return Response(
+            {"message": "User updated successfully"}, status=status.HTTP_200_OK
+        )
+    return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["DELETE"])
+def DeleteUser(request, id):
+    users = get_object_or_404(User, id=id)
+    users.delete()
+    return Response({"message": "User deleted successfully"}, status=status.HTTP_200_OK)
+
+
+######################### USERAPI ############################
 
 
 ######################### WORDAPI ############################
@@ -510,6 +501,203 @@ GET_Footer = f"{baseURL}/api/all/footer/"  # FooterAPI Url
 GET_Header = f"{baseURL}/api/all/header/"  # HeaderAPI Url
 GET_Page = f"{baseURL}/api/all/page/"  # PAGEAPI Url
 GET_Blog = f"{baseURL}/api/all/blog/"  # BLOGAPI Url
+GET_User = f"{baseURL}/api/all/user/"  # USER URL
+
+
+# Admin Login
+@login_required
+@csrf_exempt
+def supermain(request):
+    return render(request, "admin/supermain.html")
+@csrf_exempt
+def authentication(request):
+    return render(request, "admin/authentication.html")
+
+
+@csrf_exempt
+def admin_register(request):
+    if request.method == "POST":
+
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if len(password) < 8:
+            messages.error(request, "Password should be at least 8 characters long")
+            return redirect("admin_register")
+
+        if password != confirm_password:
+            messages.error(request, "Password Do not match")
+            return redirect("admin_register")
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, f"{username} already Exists")
+            return redirect("admin_register")
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, f"{email} already Exists")
+            return redirect("admin_register")
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+        )
+        user.is_superuser = True
+        user.save()
+        messages.success(
+            request, f"Admin Account created successfully! You can now log in."
+        )
+        return redirect("admin_login")
+
+    return render(request, "admin/auth/register.html")
+
+
+@csrf_exempt
+def admin_login(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            # messages.success(request, f"Login Successfully Welcome, {username}!")
+            return redirect("supermain")
+        else:
+            messages.error(request, f"Invalid username and Password.")
+    return render(request, "admin/auth/login.html")
+
+
+def admin_logout(request):
+    logout(request)
+    messages.success(request, "Logged out successfully!")
+    return redirect("admin_login")
+
+
+# User Login
+@csrf_exempt
+def user_register(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if len(password) < 8:
+            messages.error(request, "Password should be at least 8 characters long")
+            return redirect("user_register")
+
+        if password != confirm_password:
+            messages.error(request, "Password Do not match")
+            return redirect("user_register")
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, f"{username} already Exists")
+            return redirect("user_register")
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, f"{email} already Exists")
+            return redirect("user_register")
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+        )
+        user.is_staff = True
+        
+        user.save()
+        messages.success(
+            request, f"User Account created successfully! You can now log in."
+        )
+        return redirect("user_login")
+
+    return render(request, "admin/user/User_register.html")
+
+
+@csrf_exempt
+def user_login(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        user = authenticate(request, username=username, password=password)
+        if user:
+            if user.status == "Superuser":
+                login(request, user)
+                messages.success(request, f"Login Successfully Welcome, {username}!")
+                return redirect("supermain")
+            else:
+                return HttpResponse("Did match")
+        else:
+            messages.error(request, f"Invalid username and Password.")
+    return render(request, "admin/user/User_login.html")
+
+
+def user_logout(request):
+    logout(request)
+    messages.success(request, "Logged out successfully!")
+    return redirect("user_login")
+
+
+##########################################################################################################################################################################
+
+
+# User CRUD Operation
+def userListApi(request):
+    response = requests.get(GET_User)
+    ApiUsersList = response.json() if response.status_code == 200 else []
+    userform = User(request.POST or None)
+    if (
+        request.method == "POST"
+        and "user_submit" in request.POST
+        and userform.is_valid()
+    ):
+
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        if username and email and password:
+            if not User.objects.filter(username=username).exists():
+                User.objects.create_user(
+                    username=username, email=email, password=password
+                )
+                messages.success(request, "User added successfully!")
+                return redirect("apiuser")
+            messages.error(request, "User already exists!")
+        else:
+            messages.error(request, "All fields are required.")
+
+    context = {
+        "ApiUsersList": ApiUsersList,
+    }
+    return render(request, "admin/user.html", context)
+
+
+def userDelApi(request, id):
+    users = get_object_or_404(User, id=id)
+    users.delete()
+    messages.warning(request, "User Deleted Successfully")
+    return redirect("apiuser")
+
+
+def userUpdateApi(request, id):
+    users = get_object_or_404(User, id=id)
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        if username and email:
+            if not User.objects.filter(username=username).exclude(id=id).exists():
+                users.username = username
+                users.email = email
+                users.save()
+                messages.success(request, "User updated successfully!")
+                return redirect("apiuser")
+            messages.error(request, "Username already exists.")
+        else:
+            messages.error(request, "All fields are required.")
+    return render(request, "admin/user.html", {"users": users})
 
 
 # WORD CRUD OPERATION

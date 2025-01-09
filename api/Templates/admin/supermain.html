@@ -27,18 +27,28 @@
 
 <body>
   <main class="d-flex flex-column" style="height: 100vh">
+
     <!-- Header -->
     <header class="bg-dark text-white text-center fw-bolder position-sticky top-0 d-flex"
       style="padding: 1%; font-size: 3vh; width: 100%; height: 8vh; z-index: 100">
       <span class="position-absolute justify-center" style="font-size: 20px;">
         Admin Dashboard
       </span>
-      <span class="position-absolute end-0">
-        <a href="{% url 'admin_logout' %}" class="text-decoration-none"><i class="bi bi-box-arrow-in-right fs-2 d-flex px-4 justify-end items-center"
+      <span class="position-absolute end-0 d-flex">
+        {% if user.is_superuser %}
+        <a href="{% url 'admin_logout' %}" class="text-decoration-none"><i
+            class="bi bi-box-arrow-in-right fs-2 d-flex px-4 justify-end items-center"
             style="top: 15px; right: 0; color: white;"></i>
+        </a>
+        {% else %}
+        <a href="{% url 'user_logout' %}" class="text-decoration-none"><i
+            class="bi bi-box-arrow-in-right fs-2 d-flex px-4 justify-end items-center"
+            style="top: 15px; right: 0; color: white;"></i>
+        </a>
+        {% endif %}
+
       </span>
     </header>
-    </a>
 
     <div class="row m-0 flex-grow-1 overflow-hidden">
       <!-- Sidebar -->
@@ -48,7 +58,8 @@
             {% if user.username %} {{user.username}} {% else %} No User {% endif %}
           </p>
           <p style="font-size: 2vh">
-            {% if user.email %} {{user.email}} {% else %} No User {% endif %}
+            {% if user.email%} {{user.email}} {% else %} No Admin {% endif %} <br>
+            {% if user.is_superuser %} Superadmin {% else %} Admin {% endif %}
           </p>
         </div>
         <nav class="sidebar-menu d-flex flex-column gap-4 p-3">
@@ -73,13 +84,27 @@
           <a href="{% url 'apiblog' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
             <i class="bi bi-envelope-paper"></i> Blog
           </a>
+          {% if user.is_superuser %}
+          <a href="{% url 'apiuser' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
+            <i class="bi bi-lock"></i> User
+          </a>
+          {% endif %}
         </nav>
       </aside>
 
       <!-- Main Content -->
       <section class="col-12 col-md-9 col-lg-10">
         <div class="main-content h-100 p-3 overflow-auto" style="max-height: 90vh">
+          {% if messages %}
+          <div class="position-absolute top-0 end-0 m-2 alert ">
+            {% for message in messages %}
+            <p class="text-danger m-0">{{ message }}</p>
+            {% endfor %}
+          </div>
+          {% endif %}
+
           {% block admin %} {% endblock %}
+
         </div>
       </section>
     </div>

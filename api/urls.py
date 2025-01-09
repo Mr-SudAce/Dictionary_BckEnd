@@ -2,16 +2,35 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    # Authentication
-    ########################## Login #######################
-    ########################## Login #######################
-    ########################## Register #######################
-    ########################## Register #######################
     
+    path("", supermain, name="supermain"),
+    
+    
+    #  admin Login/ register
+    path('accounts/register/', admin_register, name='admin_register'),
+    path('accounts/login/', admin_login, name='admin_login'),
+    path('accounts/logout/', admin_logout, name='admin_logout'),
+    
+    # user Login/ register
+    path('register/', user_register, name='user_register'),
+    path('login/', user_login, name='user_login'),
+    path('logout/', user_logout, name='user_logout'),
     
     
     
     # API URL
+    
+    ########################## User #######################
+    path("api/user/", CreateUser, name="create_post_user"),
+    path("api/all/user/", GetAllUser, name="get_alluser"),
+    path("api/user/<int:id>/", GetUserById, name="get_userby_id"),
+    path("api/user/update/<int:id>/", UpdateUser, name="update_user"),
+    path("api/user/delete/<int:id>/", DeleteUser, name="delete_user"),
+    ########################## User #######################
+    
+    
+    
+    
     ########################## Word #######################
     path("api/word/", CreateWord, name="create_post_word"),
     path("api/all/word/", GetAllWord, name="get_allword"),
@@ -65,12 +84,11 @@ urlpatterns = [
     
     ########################## Template URL #######################
     
-    # Login/ register
-    path("", supermain, name="supermain"),
-    path('accounts/register/', admin_register, name='admin_register'),
-    path('accounts/login/', admin_login, name='admin_login'),
-    path('logout/', admin_logout, name='admin_logout'),
     
+    # USER CRUD URL
+    path("user/", userListApi, name='apiuser'),
+    path("user/delete/<int:id>/", userDelApi, name='deleteuser'),
+    path("user/edit/<int:id>/", userUpdateApi, name='updateuser'),
     # Word CRUD URL
     path("word/", adminWordListApi, name="apiword"),
     path("word/delete/<int:id>/", adminWordDelApi, name="deleteword"),
