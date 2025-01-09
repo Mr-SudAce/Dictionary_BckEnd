@@ -161,8 +161,6 @@
                   <select name="postCat" id="id_postCat_{{ post.id }}" class="form-control" required>
                     {% for category in ApiPostCatList %}
                     <option value="{{ category.id }}" {% if category.id==post.post_Cat.id %} selected {% endif %}>
-                      {{ category.cat_title }}
-                    </option>
                     {% endfor %}
                   </select>
                   <!-- Image -->
