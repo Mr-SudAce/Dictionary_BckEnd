@@ -50,6 +50,8 @@ class PageSerializer(serializers.ModelSerializer):
 
 
 class BlogSerializer(serializers.ModelSerializer):
+    blog_Cat = PostCategorySerializer(source="post_Cat", read_only=True)
+    
     class Meta:
         model = BlogModel
         fields = [
@@ -58,6 +60,7 @@ class BlogSerializer(serializers.ModelSerializer):
             "blog_description",
             "blog_image",
             "blog_author",
+            "blog_Cat",
             "created_at",
         ]
 

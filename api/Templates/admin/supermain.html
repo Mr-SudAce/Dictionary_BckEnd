@@ -84,7 +84,7 @@
           <a href="{% url 'apiblog' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
             <i class="bi bi-substack"></i> Blog
           </a>
-          {% if user.is_superuser %}
+          {% if not user.is_staff %}
           <a href="{% url 'apiuser' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
             <i class="bi bi-person"></i> User
           </a>
@@ -103,13 +103,12 @@
           </div>
           {% endif %}
           {% block admin %} {% endblock %}
-
           {% url 'supermain' as supermain_url %}
           {% if request.path == supermain_url %}
-            {% block dashboard %}{% endblock %}
+          {% block dashboard %}{% endblock %}
           {% endif %}
         </div>
-      </section>  
+      </section>
     </div>
 
     <!-- Footer -->

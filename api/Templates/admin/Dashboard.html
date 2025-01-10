@@ -9,7 +9,6 @@
 
 <div class="main_card">
 
-
     <div class="card" title="Word">
         <i class="icon bi bi-file-earmark-word"></i>
         <p class="length m-0">{{ ApiWordsList|length|default:"0" }}</p>
@@ -44,12 +43,12 @@
         <i class="icon bi bi-substack"></i>
         <p class="length m-0">{{ ApiBlogsList|length|default:"0" }}</p>
     </div>
-
-    {% if user.is_superuser %}
-
+    {% if not user.is_staff %}
     <div class="card" title="Users">
         <i class="icon bi bi-person"></i>
-        <p class="length m-0">{{ ApiUserList|length|default:"0" }}</p>
+        <p class="length m-0">
+            {{ StaffCount }}</p>
+        <!-- {{ SuperuserCount|length|default:"0" }}</p> -->
     </div>
     {% endif %}
 

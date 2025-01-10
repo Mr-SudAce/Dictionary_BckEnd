@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from api.views import *
+from api.api_views import *
 # from rest_framework_swagger.views import get_swagger_view
 
 # schema_view = get_swagger_view(title='Jaseci API')
@@ -26,7 +27,9 @@ from api.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("api.urls")),
+    path('', include("api.api_url")),
     path('', supermain, name='supermain')
+    
 ]
 
 # Adding static and media URL patterns

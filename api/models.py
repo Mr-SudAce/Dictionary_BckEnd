@@ -64,6 +64,7 @@ class BlogModel(models.Model):
     blog_description = HTMLField()
     blog_image = models.ImageField(upload_to="images/")
     blog_author = models.CharField(max_length=100, default="")
+    post_Cat = models.ForeignKey(PostCategoryModel, related_name='blogs', on_delete=models.CASCADE, default="")
     created_at = models.DateTimeField(auto_now_add=True)
     
 
