@@ -1,0 +1,26 @@
+.main_card {
+    display: flex;
+    /* background-color: blue; */
+    padding: 20px 0;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.card {
+    border-radius: 10%;
+    width: 200px;
+    height: 250px;
+    background-color: transparent;
+    border: 1px solid gray;
+}
+
+.card .length,
+.icon {
+    font-size: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}

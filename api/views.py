@@ -494,9 +494,9 @@ def DeleteBlog(request, id):
 
 ################################## Templates ###########################
 baseURL = "http://127.0.0.1:8000"
-Get_Word = f"{baseURL}/api/all/word/"  # WordAPI Url
-Get_POST = f"{baseURL}/api/all/post/"  # PostAPI Url
-Get_POSTCATE = f"{baseURL}/api/all/postcat/"  # Post_CategoryAPI Url
+GET_Word = f"{baseURL}/api/all/word/"  # WordAPI Url
+GET_Post = f"{baseURL}/api/all/post/"  # PostAPI Url
+GET_PostCate = f"{baseURL}/api/all/postcat/"  # Post_CategoryAPI Url
 GET_Footer = f"{baseURL}/api/all/footer/"  # FooterAPI Url
 GET_Header = f"{baseURL}/api/all/header/"  # HeaderAPI Url
 GET_Page = f"{baseURL}/api/all/page/"  # PAGEAPI Url
@@ -509,6 +509,36 @@ GET_User = f"{baseURL}/api/all/user/"  # USER URL
 @csrf_exempt
 def supermain(request):
     return render(request, "admin/supermain.html")
+
+
+def supermain(request):
+    Word = requests.get(GET_Word)
+    Post = requests.get(GET_Post)
+    PostCate = requests.get(GET_PostCate)
+    Footer = requests.get(GET_Footer)
+    Header = requests.get(GET_Header)
+    Page = requests.get(GET_Page)
+    Blog = requests.get(GET_Blog)
+    Users = requests.get(GET_User)
+    ApiWordsList = Word.json()
+    ApiPostsList = Post.json()
+    ApiPostCatesList = PostCate.json()
+    ApiFootersList = Footer.json()
+    ApiHeadersList = Header.json()
+    ApiPagesList = Page.json()
+    ApiBlogsList = Blog.json()
+    ApiUserList = Users.json()
+    context = {
+        'ApiWordsList' : ApiWordsList,
+        'ApiPostsList' : ApiPostsList,
+        'ApiPostCatesList' : ApiPostCatesList,
+        'ApiFootersList' : ApiFootersList,
+        'ApiHeadersList' : ApiHeadersList,
+        'ApiPagesList' : ApiPagesList,
+        'ApiBlogsList' : ApiBlogsList,
+        'ApiUserList' : ApiUserList,
+    }
+    return render(request, "admin/dashboard.html", context)
 
 
 @csrf_exempt
@@ -550,6 +580,7 @@ def auth_register(request):
 
     return render(request, "admin/auth/register.html")
 
+
 @csrf_exempt
 def auth_login(request):
     if request.method == "POST":
@@ -569,72 +600,11 @@ def auth_login(request):
             messages.error(request, f"Invalid username and Password.")
     return render(request, "admin/auth/login.html")
 
+
 def auth_logout(request):
     logout(request)
     messages.success(request, "Logged out successfully!")
     return redirect("auth_login")
-
-# # User Login
-# @csrf_exempt
-# def user_register(request):
-#     if request.method == "POST":
-#         username = request.POST.get("username")
-#         email = request.POST.get("email")
-#         password = request.POST.get("password")
-#         confirm_password = request.POST.get("confirm_password")
-
-#         if len(password) < 8:
-#             messages.error(request, "Password should be at least 8 characters long")
-#             return redirect("user_register")
-
-#         if password != confirm_password:
-#             messages.error(request, "Password Do not match")
-#             return redirect("user_register")
-
-#         if User.objects.filter(username=username).exists():
-#             messages.error(request, f"{username} already Exists")
-#             return redirect("user_register")
-
-#         if User.objects.filter(email=email).exists():
-#             messages.error(request, f"{email} already Exists")
-#             return redirect("user_register")
-
-#         user = User.objects.create_user(
-#             username=username,
-#             email=email,
-#             password=password,
-#         )
-#         user.is_staff = True
-        
-#         user.save()
-#         messages.success(
-#             request, f"User Account created successfully! You can now log in."
-#         )
-#         return redirect("user_login")
-
-#     return render(request, "admin/user/User_register.html")
-
-# @csrf_exempt
-# def user_login(request):
-#     if request.method == "POST":
-#         username = request.POST.get("username")
-#         password = request.POST.get("password")
-#         user = authenticate(request, username=username, password=password)
-#         if user:
-#             if user.status == "Superuser":
-#                 login(request, user)
-#                 messages.success(request, f"Login Successfully Welcome, {username}!")
-#                 return redirect("supermain")
-#             else:
-#                 return HttpResponse("Did match")
-#         else:
-#             messages.error(request, f"Invalid username and Password.")
-#     return render(request, "admin/user/User_login.html")
-
-# def user_logout(request):
-#     logout(request)
-#     messages.success(request, "Logged out successfully!")
-#     return redirect("user_login")
 
 
 ##########################################################################################################################################################################
@@ -699,7 +669,7 @@ def userUpdateApi(request, id):
 
 # WORD CRUD OPERATION
 def adminWordListApi(request):
-    response = requests.get(Get_Word)
+    response = requests.get(GET_Word)
     ApiWordsList = response.json() if response.status_code == 200 else []
     wordform = WordForm(request.POST or None)
 
@@ -743,8 +713,8 @@ def adminWordUpdateApi(request, id):
 
 # POST CRUD OPERATION
 def adminPostListApi(request):
-    response = requests.get(Get_POST)
-    response1 = requests.get(Get_POSTCATE)
+    response = requests.get(GET_Post)
+    response1 = requests.get(GET_PostCate)
     ApiPostsList = response.json() if response.status_code == 200 else []
     ApiPostCatList = response1.json() if response1.status_code == 200 else []
     postform = PostForm(request.POST, request.FILES or None)
@@ -791,7 +761,7 @@ def adminPostUpdateApi(request, id):
 
 # POST CATEGORY OPERATION
 def adminPostCateListApi(request):
-    response = requests.get(Get_POSTCATE)
+    response = requests.get(GET_PostCate)
     ApiPostCatList = response.json() if response.status_code == 200 else []
     postcateform = PostCatForm(request.POST or None)
 

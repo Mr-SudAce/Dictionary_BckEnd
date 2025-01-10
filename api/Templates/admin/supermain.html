@@ -67,7 +67,7 @@
             <i class="bi bi-file-earmark-word"></i> WORD
           </a>
           <a href="{% url 'apipost' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
-            <i class="bi bi-chat-left-text"></i> POST
+            <i class="bi bi-file-post"></i> POST
           </a>
           <a href="{% url 'apifooter' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
             <i class="bi bi-credit-card-2-back"></i> FOOTER
@@ -79,14 +79,14 @@
             <i class="bi bi-tag-fill"></i> Post Category
           </a>
           <a href="{% url 'apipage' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
-            <i class="bi bi-paperclip"></i> Page
+            <i class="bi bi-file-text"></i> Page
           </a>
           <a href="{% url 'apiblog' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
-            <i class="bi bi-envelope-paper"></i> Blog
+            <i class="bi bi-substack"></i> Blog
           </a>
           {% if user.is_superuser %}
           <a href="{% url 'apiuser' %}" class="text-decoration-none text-dark fw-bolder" style="font-size: 2vh">
-            <i class="bi bi-lock"></i> User
+            <i class="bi bi-person"></i> User
           </a>
           {% endif %}
         </nav>
@@ -106,15 +106,15 @@
 
           {% url 'supermain' as supermain_url %}
           {% if request.path == supermain_url %}
-              <p>Dashboard</p>
+            {% block dashboard %}{% endblock %}
           {% endif %}
         </div>
-      </section>
+      </section>  
     </div>
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center fw-bolder" style="width: 100%; padding: 1%; font-size: 2vh">
-      &copy; 2024 Admin Dashboard. All Rights Reserved.
+      &copy; 2024 - <span id="year"></span> Admin Dashboard. All Rights Reserved.
     </footer>
   </main>
 
@@ -164,6 +164,10 @@
         alert.style.display = "none";
       });
     }, 5000);
+
+    const date = new Date();
+    const year = date.getFullYear();
+    document.querySelector("#year").textContent = year;
   </script>
 </body>
 

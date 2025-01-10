@@ -1,0 +1,66 @@
+{% extends "admin/supermain.html" %}
+{% load static %}
+
+
+
+
+{% block dashboard %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="main_card">
+
+
+    <div class="card" title="Word">
+        <i class="icon bi bi-file-earmark-word"></i>
+        <p class="length m-0">{{ ApiWordsList|length|default:"0" }}</p>
+    </div>
+
+    <div class="card" title="Post">
+        <i class="icon bi bi-file-post"></i>
+        <p class="length m-0">{{ ApiPostsList|length|default:"0" }}</p>
+    </div>
+
+    <div class="card" title="Post Category">
+        <i class="icon bi bi-tag-fill"></i>
+        <p class="length m-0">{{ ApiPostCatesList|length|default:"0" }}</p>
+    </div>
+
+    <div class="card" title="Footer">
+        <i class="icon bi bi-credit-card-2-back"></i>
+        <p class="length m-0">{{ ApiFootersList|length|default:"0" }}</p>
+    </div>
+
+    <div class="card" title="Header">
+        <i class="icon bi bi-credit-card"></i>
+        <p class="length m-0">{{ ApiHeadersList|length|default:"0" }}</p>
+    </div>
+
+    <div class="card" title="Page">
+        <i class="icon bi bi-file-text"></i>
+        <p class="length m-0">{{ ApiPagesList|length|default:"0" }}</p>
+    </div>
+
+    <div class="card" title="Blog">
+        <i class="icon bi bi-substack"></i>
+        <p class="length m-0">{{ ApiBlogsList|length|default:"0" }}</p>
+    </div>
+
+    {% if user.is_superuser %}
+
+    <div class="card" title="Users">
+        <i class="icon bi bi-person"></i>
+        <p class="length m-0">{{ ApiUserList|length|default:"0" }}</p>
+    </div>
+    {% endif %}
+
+
+
+
+
+</div>
+
+
+
+
+
+{% endblock %}
