@@ -54,8 +54,6 @@ def supermain(request):
     # Staff and superuser count from Django model
     staff_count = User.objects.filter(is_staff=True).count()
     superuser_count = User.objects.filter(is_superuser=True).count()
-    print("Staff from dashboard", staff_count)
-    print("Superuser from dashboard", superuser_count)
 
     # Prepare context
     context = {
