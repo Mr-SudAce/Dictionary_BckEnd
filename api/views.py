@@ -458,7 +458,6 @@ def adminPageUpdateApi(request, id):
             messages.error(request, "Error updating page. Please check the form.")
     else:
         page_form = PageForm(instance=page)
-
     return render(request, "admin/page.html", {"pageform": page_form, "page": page})
 
 

@@ -155,8 +155,8 @@ CORS_ALLOWED_ORIGINS = [
 # AUTH_USER_MODEL = "api.CustomUser"
 
 LOGIN_REDIRECT_URL = "supermain"
-LOGOUT_REDIRECT_URL = "admin_login"
-LOGIN_URL = "admin_login"
+LOGOUT_REDIRECT_URL = "auth_login"
+LOGIN_URL = "auth_login"
 
 
 # Username  :   dictionary
