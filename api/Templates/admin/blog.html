@@ -15,12 +15,11 @@
     {% for message in messages %}
     <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
       {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     {% endfor %}
   </div>
   {% endif %}
-  <!-- End Alert -->
 
   <!-- Blog Header -->
   <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -31,29 +30,44 @@
   </div>
 
   <!-- Add Blog Modal -->
-  <div class="modal fade" id="blogFormModal" tabindex="-1" aria-labelledby="blogFormLabel" aria-hidden="true">
+  <div class="modal fade" id="blogFormModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-dark text-white">
-          <h5 class="modal-title" id="blogFormLabel">Add New Blog</h5>
-          <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Add New Blog</h5>
+          <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"></button>
         </div>
+
         <div class="modal-body">
           <form action="{% url 'apiblog' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="row g-3">
-              {% for field in blogform %}
-              <div class="col-md-6">
-                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                {{ field }}
-              </div>
+
+            <label class="form-label">Title</label>
+            <input type="text" name="blog_title" class="form-control" required>
+
+            <label class="form-label mt-2">Image</label>
+            <input type="file" name="blog_image" class="form-control" required>
+
+            <label class="form-label mt-2">Description</label>
+            <textarea name="blog_description" class="form-control" rows="4" required></textarea>
+
+            <label class="form-label mt-2">Author</label>
+            <input type="text" name="blog_author" class="form-control" required>
+
+            <label class="form-label mt-2">Category</label>
+            <select name="post_Cat" class="form-control" required>
+              <option value disabled selected>Select Category</option>
+              {% for cat in categories %}
+              <option value="{{ cat.id }}">{{ cat.cat_title }}</option>
               {% endfor %}
-            </div>
+            </select>
+
             <div class="d-flex justify-content-end mt-4">
-              <button type="submit" name="blog_submit" class="btn btn-success">
+              <button type="submit" class="btn btn-success">
                 Submit <i class="bi bi-check-circle"></i>
               </button>
             </div>
+
           </form>
         </div>
       </div>
@@ -65,15 +79,16 @@
     <table class="table table-bordered table-striped m-0">
       <thead class="table-dark" style="height: 4rem;">
         <tr>
-          <th class="text-center align-middle" style="width: 2%;">#</th>
-          <th class="text-center align-middle" style="width: 10%;">Title</th>
-          <th class="text-center align-middle" style="width: 15%;">Description</th>
-          <th class="text-center align-middle" style="width: 15%;">Image</th>
-          <th class="text-center align-middle" style="width: 15%;">Category</th>
-          <th class="text-center align-middle" style="width: 10%;">Author</th>
-          <th class="text-center align-middle" style="width: 10%;">Actions</th>
+          <th class="text-center align-middle">#</th>
+          <th class="text-center align-middle">Title</th>
+          <th class="text-center align-middle">Description</th>
+          <th class="text-center align-middle">Image</th>
+          <th class="text-center align-middle">Category</th>
+          <th class="text-center align-middle">Author</th>
+          <th class="text-center align-middle">Actions</th>
         </tr>
       </thead>
+
       <tbody>
         {% if ApiBlogList %}
         {% for blog in ApiBlogList %}
@@ -81,65 +96,107 @@
           <td class="text-center align-middle">{{ forloop.counter }}</td>
           <td class="text-center align-middle">{{ blog.blog_title }}</td>
           <td class="text-center align-middle descp">{{ blog.blog_description|safe|truncatechars:50 }}</td>
+
           <td class="text-center align-middle">
             {% if blog.blog_image %}
             <img src="{{ blog.blog_image }}" alt="Blog Image" style="width: 50px; height: auto;" />
             {% else %}
-            <img src="{% static 'default.png' %}" alt="No Image" class="rounded shadow-sm" style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;" />
+            <img src="{% static 'default.png' %}" style="width: 50px;">
             {% endif %}
           </td>
+
           <td class="text-center align-middle">{{ blog.blog_Cat.cat_title }}</td>
           <td class="text-center align-middle">{{ blog.blog_author }}</td>
+
           <td class="text-center align-middle">
-            <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#blogFormModal{{ blog.id }}" title="Edit Blog">
+            <button class="btn btn-sm btn-outline-warning"
+              data-bs-toggle="modal"
+              data-bs-target="#updateModal{{ blog.id }}">
               <i class="bi bi-pencil-square"></i>
             </button>
-            <a href="{% url 'deleteblog' blog.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete this blog?');" title="Delete Blog">
+
+            <a href="{% url 'deleteblog' blog.id %}"
+              class="btn btn-sm btn-outline-danger"
+              onclick="return confirm('Delete this blog?');">
               <i class="bi bi-trash"></i>
             </a>
           </td>
         </tr>
 
-        <!-- Edit Modal -->
-        <div class="modal fade" id="blogFormModal{{ blog.id }}" tabindex="-1" aria-labelledby="blogFormLabel{{ blog.id }}" aria-hidden="true">
+        <!-- Update Modal -->
+        <div class="modal fade" id="updateModal{{ blog.id }}" tabindex="-1">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
+
               <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="blogFormLabel{{ blog.id }}">Edit Blog - {{ blog.blog_title }}</h5>
-                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Edit Blog - {{ blog.blog_title }}</h5>
+                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"></button>
               </div>
+
               <form action="{% url 'updateblog' blog.id %}" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+
                 <div class="modal-body">
+
+                  <!-- Title -->
                   <label class="form-label">Title</label>
-                  <input type="text" name="blog_title" class="form-control" value="{{ blog.blog_title }}" required />
+                  <input type="text" name="blog_title" class="form-control"
+                    value="{{ blog.blog_title }}" required>
 
-                  <label class="form-label mt-2">Image</label>
-                  <input type="file" name="blog_image" class="form-control" />
+                  <!-- Current Image -->
+                  <label class="form-label mt-2">Current Image</label>
+                  {% if blog.blog_image %}
+                  <div>
+                    <img src="{{ blog.blog_image.url }}" style="max-width:150px;">
+                  </div>
+                  {% endif %}
 
+                  <!-- Change Image -->
+                  <label class="form-label mt-2">Change Image</label>
+                  <input type="file" name="blog_image" class="form-control">
+
+                  <!-- Description -->
                   <label class="form-label mt-2">Description</label>
-                  <textarea name="blog_description" class="form-control" required>{{ blog.blog_description }}</textarea>
+                  <textarea name="blog_description" class="form-control" rows="4" required>{{ blog.blog_description }}</textarea>
 
+                  <!-- Author -->
                   <label class="form-label mt-2">Author</label>
-                  <input type="text" name="blog_author" class="form-control" value="{{ blog.blog_author }}" required />
+                  <input type="text" name="blog_author" class="form-control"
+                    value="{{ blog.blog_author }}" required>
+
+                  <!-- Category -->
+                  <label class="form-label mt-2">Category</label>
+                  <select name="post_Cat" class="form-control">
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}"
+                      {% if blog.post_Cat.id == cat.id %}selected{% endif %}>
+                      {{ cat.cat_title }}
+                    </option>
+                    {% endfor %}
+                  </select>
+
                 </div>
-                <div class="d-flex justify-content-end mt-3">
-                  <button type="submit" name="blog_submit" class="btn btn-success">Update <i class="bi bi-check-circle"></i></button>
+
+                <div class="d-flex justify-content-end p-3">
+                  <button type="submit" class="btn btn-success">
+                    Update <i class="bi bi-check-circle"></i>
+                  </button>
                 </div>
+
               </form>
             </div>
           </div>
         </div>
+
         {% endfor %}
         {% else %}
         <tr>
-          <td colspan="7" class="text-center py-3">
-            <p class="m-0 fw-bold text-muted">No Blogs Available</p>
-          </td>
+          <td colspan="7" class="text-center py-3 fw-bold text-muted">No Blogs Available</td>
         </tr>
         {% endif %}
       </tbody>
     </table>
   </div>
 </div>
+
 {% endblock %}

@@ -463,41 +463,68 @@ def adminPageUpdateApi(request, id):
 
 # Blog CRUD OPERATION
 def adminBlogListApi(request):
+    # Fetch API list
     response = requests.get(GET_Blog)
     ApiBlogList = response.json() if response.status_code == 200 else []
-    blogform = BlogForm(request.POST, request.FILES or None)
 
-    if (
-        request.method == "POST"
-        and "blog_submit" in request.POST
-        and blogform.is_valid()
-    ):
-        blogform.save()
-        messages.success(request, "Blog added Successfully!")
-        return redirect("apiblog")
-    context = {"ApiBlogList": ApiBlogList, "blogform": blogform}
+    categories = PostCategoryModel.objects.all()
 
+    # Add form
+    blogform = BlogForm(request.POST or None, request.FILES or None)
+
+    if request.method == "POST" and "blog_submit" in request.POST:
+        if blogform.is_valid():
+            blogform.save()
+            messages.success(request, "Blog added successfully!")
+            return redirect("apiblog")
+        else:
+            messages.error(request, "Error adding blog. Check your inputs.")
+
+    context = {
+        "ApiBlogList": ApiBlogList,
+        "blogform": blogform,
+        "categories": categories,
+    }
     return render(request, "admin/blog.html", context)
 
 
+#DELETE BLOG
 def adminBlogDelApi(request, id):
     blog = get_object_or_404(BlogModel, id=id)
     blog.delete()
-    messages.warning(request, "Deleted Successfully")
+    messages.warning(request, "Blog deleted successfully!")
     return redirect("apiblog")
 
 
+#UPDATE BLOG
 def adminBlogUpdateApi(request, id):
     blog = get_object_or_404(BlogModel, id=id)
+    categories = PostCategoryModel.objects.all()
+
     if request.method == "POST":
-        blog_form = BlogForm(request.POST, instance=blog)
+        blog_form = BlogForm(request.POST, request.FILES, instance=blog)
+
         if blog_form.is_valid():
             blog_form.save()
-            messages.success(request, "Blog Updated Sucessfully!")
+            messages.success(request, "Blog updated successfully!")
             return redirect("apiblog")
         else:
-            messages.error(request, "Error updating blog. Please check the form.")
+            messages.error(request, "Error updating blog. Check your inputs.")
     else:
         blog_form = BlogForm(instance=blog)
 
-    return render(request, "admin/blog.html", {"blogform": blog_form, "blog": blog})
+    # always reload blog list for the modal template
+    response = requests.get(GET_Blog)
+    ApiBlogList = response.json() if response.status_code == 200 else []
+
+    return render(
+        request,
+        "admin/blog.html",
+        {
+            "blogform": BlogForm(),  # for add modal
+            "editform": blog_form,  # for edit modal
+            "ApiBlogList": ApiBlogList,
+            "blog": blog,
+            "categories": categories,
+        },
+    )

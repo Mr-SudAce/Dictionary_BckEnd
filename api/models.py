@@ -66,7 +66,6 @@ class BlogModel(models.Model):
     blog_author = models.CharField(max_length=100, default="")
     post_Cat = models.ForeignKey(PostCategoryModel, related_name='blogs', on_delete=models.CASCADE, default="")
     created_at = models.DateTimeField(auto_now_add=True)
-    # created_at = models.DateTimeField(default=models.functions.Now, editable=False)
 
 
     
