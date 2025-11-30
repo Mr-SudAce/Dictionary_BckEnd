@@ -169,13 +169,11 @@ def userListApi(request):
     }
     return render(request, "admin/user.html", context)
 
-
 def userDelApi(request, id):
     users = get_object_or_404(User, id=id)
     users.delete()
     messages.warning(request, "User Deleted Successfully")
     return redirect("apiuser")
-
 
 def userUpdateApi(request, id):
     users = get_object_or_404(User, id=id)
@@ -215,13 +213,11 @@ def adminWordListApi(request):
     }  # user this for data flow
     return render(request, "admin/admin.html", context)
 
-
 def adminWordDelApi(request, id):
     word = get_object_or_404(WordModel, id=id)
     word.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apiword")
-
 
 def adminWordUpdateApi(request, id):
     word = get_object_or_404(WordModel, id=id)
@@ -263,13 +259,11 @@ def adminPostListApi(request):
     }  # user this for data flow
     return render(request, "admin/post.html", context)
 
-
 def adminPostDelApi(request, id):
     post = get_object_or_404(PostModel, id=id)
     post.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apipost")
-
 
 def adminPostUpdateApi(request, id):
     post_instance = get_object_or_404(PostModel, id=id)
@@ -304,13 +298,11 @@ def adminPostCateListApi(request):
     context = {"ApiPostCatList": ApiPostCatList, "postcateform": postcateform}
     return render(request, "admin/postcategory.html", context)
 
-
 def adminPostCateDelApi(request, id):
     postcate = get_object_or_404(PostCategoryModel, id=id)
     postcate.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apipostcat")
-
 
 def adminPostCateUpdateApi(request, id):
     postcate = get_object_or_404(PostCategoryModel, id=id)
@@ -332,23 +324,21 @@ def adminPostCateUpdateApi(request, id):
 
 # FOOTER CRUD OPERATION
 def adminFooterListApi(request):
-    response = requests.get(GET_Footer)
-    ApiFooterList = response.json() if response.status_code == 200 else []
-    footerform = FooterForm(request.POST, request.FILES or None)
+    footers = FooterModel.objects.all().order_by('id')
+    footerform = FooterForm(request.POST or None)
 
-    if (
-        request.method == "POST"
-        and "footer_submit" in request.POST
-        and footerform.is_valid()
-    ):
-        footerform.save()
-        messages.success(request, "Footer added successfully!")
-        return redirect("apifooter")
-    context = {
-        "ApiFooterList": ApiFooterList,
+    if request.method == "POST" and "footer_submit" in request.POST:
+        if footerform.is_valid():
+            footerform.save()
+            messages.success(request, "Footer added successfully!")
+            return redirect("apifooter")
+        else:
+            messages.error(request, "Failed to add footer!")
+
+    return render(request, "admin/footer.html", {
+        "ApiFooterList": footers,
         "footerform": footerform,
-    }  # user this for data flow
-    return render(request, "admin/footer.html", context)
+    })
 
 
 def adminFooterDelApi(request, id):
@@ -357,21 +347,29 @@ def adminFooterDelApi(request, id):
     messages.warning(request, "Deleted Successfully")
     return redirect("apifooter")
 
-
 def adminFooterUpdateApi(request, id):
     footer = get_object_or_404(FooterModel, id=id)
+
     if request.method == "POST":
-        footer_form = FooterForm(request.POST, request.FILES, instance=footer)
+        footer_form = FooterForm(request.POST, instance=footer)
         if footer_form.is_valid():
             footer_form.save()
             messages.success(request, "Footer updated successfully!")
             return redirect("apifooter")
+        else:
+            messages.error(request, "Update failed.")
     else:
         footer_form = FooterForm(instance=footer)
 
-    return render(
-        request, "admin/footer.html", {"footerform": footer_form, "footer": footer}
-    )
+    # include ApiFooterList again to keep table working
+    response = requests.get(GET_Footer)
+    ApiFooterList = response.json() if response.status_code == 200 else []
+
+    return render(request, "admin/footer.html", {
+        "ApiFooterList": ApiFooterList,
+        "footerform": footer_form,
+        "footer": footer,
+    })
 
 
 # Header CRUD OPERATION
@@ -394,13 +392,11 @@ def adminHeaderListApi(request):
     }  # user this for data flow
     return render(request, "admin/header.html", context)
 
-
 def adminHeaderDelApi(request, id):
     header = get_object_or_404(HeaderModel, id=id)
     header.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apiheader")
-
 
 def adminHeaderUpdateApi(request, id):
     header = get_object_or_404(HeaderModel, id=id)
@@ -438,13 +434,11 @@ def adminPageListApi(request):
 
     return render(request, "admin/page.html", context)
 
-
 def adminPageDelApi(request, id):
     page = get_object_or_404(PageModel, id=id)
     page.delete()
     messages.warning(request, "Deleted Successfully")
     return redirect("apipage")
-
 
 def adminPageUpdateApi(request, id):
     page = get_object_or_404(PageModel, id=id)
@@ -463,13 +457,10 @@ def adminPageUpdateApi(request, id):
 
 # Blog CRUD OPERATION
 def adminBlogListApi(request):
-    # Fetch API list
     response = requests.get(GET_Blog)
     ApiBlogList = response.json() if response.status_code == 200 else []
 
     categories = PostCategoryModel.objects.all()
-
-    # Add form
     blogform = BlogForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST" and "blog_submit" in request.POST:
@@ -487,16 +478,12 @@ def adminBlogListApi(request):
     }
     return render(request, "admin/blog.html", context)
 
-
-#DELETE BLOG
 def adminBlogDelApi(request, id):
     blog = get_object_or_404(BlogModel, id=id)
     blog.delete()
     messages.warning(request, "Blog deleted successfully!")
     return redirect("apiblog")
 
-
-#UPDATE BLOG
 def adminBlogUpdateApi(request, id):
     blog = get_object_or_404(BlogModel, id=id)
     categories = PostCategoryModel.objects.all()
