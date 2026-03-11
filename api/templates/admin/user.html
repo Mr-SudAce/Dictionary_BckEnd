@@ -1,0 +1,180 @@
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+
+<link rel="stylesheet" href="{% static 'css/' %}" />
+
+<div class="position-relative">
+    <!-- Alert Messages -->
+    {% if messages %}
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show m-0" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Alert Messages -->
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="text-dark">User's</h1>
+
+        {{ staff_count }}
+        {{ superuser_count}}
+        <!-- <button class="btn btn-outline-dark fw-bolder" data-bs-toggle="modal" data-bs-target="#UserModal">
+            Add User <i class="bi bi-plus-lg fw-bolder"></i>
+        </button> -->
+    </div>
+    <!-- Page Header -->
+
+    <!-- User Form Modal -->
+    <div class="modal fade" id="UserModal" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="UserModalLabel">
+                        {% if userform.instance.id %} Update User {% else %} Add New
+                        User {% endif %}
+                    </h5>
+                    <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form
+                        action="{% if userform.instance.id %}{% url 'updateuser' userform.instance.id %}{% else %}{% url 'apiuser' %}{% endif %}"
+                        method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <!--user-->
+                            <label for="{{ user.id }}" class="form-label">User Name</label>
+                            <input type="text" name="user_id" id="{{ user.id }}" class="form-control"
+                                value="{{ user.username }}" required>
+                        </div>
+
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" name="user_submit" class="btn btn-success">
+                                Submit <i class="bi bi-check-circle"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- User Form Modal -->
+
+    <!-- User Table -->
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered table-striped m-0">
+            <thead class="table-dark">
+                <tr>
+                    <!-- <th class="text-center align-middle" style="width: 5%">#</th> -->
+                    <th class="text-center align-middle" style="width: 10%">
+                        Username
+                    </th>
+                    <th class="text-center align-middle" style="width: 15%">
+                        Email
+                    </th>
+                    <th class="text-center align-middle" style="width: 5%">
+                        Status
+                    </th>
+                    <th class="text-center align-middle" style="width: 10%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if ApiUsersList %}
+                {% for user in ApiUsersList %}
+                <tr>
+                    {% if user.is_staff and not user.is_superuser %}
+                    <!-- <td class="text-center align-middle">{{ forloop.counter }}</td> -->
+                    <td class="text-center align-middle">
+                        {{ user.username }}
+                    </td>
+                    <td class="text-center align-middle">
+                        {{ user.email }}
+                    </td>
+                    <td class="text-center align-middle">
+                        <p class="text-dark fw-bold m-0">User</p>
+                    </td>
+                    <td class="text-center align-middle">
+                        <div class="btn-group gap-2">
+                            <a href="{% url 'updateuser' user.id %}" class="btn btn-sm btn-outline-warning"
+                                data-bs-toggle="modal" data-bs-target="#userFormModal{{ user.id }}" title="Edit User">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="{% url 'deleteuser' user.id %}" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Are you sure you want to delete this user?');"
+                                title="Delete User">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                    {% endif %}
+                </tr>
+
+                <!-- Modal for Editing User -->
+                <div class="modal fade" id="userFormModal{{ user.id }}" tabindex="-1" aria-labelledby="userFormLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-dark text-white">
+                                <h5 class="modal-title" id="userFormLabel">
+                                    Edit User - {{ user.username }}
+                                </h5>
+                                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{% url 'updateuser' user.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="user_id_{{ user.id }}" class="form-label">Username</label>
+                                        <input type="text" name="username" id="user_id_{{ user.id }}"
+                                            class="form-control" value="{{ user.username }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email_{{ user.id }}" class="form-label">Email</label>
+                                        <input type="email" name="email" id="email_{{ user.id }}" class="form-control"
+                                            value="{{ user.email }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="status_{{ user.id }}" class="form-label">Status</label>
+                                        <select name="status" id="status_{{ user.id }}" class="form-control">
+                                            <option value="superuser" {% if user.is_superuser %}selected{% endif %}>
+                                                Superuser</option>
+                                            <option value="staff" {% if user.is_staff %}selected{% endif %}>Staff
+                                            </option>
+                                            <option value="user" {% if not user.is_staff and not user.is_superuser%}
+                                                selected {% endif %}>User</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-success">
+                                            Update <i class="bi bi-check-circle"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                        No users available.
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+
+        </table>
+    </div>
+    <!-- User Table -->
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,229 @@
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+<style>
+  .descp p {
+    margin: 0;
+  }
+</style>
+
+<div class="pagemain">
+  <!-- Alert Message -->
+  {% if messages %}
+
+  <div class="alertmessage p-3">
+    {% for message in messages %}
+    <div
+      class="alertbox  alert alert-{{ message.tags }} alert-dismissible fade show m-0 absolute"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+        style="outline: none"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <!-- Alert Message -->
+</div>
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+  <h1 class="text-dark" style="font-size: 4vh">Page Management</h1>
+  <button
+    class="btn btn-outline-dark fw-bolder"
+    data-bs-toggle="modal"
+    data-bs-target="#pageFormModal"
+    style="font-size: 2vh"
+  >
+    Add New Page <i class="bi bi-plus-lg fw-bolder"></i>
+  </button>
+</div>
+<!-- Page Header -->
+
+<!-- post Form Modal -->
+<div
+  class="modal fade"
+  id="pageFormModal"
+  tabindex="-1"
+  aria-labelledby="pageFormLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="pageFormLabel">
+          {% if pageform.instance.id %} Update Page {% else %} Add New Page
+          {%endif %}
+        </h5>
+        <button
+          type="button"
+          class="btn-close bg-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="{% if pageform.instance.id %}{% url 'updatepage' pageform.instance.id %}{% else %}{% url 'apipage' %}{% endif %}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
+          <div class="row g-3">
+            {% for field in pageform %}
+            <div class="col-md-6">
+              <label for="{{ field.id_for_label }}" class="form-label"
+                >{{ field.label }}</label
+              >
+              {{ field }}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="d-flex justify-content-end mt-4">
+            <button type="submit" name="page_submit" class="btn btn-success">
+              Submit <i class="bi bi-check-circle"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Post Table -->
+<div
+  class="table-responsive mt-4"
+  style="
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  "
+>
+  <table class="table table-bordered table-striped m-0">
+    <thead class="table-dark" style="height: 4rem">
+      <tr>
+        <th class="text-center align-middle" style="width: 2%">#</th>
+        <th class="text-center align-middle" style="width: 15%">Title</th>
+        <th class="text-center align-middle" style="width: 15%">Content</th>
+        <th class="text-center align-middle" style="width: 3%">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if ApiPageList %} {% for page in ApiPageList %}
+      <tr>
+        <td class="text-center align-middle">{{ forloop.counter }}</td>
+        <td class="text-center align-middle">{{ page.page_title }}</td>
+        <td class="text-center align-middle descp">
+          {{page.page_description|safe}}
+        </td>
+        <td class="text-center align-middle">
+          <!-- Edit Button -->
+          <a
+            href="{% url 'updatepage' page.id %}"
+            class="btn btn-sm btn-outline-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#pageFormModal{{ page.id }}"
+            title="Edit Page"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </a>
+          <!-- Delete Form -->
+          <a
+            href="{% url 'deletepage' page.id %}"
+            class="btn btn-sm btn-outline-danger"
+            onclick="return confirm('Are you sure you want to delete this page?');"
+            title="Delete Page"
+          >
+            <i class="bi bi-trash"></i>
+          </a>
+        </td>
+      </tr>
+
+      <!-- Modal for Edit -->
+      <div
+        class="modal fade"
+        id="pageFormModal{{ page.id }}"
+        tabindex="-1"
+        aria-labelledby="pageFormLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+              <h5 class="modal-title" id="pageFormLabel">
+                Edit Page - {{ page.page_title }}
+              </h5>
+              <button
+                type="button"
+                class="btn-close bg-white"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form
+                action="{% url 'updatepage' page.id %}"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                {% csrf_token %}
+                <div class="modal-body">
+                  <!--page_title-->
+                  <label for="id_page_title_{{ page.id }}" class="form-label"
+                    >Title</label
+                  >
+                  <input
+                    type="text"
+                    name="page_title"
+                    id="id_page_title_{{ page.id }}"
+                    class="form-control"
+                    value="{{ page.page_title }}"
+                    required
+                  />
+
+                  <!-- page description -->
+                  <label
+                    for="id_page_description_{{ page.id }}"
+                    class="form-label"
+                    >Description</label
+                  >
+                  <textarea
+                    name="page_description"
+                    id="id_page_description_{{ page.id }}"
+                    class="form-control"
+                    required
+                  >
+{{ page.page_description }}</textarea
+                  >
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                  <button
+                    type="submit"
+                    name="page_submit"
+                    class="btn btn-success"
+                  >
+                    Update <i class="bi bi-check-circle"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <tr>
+        <td colspan="7" class="text-center py-3">
+          <p class="m-0 fw-bold text-muted">No Page Available</p>
+        </td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+<!-- Post Table -->
+
+{% endblock %}

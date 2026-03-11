@@ -1,0 +1,37 @@
+.descp p {
+    margin: 0;
+}
+
+.position-fixed {
+    z-index: 1050;
+}
+
+.modal-header.bg-dark {
+    background-color: #343a40 !important;
+}
+
+.modal-header.text-white {
+    color: #fff;
+}
+
+.modal-content {
+    border-radius: 8px;
+}
+
+.table-responsive {
+    border-radius: 8px;
+}
+
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.text-truncate.descp {
+    max-width: 250px;
+}
+
+.btn-group .btn-sm {
+    margin-right: 5px;
+}

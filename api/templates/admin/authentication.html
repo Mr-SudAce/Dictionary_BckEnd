@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../../static/logo1.png" type="image/x-icon" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        integrity="sha384-tViUnnbYAV00FLIhhi3v/dWt3Jxw4gZQcNoSCxCIFNJVCx7/D55/wXsrNIRANwdD" crossorigin="anonymous" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+</head>
+<title>{% block authtitle %}{% endblock%}</title>
+<link rel="stylesheet" href="{% static 'css/authentication.css' %}">
+
+<style>
+    .crd {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid black;
+        height: 220px;
+        width: 190px;
+        margin: 4px 8px;
+        overflow: hidden;
+    }
+
+    .crd i {
+        color: #333;
+        font-size: 10rem;
+    }
+</style>
+
+<body>
+
+
+
+    {% block auth %}{% endblock %}
+    <!-- {% block user_auth %}{% endblock %} -->
+
+
+    <script>
+        setTimeout(() => {
+            document.querySelectorAll(".alert").forEach((alert) => {
+                alert.style.display = "none";
+            });
+        }, 3000);
+    </script>
+</body>
+
+</html>

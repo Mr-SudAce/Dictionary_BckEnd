@@ -1,0 +1,230 @@
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+
+<link rel="stylesheet" href="{% static 'css/word.css' %}" />
+
+<div class="">
+  <!-- Alert Messages -->
+  {% if messages %}
+  <div class="position-fixed top-0 end-0 p-3">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-dark" style="font-size: 4vh">Word Management</h1>
+    <button
+      class="btn btn-outline-dark fw-bolder"
+      data-bs-toggle="modal"
+      data-bs-target="#wordFormModal"
+      style="font-size: 2vh"
+    >
+      Add New Word <i class="bi bi-plus-lg fw-bolder"></i>
+    </button>
+  </div>
+
+  <!-- Word Form Modal -->
+  <div
+    class="modal fade"
+    id="wordFormModal"
+    tabindex="-1"
+    aria-labelledby="wordFormModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="wordFormModalLabel">
+            {% if wordform.instance.id %} Update Word {% else %} Add New Word 
+            {%endif %}
+          </h5>
+          <button
+            type="button"
+            class="btn-close bg-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            action="{% if wordform.id %}{% url 'updateword' wordform.id %}{% else %}{% url 'apiword' %}{% endif %}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <div class="row g-3">
+              {% for field in wordform %}
+              <div class="col-12">
+                <label for="{{ field.id_for_label }}" class="form-label"
+                  >{{ field.label }}</label
+                >
+                {{ field }} {% if field.errors %}
+                <div class="text-danger small">
+                  {% for error in field.errors %}
+                  <p class="m-0">{{ error }}</p>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            <div class="d-flex justify-content-end mt-4">
+              <button type="submit" name="word_submit" class="btn btn-success">
+                Submit <i class="bi bi-check-circle"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Words Table -->
+  <div class="card shadow-sm border-0 mt-4">
+    <div class="table-responsive">
+      <table
+        class="table table-bordered table-striped table-hover align-middle mb-0"
+      >
+        <thead class="bg-dark text-white" style="height: 4rem">
+          <tr>
+            <th class="text-center align-middle" style="width: 5%">#</th>
+            <th class="text-center align-middle">Word</th>
+            <th class="text-center align-middle">Description</th>
+            <th class="text-center align-middle">Antonyms</th>
+            <th class="text-center align-middle">Synonyms</th>
+            <th class="text-center align-middle">Example</th>
+            <th class="text-center align-middle" style="width: 15%">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if ApiWordsList %} {% for word in ApiWordsList %}
+          <tr>
+            <td class="text-center">{{ forloop.counter }}</td>
+            <td class="align-middle text-center">{{ word.word }}</td>
+            <td class="text-truncate descp">
+              {{ word.description|safe|slice:30 }}
+            </td>
+            <td class="align-middle text-center">{{ word.antonyms }}</td>
+            <td class="align-middle text-center">{{ word.synonyms }}</td>
+            <td class="align-middle text-center">{{ word.example }}</td>
+            <td class="text-center">
+              <div class="btn-group gap-1">
+                  <!-- Edit Button -->
+                  <a
+                    href="{% url 'updateword' word.id %}"
+                    class="btn btn-sm btn-outline-warning"
+                    data-bs-toggle="modal"
+                    data-bs-target="#wordFormModal{{ word.id }}"
+                    title="Edit Word"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </a>
+
+                  <!-- Delete Form -->
+                  <a
+                    href="{% url 'deleteword' word.id %}"
+                    class="btn btn-sm btn-outline-danger"
+                    onclick="return confirm('Are you sure you want to delete this word?');"
+                    title="Delete Word"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Modal for Edit -->
+          <div
+            class="modal fade"
+            id="wordFormModal{{ word.id }}"
+            tabindex="-1"
+            aria-labelledby="wordFormModal"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                  <h5 class="modal-title" id="wordFormModal">
+                    Edit word - {{ word.word }} - {{word.id}}
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close bg-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form
+                    action="{% url 'updateword' word.id %}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                  >
+                    {% csrf_token %}
+                    <div class="modal-body">
+                      <!-- Word -->
+                      <label for="id_word_{{ word.id }}" class="form-label">Word</label>
+                      <input type="text" name="word" id="id_word_{{ word.id }}" class="form-control" value="{{ word.word }}" required>
+        
+                      <!-- Antonyms -->
+                      <label for="id_antonyms_{{ word.id }}" class="form-label">Antonyms</label>
+                      <input type="text" name="antonyms" id="id_antonyms_{{ word.id }}" class="form-control" value="{{ word.antonyms }}" required>
+        
+                      <!-- Synonyms -->
+                      <label for="id_synonyms_{{ word.id }}" class="form-label">Synonyms</label>
+                      <input type="text" name="synonyms" id="id_synonyms_{{ word.id }}" class="form-control" value="{{ word.synonyms }}" required>
+        
+                      <!-- Description -->
+                      <label for="id_description_{{ word.id }}" class="form-label">Description</label>
+                      <textarea name="description" id="id_description_{{ word.id }}" class="form-control" required>{{ word.description }}</textarea>
+
+                      <!-- Example -->
+                      <label for="id_example_{{ word.id }}" class="form-label">Example</label>
+                      <textarea name="example" id="id_example_{{ word.id }}" class="form-control" required>{{ word.example }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                      <button
+                        type="submit"
+                        name="word_submit"
+                        class="btn btn-success"
+                      >
+                        Update <i class="bi bi-check-circle"></i>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal for Edit -->
+
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="7" class="text-center text-muted py-4">
+              No words available.
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

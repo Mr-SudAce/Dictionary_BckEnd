@@ -1,0 +1,126 @@
+body {
+    margin: 0;
+    font-family: "Roboto";
+    /* background-color: #f8f5f2; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.auth_container {
+    display: flex;
+    max-width: 150vh;
+    max-height: auto;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background: transparent;
+    /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.login_right, .reg_left {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    width: 90vh;
+    height: 75vh;
+    row-gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.reg_right img,
+.login_left img {
+    height: 100%;
+    width: 100%;
+}
+
+.reg_right,
+.login_left {
+    flex: 1;
+    background-size: cover;
+}
+
+.login_right h1 {
+    top: -4rem;
+    /* right: 12rem; */
+    /* top: 0; */
+}
+
+.reg_left h1 {
+    top: 1rem;
+    left: 2.4rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 0.9rem;
+    color: #7b7b7b;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 2px solid #d6d6d6;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #000;
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.checkbox-container label {
+    font-size: 0.9rem;
+    color: #7b7b7b;
+}
+
+.checkbox-container a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: #000;
+    transition: color 0.3s;
+}
+
+.checkbox-container a:hover {
+    color: #000;
+}
+
+.btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #333;
+}
+

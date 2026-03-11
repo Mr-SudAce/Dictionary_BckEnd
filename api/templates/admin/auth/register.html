@@ -1,0 +1,70 @@
+{% extends "admin/authentication.html" %}
+{% load static %}
+
+<title>{% block authtitle %} Register {% endblock %}</title>
+{% block auth %}
+<div class="auth_container">
+
+    <!-- {% if form.errors %}
+    <div class="position-absolute top-0 end-0 m-0 px-1 alert alert-danger">
+        {% for field, errors in form.errors.items %}
+        <div>
+            {% for error in errors %}
+            <p class="m-0 text-danger">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %} -->
+
+    {% if messages %}
+    <div class="position-absolute top-0 end-0 m-2 alert ">
+        {% for regmessage in messages %}
+        <p class="text-danger m-0">{{ regmessage }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="reg_left position-relative">
+
+
+        <h1 class="position-absolute text-uppercase">Register</h1>
+        {% csrf_token %}
+        <form method="post" action="{% url 'auth_register' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+
+            <div class="gap-3 d-flex flex-column">
+                <div class="text-start">
+                    <input type="checkbox" required> I agree to the terms and conditions
+                </div>
+
+                <div class="text-end">
+                    Already have an account? <a href="{% url 'auth_login' %}">Login</a>
+                </div>
+            </div>
+
+            <button class="btn" type="submit">Register</button>
+        </form>
+
+    </div>
+    <div class="reg_right">
+        <img src="{% static 'register.jpeg' %}" alt="Register Image">
+    </div>
+</div>
+{% endblock %}

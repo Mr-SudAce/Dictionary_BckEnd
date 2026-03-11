@@ -1,0 +1,154 @@
+INFO 2026-03-01 18:29:54,202 autoreload 10056 5964 Watching for file changes with StatReloader
+INFO 2026-03-01 18:31:27,653 autoreload 10056 5964 D:\Other Drive\PROJECTS\Dictionary\BackEnd\api\api_views.py changed, reloading.
+INFO 2026-03-01 18:31:28,991 autoreload 11472 10016 Watching for file changes with StatReloader
+INFO 2026-03-01 18:34:57,118 autoreload 11472 10016 D:\Other Drive\PROJECTS\Dictionary\BackEnd\api\views.py changed, reloading.
+INFO 2026-03-01 18:34:58,536 autoreload 3276 10988 Watching for file changes with StatReloader
+INFO 2026-03-01 18:39:04,098 autoreload 3276 10988 D:\Other Drive\PROJECTS\Dictionary\BackEnd\dictionary\settings.py changed, reloading.
+INFO 2026-03-01 18:39:05,907 autoreload 4988 6040 Watching for file changes with StatReloader
+ERROR 2026-03-01 18:39:21,853 views 4988 4564 Dashboard error: no such column: api_wordmodel.updated_at
+INFO 2026-03-01 18:39:21,992 basehttp 4988 4564 "GET / HTTP/1.1" 200 7193
+ERROR 2026-03-01 18:39:25,171 log 4988 4564 Internal Server Error: /post/
+Traceback (most recent call last):
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: api_postcategorymodel.created_at
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\api\views.py", line 306, in adminPostListApi
+    "ApiPostCatList": PostCategorySerializer(categories_list, many=True).data,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\rest_framework\serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+                                                   ^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\query.py", line 400, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: api_postcategorymodel.created_at
+ERROR 2026-03-01 18:39:25,203 basehttp 4988 4564 "GET /post/ HTTP/1.1" 500 156327
+WARNING 2026-03-01 18:39:25,499 log 4988 4564 Not Found: /favicon.ico
+WARNING 2026-03-01 18:39:25,500 basehttp 4988 4564 "GET /favicon.ico HTTP/1.1" 404 21347
+ERROR 2026-03-01 18:39:29,258 log 4988 4564 Internal Server Error: /post/
+Traceback (most recent call last):
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such column: api_postcategorymodel.created_at
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\api\views.py", line 306, in adminPostListApi
+    "ApiPostCatList": PostCategorySerializer(categories_list, many=True).data,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\rest_framework\serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+                                                   ^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\query.py", line 400, in __iter__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\Other Drive\PROJECTS\Dictionary\BackEnd\venv\Lib\site-packages\django\db\backends\sqlite3\base.py", line 354, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such column: api_postcategorymodel.created_at
+ERROR 2026-03-01 18:39:29,283 basehttp 4988 4564 "GET /post/ HTTP/1.1" 500 156327
+INFO 2026-03-01 18:43:28,725 autoreload 4988 6040 D:\Other Drive\PROJECTS\Dictionary\BackEnd\dictionary\settings.py changed, reloading.

@@ -1,0 +1,214 @@
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}<style>
+  .fuldesc p {
+    margin: 0;
+    display: inline;
+  }
+  .post-thumbnail {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+    border: 1px solid #dee2e6;
+  }
+  .post-thumbnail:hover {
+    transform: scale(2.5);
+    z-index: 100;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+</style>
+
+<!-- /////////////////////////////////////Alert Message/////////////////////////////// -->
+{% if messages %}
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show m-0" role="alert"
+    style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="outline: none"></button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+<!-- /////////////////////////////////////Alert Message/////////////////////////////// -->
+
+<!-- /////////////////////////////////////Page Header/////////////////////////////// -->
+<div class="d-flex justify-content-between align-items-center">
+  <h1 class="text-dark" style="font-size: 4vh">Post Management</h1>
+  <button class="btn btn-outline-dark fw-bolder" data-bs-toggle="modal" data-bs-target="#postFormModal"
+    style="font-size: 2vh">
+    Add New Post <i class="bi bi-plus-lg fw-bolder"></i>
+  </button>
+</div>
+<!-- /////////////////////////////////////Page Header/////////////////////////////// -->
+
+<!-- /////////////////////////////////////Add Post/////////////////////////////////////// -->
+<div class="modal fade" id="postFormModal" tabindex="-1" aria-labelledby="postFormLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="postFormLabel">
+          Add New Post
+        </h5>
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'apipost' %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            {% for field in postform %}
+            <div class="col-md-6">
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+              {{ field }}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="d-flex justify-content-end mt-4">
+            <button type="submit" name="post_submit" class="btn btn-success">
+              Submit <i class="bi bi-check-circle"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /////////////////////////////////////Add Post/////////////////////////////////////// -->
+
+
+<!-- /////////////////////////////////////Table/////////////////////////////////////// -->
+<div class="table-responsive mt-4" style="
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    ">
+  <table class="table table-bordered table-striped table-hover m-0 align-middle">
+    <thead class="table-dark" style="height: 4rem">
+      <tr>
+        <th class="text-center align-middle" style="width: 5%">#</th>
+        <th class="text-center align-middle" style="width: 15%">Title</th>
+        <th class="text-center align-middle" style="width: 15%">
+          Description
+        </th>
+        <th class="text-center align-middle" style="width: 25%">
+          Full Description
+        </th>
+        <th class="text-center align-middle" style="width: 15%">Category</th>
+        <th class="text-center align-middle" style="width: 15%">Image</th>
+        <th class="text-center align-middle" style="width: 20%">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if ApiPostsList %} {% for post in ApiPostsList %}
+      <tr>
+        <td class="text-center align-middle">{{ forloop.counter }}</td>
+        <td class="text-center align-middle">{{ post.title }}</td>
+        <td class="text-center align-middle fuldesc">
+          {{ post.full_desc|striptags|truncatechars:30 }}
+        </td>
+        <td class="text-start align-middle fuldesc">
+          {{ post.full_desc|striptags|truncatechars:60 }}
+        </td>
+        <td class="text-center align-middle">
+          {{ post.post_Cat.cat_title }}
+        </td>
+        <td class="text-center align-middle">
+          {% if post.image %}
+          <img src="{{ post.image }}" alt="{{ post.title }}" class="rounded shadow-sm post-thumbnail" loading="lazy" />
+          {% else %}
+          <img src="{% static 'default.png' %}" alt="No Image" class="rounded shadow-sm post-thumbnail" loading="lazy" />
+          {% endif %}
+        </td>
+        <td class="text-center align-middle">
+          <div class="btn-group gap-2">
+            <!-- Edit Button -->
+            <a href="{% url 'updatepost' post.id %}" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal"
+              data-bs-target="#postFormModal{{ post.id }}" title="Edit Post">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+
+            <!-- Delete Form -->
+            <a href="{% url 'deletepost' post.id %}" class="btn btn-sm btn-outline-danger"
+              onclick="return confirm('Are you sure you want to delete this post?');" title="Delete Post">
+              <i class="bi bi-trash"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %} {% else %}
+      <tr>
+        <td colspan="7" class="text-center py-3">
+          <p class="m-0 fw-bold text-muted">No Posts Available</p>
+        </td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+<!-- /////////////////////////////////////Table/////////////////////////////////////// -->
+
+<!-- /////////////////////////////////////Edit Post Modals/////////////////////////////////////// -->
+{% if ApiPostsList %}
+{% for post in ApiPostsList %}
+<div class="modal fade" id="postFormModal{{ post.id }}" tabindex="-1" aria-labelledby="postFormModalLabel{{ post.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="postFormModalLabel{{ post.id }}">
+          Edit Post - {{ post.title }}
+        </h5>
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'updatepost' post.id %}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3">
+            <!-- Title -->
+            <div class="col-12">
+              <label for="id_title_{{ post.id }}" class="form-label fw-bold">Title</label>
+              <input type="text" name="title" id="id_title_{{ post.id }}" class="form-control" value="{{ post.title }}" required>
+            </div>
+            <!-- Description -->
+            <div class="col-12">
+              <label for="id_full_desc_{{ post.id }}" class="form-label fw-bold">Full Description</label>
+              <textarea name="full_desc" id="id_full_desc_{{ post.id }}" class="form-control" rows="5" required>{{ post.full_desc }}</textarea>
+            </div>
+            <!-- Category -->
+            <div class="col-md-6">
+              <label for="id_postCat_{{ post.id }}" class="form-label fw-bold">Category</label>
+              <select name="postCat" id="id_postCat_{{ post.id }}" class="form-select" required>
+                {% for category in ApiPostCatList %}
+                <option value="{{ category.id }}" {% if category.id == post.post_Cat.id %} selected {% endif %}>
+                  {{ category.cat_title }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <!-- Image -->
+            <div class="col-md-6">
+              <label for="id_image_{{ post.id }}" class="form-label fw-bold">Image</label>
+              <input type="file" name="image" id="id_image_{{ post.id }}" class="form-control">
+              {% if post.image %}
+              <div class="mt-2">
+                <img src="{{ post.image }}" alt="{{ post.title }}" class="img-thumbnail" style="max-height: 100px;">
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="d-flex justify-content-end mt-4">
+            <button type="submit" name="post_submit" class="btn btn-success">
+              Update <i class="bi bi-check-circle"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+<!-- /////////////////////////////////////Edit Post Modals/////////////////////////////////////// -->
+
+</div>
+
+{% endblock %}

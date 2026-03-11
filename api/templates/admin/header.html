@@ -1,0 +1,231 @@
+{% extends "admin/supermain.html" %}
+{% load static %}
+{% block admin %}
+
+<link rel="stylesheet" href="{% static 'css/header.css' %}" />
+
+<div>
+  {% if messages %}
+  <div class="alert-position">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible-custom fade show shadow-sm alert-custom"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close btn-close-custom"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <h1 class="page-header">Header Management</h1>
+
+  <div class="table-card">
+    <div class="table-responsive table-responsive-custom">
+      <table
+        class="table table-bordered table-striped table-hover align-middle table-custom"
+      >
+        <thead class="bg-light">
+          <tr class="bg-dark text-white">
+            <th class="text-center align-middle" style="width: 10%">#</th>
+            <th class="text-center align-middle">Site Name</th>
+            <th class="text-center align-middle">Logo</th>
+            <th class="text-center align-middle" style="width: 20%">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if ApiHeaderList %}
+          {% for header in ApiHeaderList %}
+          <tr>
+            <td class="text-center fw-bolder">{{ forloop.counter }}</td>
+            <td class="text-center align-middle">{{ header.site_title }}</td>
+            <td class="text-center">
+              {% if header.logo %}
+              <img
+                src="{{ header.logo }}"
+                alt="{{ header.site_title }}"
+                class="rounded shadow-sm"
+              />
+              {% else %}
+              <img
+                src="{% static 'default.jpg' %}"
+                alt="No Logo"
+                class="rounded shadow-sm"
+              />
+              {% endif %}
+            </td>
+            <td class="text-center">
+              <div class="btn-group gap-2 btn-group-custom">
+                <a
+                  href="{% url 'updateheader' header.id %}"
+                  class="btn btn-sm btn-outline-warning"
+                  title="Edit Header"
+                  data-bs-toggle="modal"
+                  data-bs-target="#headerFormModal{{ header.id }}"
+                >
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          <!-- Modal for Edit -->
+          <div
+            class="modal fade"
+            id="headerFormModal{{ header.id }}"
+            tabindex="-1"
+            aria-labelledby="headerFormModal"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                  <h5 class="modal-title" id="headerFormLabel">
+                    Edit Header - {{ header.site_title }}
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close bg-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <form
+                    action="{% url 'updateheader' header.id %}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                  >
+                    {% csrf_token %}
+                    <div class="modal-body">
+                      <label for="id_site_title_{{ header.id }}" class="form-label"
+                        >Site_title</label
+                      >
+                      <input
+                        type="text"
+                        name="site_title"
+                        id="id_site_title_{{ header.id }}"
+                        class="form-control"
+                        value="{{ header.site_title }}"
+                        required
+                      />
+
+                      <label for="id_logo_{{ header.id }}" class="form-label">Logo</label>
+                      <input
+                        type="file"
+                        name="logo"
+                        id="id_logo_{{ header.id }}"
+                        class="form-control"
+                      />
+                      {% if header.logo %}
+                      <img
+                        src="{{ header.logo }}"
+                        alt="{{ header.site_title }}"
+                        style="max-width: 80px; height: 80px; object-fit: contain; border: 1px solid #ddd;"
+                        loading="lazy"
+                      />
+                      {% endif %}
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                      <button
+                        type="submit"
+                        name="post_submit"
+                        class="btn btn-success"
+                      >
+                        Update <i class="bi bi-check-circle"></i>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td colspan="4" class="text-center text-muted py-4">
+              No headers available.
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% if not ApiHeaderList %}
+<div class="text-center mt-4">
+  <a
+    href="{% url 'apiheader' %}"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#addHeaderModal"
+  >
+    Add Header
+  </a>
+</div>
+
+<!-- Modal for Add -->
+<div
+  class="modal fade"
+  id="addHeaderModal"
+  tabindex="-1"
+  aria-labelledby="addHeaderModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="addHeaderModalLabel">Add Header</h5>
+        <button
+          type="button"
+          class="btn-close bg-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="{% url 'apiheader' %}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
+          <div class="modal-body">
+            <label for="id_site_title" class="form-label">Site_title</label>
+            <input
+              type="text"
+              name="site_title"
+              id="id_site_title"
+              class="form-control"
+              required
+            />
+
+            <label for="id_logo" class="form-label">Logo</label>
+            <input type="file" name="logo" id="id_logo" class="form-control" />
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button
+              type="submit"
+              name="header_submit"
+              class="btn btn-success"
+            >
+              Submit <i class="bi bi-check-circle"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

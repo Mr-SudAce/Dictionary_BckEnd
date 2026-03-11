@@ -1,0 +1,212 @@
+{% extends "admin/supermain.html" %} {% load static %} {% block admin %}
+
+<link rel="stylesheet" href="{% static 'css/' %}" />
+
+<div class="position-relative">
+  <!-- Alert Messages -->
+  {% if messages %}
+  <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible fade show m-0"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <!-- Alert Messages -->
+
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="text-dark">Post Category Management</h1>
+    <button
+      class="btn btn-outline-dark fw-bolder"
+      data-bs-toggle="modal"
+      data-bs-target="#postcateFormModal"
+    >
+      Add New Category <i class="bi bi-plus-lg fw-bolder"></i>
+    </button>
+  </div>
+  <!-- Page Header -->
+
+  <!-- PostCategory Form Modal -->
+  <div
+    class="modal fade"
+    id="postcateFormModal"
+    tabindex="-1"
+    aria-labelledby="postcateFormModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title" id="postcateFormModalLabel">
+            {% if postcateform.instance.id %} Update Category {% else %} Add New
+            Category {% endif %}
+          </h5>
+          <button
+            type="button"
+            class="btn-close bg-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            action="{% url 'apipostcat' %}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+            <div class="modal-body">
+              <!--cat_order-->
+              <label for="id_cat_order_{{ postcat.id }}" class="form-label">Cat_order</label>
+              <input type="text" name="cat_order" id="id_cat_title_{{ postcat.id }}" class="form-control" value="{{ postcat.cat_order }}" required>
+
+              {{postcat}}
+              <!--cat_title-->
+              <label for="id_cat_title_{{ postcat.id }}" class="form-label">Cat_title</label>
+              <input type="text" name="cat_title" id="id_cat_title_{{ postcat.id }}" class="form-control" value="{{ postcat.cat_title }}" required>
+            </div>
+
+
+            <div class="d-flex justify-content-end mt-4">
+              <button
+                type="submit"
+                name="postCat_submit"
+                class="btn btn-success"
+              >
+                Submit <i class="bi bi-check-circle"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- PostCategory Form Modal -->
+
+  <!-- Postcategory Table -->
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered table-striped m-0">
+      <thead class="table-dark">
+        <tr>
+          <th class="text-center align-middle" style="width: 5%">#</th>
+          <th class="text-center align-middle" style="width: 15%">
+            Category Name
+          </th>
+          <th class="text-center align-middle" style="width: 5%">
+            Category Order
+          </th>
+          <th class="text-center align-middle" style="width: 10%">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if ApiPostCatList %} {% for postcate in ApiPostCatList %}
+        <tr>
+          <td class="text-center align-middle">{{ forloop.counter }}</td>
+          <td class="text-center align-middle">
+            {{ postcate.cat_title }} - {{postcate.id}}
+          </td>
+          <td class="text-center align-middle">
+            {{ postcate.cat_order }}
+          </td>
+          <td class="text-center align-middle">
+            <div class="btn-group gap-2">
+              <a
+                href="{% url 'updatepostcat' postcate.id %}"
+                class="btn btn-sm btn-outline-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#postcateFormModal{{postcate.id}}"
+                title="Edit Category"
+              >
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              <a
+                href="{% url 'deletepostcat' postcate.id %}"
+                class="btn btn-sm btn-outline-danger"
+                onclick="return confirm('Are you sure you want to delete this category?');"
+                title="Delete Category"
+              >
+                <i class="bi bi-trash"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+        <!-- Modal for Edit -->
+        <div
+          class="modal fade"
+          id="postcateFormModal{{ postcate.id }}"
+          tabindex="-1"
+          aria-labelledby="postcateFormLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="postcateFormLabel">
+                  Edit Post - {{ postcate.cat_title }}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <form
+                  action="{% url 'updatepostcat' postcate.id %}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                >
+                  {% csrf_token %}
+                  <div class="modal-body">
+                    <!--cat_order-->
+                    <label for="id_cat_order_{{ postcate.id }}" class="form-label">Cat_order</label>
+                    <input type="text" name="cat_order" id="id_cat_order_{{ postcate.id }}" class="form-control" value="{{ postcate.cat_order }}" required>
+      
+                    
+                    <!--cat_title-->
+                    <label for="id_cat_title_{{ postcate.id }}" class="form-label">Cat_title</label>
+                    <input type="text" name="cat_title" id="id_cat_title_{{ postcate.id }}" class="form-control" value="{{ postcate.cat_title }}" required>
+                  </div>
+                  <div class="d-flex justify-content-end mt-4">
+                    <button
+                      type="submit"
+                      name="post_submit"
+                      class="btn btn-success"
+                    >
+                      Update <i class="bi bi-check-circle"></i>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %} {% else %}
+        <tr>
+          <td colspan="6" class="text-center py-3">
+            <p class="m-0 fw-bold text-muted">No Categories Available</p>
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <!-- Postcategory Table -->
+</div>
+
+
+
+{% endblock %}
