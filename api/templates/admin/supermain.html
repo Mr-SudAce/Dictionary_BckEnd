@@ -170,14 +170,16 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"></script>
 
+    <!-- Place the first <script> tag in your HTML's <head> -->
     <script
-      src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js"></script>
-
+      src="https://cdn.tiny.cloud/1/jkk7x68jr5yjhxnwjqps72q25l1g0acffet2mln2x26a99ua/tinymce/8/tinymce.min.js"
+      referrerpolicy="origin" crossorigin="anonymous"></script>
     <script>
       tinymce.init({
         selector: "textarea",
         plugins: [
           "anchor",
+          "code",
           "autolink",
           "charmap",
           "codesample",
@@ -205,6 +207,7 @@
           ),
       });
     </script>
+
     <script>
       setTimeout(() => {
         document.querySelectorAll(".alert").forEach((alert) => {

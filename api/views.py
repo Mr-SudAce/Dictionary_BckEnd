@@ -26,7 +26,6 @@ from .serializers import (
 # Admin Login
 @login_required
 @csrf_exempt
-
 def supermain(request):
     # gather data directly from ORM and serialize
     ApiWordsList = WordSerializer(WordModel.objects.all(), many=True).data

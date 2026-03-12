@@ -1,108 +1,149 @@
-# Dictionary Backend System
+# Dictionary Backend Application
 
-A robust Backend system built with **Django** and **Django Rest Framework (DRF)**. This project serves as a Content Management System (CMS) and API provider for a Dictionary application, featuring management for words, blog posts, site pages, and UI configuration (headers/footers).
+The server-side application for the Dictionary System. This project is built with Django and Django REST Framework to provide a robust API for the corresponding frontend application.
 
 ## Features
 
-*   **RESTful API**: Comprehensive API endpoints for Words, Blogs, Pages, Headers, Footers, and Users.
-*   **Custom Admin Dashboard**: A tailored administrative interface (separate from the standard Django Admin) for managing content.
-*   **Rich Text Support**: Integration with `django-tinymce` for rich text editing in descriptions and blog posts.
-*   **User Management**: Custom authentication flows (Login/Register) and user management.
-*   **Media Management**: Handling of images for blogs, posts, and site logos.
+*   **Words API**: Full CRUD functionality for dictionary words, definitions, and related data.
+*   **Content Management API**: Serves content for blogs, posts, and dynamic pages managed through the Django admin or other interfaces.
+*   **Dynamic Site Configuration**: Endpoints to deliver site-wide configurations for elements like headers and footers.
+*   **User Authentication**: Secure user registration and token-based authentication (e.g., JWT).
+*   **Admin Interface**: Utilizes the built-in Django Admin for easy data management.
 
 ## Tech Stack
 
-*   **Language**: Python 3
-*   **Framework**: Django
-*   **API**: Django Rest Framework
-*   **Database**: SQLite (Default)
-*   **Libraries**:
-    *   `django-tinymce`: For HTML fields.
-    *   `requests`: (no longer required by backend; previously used for internal API calls which have been removed)
-    *   `Pillow`: For image processing.
+*   **Framework**: Django, Django REST Framework
+*   **Database**: SQLite3 (for development), PostgreSQL (recommended for production)
+*   **Environment**: Python 3.8+
+*   **Authentication**: Simple JWT for DRF (or another token-based auth)
+
+## Prerequisites
+
+*   **Python** (3.8+ version recommended)
+*   **Pip** (Python package installer)
+*   `virtualenv` (for creating isolated Python environments)
 
 ## Installation & Setup
 
 1.  **Clone the repository**
     ```bash
-    git clone <repository-url>
+    git clone <your-repo-url>
     cd BackEnd
     ```
 
-2.  **Create a Virtual Environment**
+2.  **Create and Activate Virtual Environment**
     ```bash
-    python -m venv venv
-    # Windows
-    venv\Scripts\activate
-    # macOS/Linux
+    # For Unix/macOS
+    python3 -m venv venv
     source venv/bin/activate
+
+    # For Windows
+    python -m venv venv
+    .\venv\Scripts\activate
     ```
 
 3.  **Install Dependencies**
+    It's recommended to have a `requirements.txt` file in your project root.
     ```bash
-    pip install django djangorestframework django-tinymce pillow
+    pip install -r requirements.txt
+    ```
+    A typical `requirements.txt` might include:
+    ```
+    django
+    djangorestframework
+    djangorestframework-simplejwt
+    django-cors-headers
+    python-decouple # For environment variables
     ```
 
-4.  **Apply Migrations**
+4.  **Configure Environment Variables**
+    Create a `.env` file in the project root directory. This file will hold your secret keys and settings. Add it to your `.gitignore`!
+    ```env
+    SECRET_KEY='your-secret-key'
+    DEBUG=True
+    DATABASE_URL='sqlite:///db.sqlite3' # Example for SQLite
+    # DATABASE_URL='postgres://user:password@host:port/dbname' # Example for PostgreSQL
+    ```
+
+5.  **Run Database Migrations**
     ```bash
-    python manage.py makemigrations
     python manage.py migrate
     ```
 
-5.  **Create a Superuser**
+6.  **Create a Superuser**
+    This allows you to access the Django Admin.
     ```bash
     python manage.py createsuperuser
     ```
 
-6.  **Run the Server**
+7.  **Run the Development Server**
     ```bash
     python manage.py runserver
     ```
-
-## Accessing the Application
-
-*   **Dashboard**: Open `http://127.0.0.1:8000/` in your browser.
-*   **Login**: `http://127.0.0.1:8000/login/`
-*   **Register**: `http://127.0.0.1:8000/register/`
-
-## API Endpoints
-
-The application exposes the following API endpoints (Base URL: `/api/`):
-
-### Words
-*   `GET /api/all/word/` - Retrieve all words
-*   `GET /api/word/<id>/` - Retrieve a specific word
-*   `POST /api/word/` - Create a new word
-*   `PUT /api/word/update/<id>/` - Update a word
-*   `DELETE /api/word/delete/<id>/` - Delete a word
-
-### Blogs & Posts
-*   `GET /api/all/blog/` - Retrieve all blogs
-*   `GET /api/all/post/` - Retrieve all posts
-*   `GET /api/all/postcat/` - Retrieve post categories
-
-### Site Configuration
-*   `GET /api/all/header/` - Retrieve header configuration
-*   `GET /api/all/footer/` - Retrieve footer configuration
-*   `GET /api/all/page/` - Retrieve static pages
-
-### Users
-*   `GET /api/all/user/` - List all users
-*   `POST /api/user/` - Create a user
+    The API will be available at `http://127.0.0.1:8000`.
 
 ## Project Structure
 
+A typical project structure might look like this:
+
 ```
 BackEnd/
-├── api/
-│   ├── admin.py        # Django Admin registration
-│   ├── api_url.py      # API specific URL routing
-│   ├── api_views.py    # DRF View functions
-│   ├── forms.py        # Django forms for the Dashboard
-│   ├── models.py       # Database Models (WordModel, BlogModel, etc.)
-│   ├── serializers.py  # DRF Serializers
-│   ├── urls.py         # Main URL routing (Dashboard + API inclusion)
-│   └── views.py        # Dashboard View functions
-├── manage.py
-└── ...
+├── dictionary_project/   # Django project folder
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── api/                  # Main Django app for the API
+│   ├── migrations/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── serializers.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── .env                  # Environment variables (gitignored)
+├── .gitignore
+├── manage.py             # Django's command-line utility
+└── requirements.txt      # Python dependencies
 ```
+
+## API Endpoints
+
+The API is accessible under the `/api/` prefix.
+
+*   **Auth**:
+    *   `POST /api/token/`: Obtain JWT token pair.
+    *   `POST /api/token/refresh/`: Refresh an access token.
+    *   `POST /api/user/register/`: Register a new user. (This is a custom endpoint you might create)
+
+*   **Words**:
+    *   `GET /api/all/word/`: List all words.
+    *   `GET /api/word/<id>/`: Retrieve a specific word by its ID.
+
+*   **Content**:
+    *   `GET /api/all/blog/`: List all blogs.
+    *   `GET /api/all/post/`: List all posts.
+    *   `GET /api/all/page/`: List all pages.
+
+*   **Site Config**:
+    *   `GET /api/all/header/`: Get header configuration.
+    *   `GET /api/all/footer/`: Get footer configuration.
+
+## Deployment
+
+For production, ensure you have:
+*   Set `DEBUG = False` in your settings.
+*   Configured a production-ready database like PostgreSQL.
+*   Set up a web server like Gunicorn or uWSGI.
+*   Configured static file serving.
+
+## Contributing
+
+Contributions are welcome! Please open an issue to discuss your ideas or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
